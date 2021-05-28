@@ -18,46 +18,40 @@ if PORT == None:
     PASSWORD = os.environ.get('PGPASSWORD')
     PORT = os.environ.get('PGPORT')
 
-# def hospital_picker(hospital_id):
-#     if hospital_id == 'FCRB':
-#         return 'fcrb', fcrb_tags
-#     elif hospital_id == 'USTAN':
-#         return 'ustan', ustan_tags
-#     elif hospital_id == 'ZMC':
-#         return 'zmc', zmc_tags
-
-
 def get_departments(body):
-    # hospital = hospital_picker('USTAN')
-    metadata = MetaData(schema='ustan')
-    Base = automap_base(metadata=metadata)
-    engine = create_engine('postgresql://postgres:{}@localhost:{}/source'.format(PASSWORD, PORT))
-    Base.prepare(engine, reflect=True)
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    
-    department_table = Base.classes['hospital_doctors']
-    query = select([
-        department_table.serums_id, 
-        department_table.staff_id,
-        department_table.name,
-        department_table.department_id,
-        department_table.department_name
-    ], department_table.serums_id == 6000)
+    try:
+        metadata = MetaData(schema=body['orgID'].lower())
+        Base = automap_base(metadata=metadata)
+        engine = create_engine('postgresql://postgres:{}@localhost:{}/source'.format(PASSWORD, PORT))
+        Base.prepare(engine, reflect=True)
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        
+        department_table = Base.classes['hospital_doctors']
+        query = select([
+            department_table.serums_id, 
+            department_table.staff_id,
+            department_table.name,
+            department_table.department_id,
+            department_table.department_name
+        ], department_table.serums_id == 6000 )
+        # The 6000 here needs to be replaced with: body['userID']
 
-    department_ids = []
-    # query = select(department_table).filter(department_table.serums_id == 6000)
-    for serums_id, staff_id, name, department_id, department_name in session.execute(query):
-        department_ids.append({
-            "serums_id": serums_id,
-            "staff_id": staff_id,
-            "name": name.replace("'", ""),
-            "department_id": department_id,
-            "department_name": department_name.replace("'", "")
-        })
-    session.close()
-    print(department_ids)
-    return department_ids
+        department_ids = []
+        for serums_id, staff_id, name, department_id, department_name in session.execute(query):
+            department_ids.append({
+                "serums_id": serums_id,
+                "staff_id": staff_id,
+                "name": name.replace("'", ""),
+                "department_id": department_id,
+                "department_name": department_name.replace("'", "")
+            })
+        session.close()
+        print(department_ids)
+        return department_ids
+    except Exception as e:
+        return {"error": str(e)}
+        # This needs to be better handled
 
 
 
