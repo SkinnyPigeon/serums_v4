@@ -8,6 +8,7 @@ import os
 import subprocess
 import json
 
+
 # Setting up environment
 
 FLASK_DEBUG=1
@@ -32,6 +33,7 @@ api = Api(
 hello = api.model('Server Check', {
     'hello': fields.String(required=True, description='Quick check that the server is on', example='Welcome to the API. The server is on')
 })
+
 
 parser = api.parser()
 # parser.add_argument('Name of field', type=list, required=True, help='Field used as part of request or reply', location='json')
