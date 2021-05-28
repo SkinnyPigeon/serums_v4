@@ -12,6 +12,7 @@ import json
 # Functions
 
 from functions.jwt import validate_jwt, refresh_jwt
+from functions.departments import get_departments
 
 
 # Setting up environment
@@ -73,8 +74,8 @@ class Department(Resource):
         jwt = refreshed_jwt['body']['resource_str']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            print(response['body'])
-        return 200
+            department_ids = get_departments(response['body'])
+        return department_ids
 
 
 
