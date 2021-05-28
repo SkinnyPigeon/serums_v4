@@ -17,7 +17,6 @@ def validate_jwt(jwt):
 
     try:
         response = requests.request("POST", url, headers=headers, data=payload)
-        print(response)
         if response.status_code == 200:
             print(
                 "SUCCESS. Status code: {} - Result: {}".format(
@@ -25,6 +24,7 @@ def validate_jwt(jwt):
                     response.json()
                 )
             )
+            return {"status_code": response.status_code, "body": response.json()}
         else:
             print(
                 "ERROR. Status code: {}​ - Reason: {}​".format(
@@ -32,5 +32,6 @@ def validate_jwt(jwt):
                     response.text
                 )
             )
+            return {"status_code": response.status_code, "body": response.text}
     except Exception as e:
         print("Failed to make request. Reason: {}​".format(str(e)))

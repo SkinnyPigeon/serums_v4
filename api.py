@@ -52,7 +52,7 @@ jwt_parser.add_argument('Authorization', help="The authorization token", locatio
 
 hello_space = api.namespace('hello', description='Check the server is on')
 staff_space = api.namespace('staff tables', description='Return the staff tables')
-jwt_space = api.namespace('jwt', description='JWT endpoints')
+# jwt_space = api.namespace('jwt', description='JWT endpoints')
 
 
 # Routes
@@ -66,19 +66,21 @@ class ServerCheck(Resource):
 @staff_space.route('/department')
 class Department(Resource):
     def post(self):
-
-
-        return 200
-
-@jwt_space.route("/authorize_jwt", methods=["POST"])
-class AuthJWT(Resource):
-    '''Verify JWT with Authentication module'''
-    def post(self):
-
         jwt = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjIyODAwNTI4LCJqdGkiOiJmZDk1MzcxOTVlOTE0ZTk1YjllZWI4MjMwYmViODVlOSIsInVzZXJJRCI6MzY0LCJpc3MiOiJTZXJ1bXNBdXRoZW50aWNhdGlvbiIsImlhdCI6MTYyMjE5NTcyOCwic3ViIjoiZXVhbkB0ZXN0LmNvbSIsImdyb3VwSURzIjpbIlBBVElFTlQiXSwib3JnSUQiOiJVU1RBTiIsImF1ZCI6Imh0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw_dT1odHRwLTNBX193d3cuc2VydW1zLmNvbSZkPUR3SURhUSZjPWVJR2pzSVRmWFBfeS1ETExYMHVFSFhKdlU4bk9IclVLOElyd05LT3RrVlUmcj11VGZONXVRMWtod2JSeV9UZ0tINmFVZDAtQmJtMEc4Sy1WYWprelpteTk4Jm09MmlVTm4yOUZTYWY3LTAzeHU5eE1CcmNuNHQ2VV8zdzN1cUxpTHl0VGZUNCZzPTVqQjJqbXFoc05BX2cxU1Z5WmdVRlJGOW9FUDhfQVFhLWxpY1lXM0l1ZncmZT0ifQ.7xY76j-_K7r3Dos7E0aoUoCnMmGLXwwzDa-d1TYRkeQ".encode('ascii', 'ignore').decode('unicode_escape')
-        # print(jwt.encode('latin-1'))
-        validate_jwt(jwt)
+        response = validate_jwt(jwt)
+        if response['status_code'] == 200:
+            print(response['body'])
         return 200
+
+
+
+# @jwt_space.route("/authorize_jwt", methods=["POST"])
+# class AuthJWT(Resource):
+#     '''Verify JWT with Authentication module'''
+#     def post(self):
+#         jwt = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjIyODAwNTI4LCJqdGkiOiJmZDk1MzcxOTVlOTE0ZTk1YjllZWI4MjMwYmViODVlOSIsInVzZXJJRCI6MzY0LCJpc3MiOiJTZXJ1bXNBdXRoZW50aWNhdGlvbiIsImlhdCI6MTYyMjE5NTcyOCwic3ViIjoiZXVhbkB0ZXN0LmNvbSIsImdyb3VwSURzIjpbIlBBVElFTlQiXSwib3JnSUQiOiJVU1RBTiIsImF1ZCI6Imh0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw_dT1odHRwLTNBX193d3cuc2VydW1zLmNvbSZkPUR3SURhUSZjPWVJR2pzSVRmWFBfeS1ETExYMHVFSFhKdlU4bk9IclVLOElyd05LT3RrVlUmcj11VGZONXVRMWtod2JSeV9UZ0tINmFVZDAtQmJtMEc4Sy1WYWprelpteTk4Jm09MmlVTm4yOUZTYWY3LTAzeHU5eE1CcmNuNHQ2VV8zdzN1cUxpTHl0VGZUNCZzPTVqQjJqbXFoc05BX2cxU1Z5WmdVRlJGOW9FUDhfQVFhLWxpY1lXM0l1ZncmZT0ifQ.7xY76j-_K7r3Dos7E0aoUoCnMmGLXwwzDa-d1TYRkeQ".encode('ascii', 'ignore').decode('unicode_escape')
+#         validate_jwt(jwt)
+#         return 200
 
 
 
