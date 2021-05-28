@@ -18,15 +18,16 @@ from functions.jwt import validate_jwt, refresh_jwt
 
 FLASK_DEBUG=1
 
-project_folder = os.path.expanduser('~/code/api_v4/code/api')
-load_dotenv(os.path.join(project_folder, '.env'))
-PORT = os.getenv('PGPORT')
-PASSWORD = os.getenv('PGPASSWORD')
+# project_folder = os.path.expanduser('~/code/api_v4/code/api')
+# load_dotenv(os.path.join(project_folder, '.env'))
 
 project_folder = subprocess.check_output("pwd", shell=True).decode("utf-8").rstrip()
 load_dotenv(os.path.join(project_folder, '.env'))
 PORT = os.getenv('PGPORT')
 PASSWORD = os.getenv('PGPASSWORD')
+if PORT == None:
+    PASSWORD = os.environ.get('PGPASSWORD')
+    PORT = os.environ.get('PGPORT')
 
 app = Flask(__name__)
 app.config['ERROR_404_HELP'] = False
