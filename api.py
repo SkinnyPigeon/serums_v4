@@ -71,8 +71,10 @@ class ServerCheck(Resource):
 class Department(Resource):
     def post(self):
         refreshed_jwt = refresh_jwt()
+        print(refreshed_jwt)
         jwt = refreshed_jwt['body']['resource_str']
         response = validate_jwt(jwt)
+        print(response['body'])
         if response['status_code'] == 200:
             department_ids = get_departments(response['body'])
         return department_ids

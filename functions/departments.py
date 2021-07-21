@@ -34,8 +34,9 @@ def get_departments(body):
             department_table.name,
             department_table.department_id,
             department_table.department_name
-        ], department_table.serums_id == 6000 )
-        # The 6000 here needs to be replaced with: body['userID']
+        ], department_table.serums_id == body['userID'] )
+
+        print(query)
 
         department_ids = []
         for serums_id, staff_id, name, department_id, department_name in session.execute(query):
