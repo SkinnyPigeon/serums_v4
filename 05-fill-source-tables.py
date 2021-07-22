@@ -50,4 +50,3 @@ for directory in directories:
         df.to_sql(table, con=engine, index=False, if_exists="replace", schema=directory)
 
 engine.dispose()
-print(dir(engine))

@@ -36,7 +36,8 @@ def setup_connection(body):
 def select_table_classes(schema, base):
     tables = {}
     for class_name in base._decl_class_registry.values():
-        if hasattr(class_name, '__table__') and class_name.__table__.fullname not in ['{schema}.serums_ids'.format(schema=schema), '{schema}.patient_rules'.format(schema=schema), '{schema}.hospital_tags'.format(schema=schema), '{schema}.hospital_doctors'.format(schema=schema)]:
+        # if hasattr(class_name, '__table__') and class_name.__table__.fullname not in ['{schema}.serums_ids'.format(schema=schema), '{schema}.patient_rules'.format(schema=schema), '{schema}.hospital_tags'.format(schema=schema), '{schema}.hospital_doctors'.format(schema=schema)]:
+        if hasattr(class_name, '__table__'):
             tables.update({class_name.__table__.fullname: class_name})
     return tables
 
@@ -60,8 +61,8 @@ def select_source_patient_id_name(body):
                     return str(column).split(".")[1]
 
 
-def select_source_patient_id_value(source_session, id_class, serums_id, key_name):
-    result = source_session.query(id_class).filter_by(serums_id=serums_id).one()
+def select_source_patient_id_value(session, id_class, serums_id, key_name):
+    result = session.query(id_class).filter_by(serums_id=serums_id).one()
     res = object_as_dict(result)
     return res[key_name]
 
@@ -69,29 +70,33 @@ def select_source_patient_id_value(source_session, id_class, serums_id, key_name
 def get_patient_data(body):
     tables = ['cycles', 'general', 'intentions', 'patients', 'regimes']
     connection = setup_connection(body)
-    # print(connection['base'].classes.USTAN_ML_Serums_IDs)
-    classes = select_table_classes(connection['schema'], connection['base'])
-    for base_class in classes:
-        print(base_class)
-    try:
-        # print("SERUMS ID: {}".format(connection['base'].classes.serums_ids))
-        # id_class = connection['base'].classes.serums_ids
-        # key_name = select_source_patient_id_name(body)
-        # patient_id = select_source_patient_id_value(connection['session'], 
-        #                                             connection['base'].classes.serums_ids, 
-        #                                             body['serums_id'], key_name)
+    # try:
+    print(connection['base'].classes.serums_ids)
+    # except Exception as e:
+    #     print(e)
+    # classes = select_table_classes(connection['schema'], connection['base'])
+    # print(classes)
+    # try:
+    #     print("SERUMS ID: {}".format(connection['base'].classes.serums_ids))
+    #     id_class = connection['base'].classes.serums_ids
+    #     print(id_class)
+    #     key_name = select_source_patient_id_name(body)
+    #     patient_id = select_source_patient_id_value(connection['session'], 
+    #                                                 id_class, 
+    #                                                 body['userID'], key_name)
 
-        # print(patient_id)
+    #     print(patient_id)
 
-        print(dir(connection['base'].classes))
+    #     print(dir(connection['base'].classes))
 
         
-        connection['engine'].dispose()
-        results = {}
-        for table in tables:
-            results[table] = 'meh'
-        return results
+    #     connection['engine'].dispose()
+    #     results = {}
+    #     for table in tables:
+    #         results[table] = 'meh'
+    #     return results
 
-    except Exception as e:
-        connection['engine'].dispose()
-        return {"error": str(e)}
+    # except Exception as e:
+    #     connection['engine'].dispose()
+    #     return {"error": str(e)}
+    return {'meh': 'bah'}
