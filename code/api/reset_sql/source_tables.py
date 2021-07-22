@@ -1,11 +1,11 @@
 # Imports
 
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.schema import CreateSchema
 from sqlalchemy.ext.declarative import declarative_base
-Base = declarative_base()
-
-from sqlalchemy import Column, Integer, BigInteger, String, DateTime, Time, Text, Numeric, ForeignKey, create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.dialects.postgresql import ARRAY, JSON
+from sqlalchemy import Column, Integer, String, Numeric, DateTime, Time, Text, ForeignKey, BigInteger
+
 
 from dotenv import load_dotenv
 from pathlib import Path
@@ -21,15 +21,23 @@ if PORT == None:
     PASSWORD = os.environ.get('PGPASSWORD')
     PORT = os.environ.get('PGPORT')
 
-engine = create_engine('postgresql://postgres:{}@localhost:{}/source'.format(PASSWORD, PORT), echo='debug')
+class_registry = {}
+metadata = MetaData()
+Base = declarative_base()
+base = Base()
+engine = create_engine('postgresql://postgres:{}@localhost:{}/source'.format(PASSWORD, PORT))
+Session = sessionmaker(bind=engine, autoflush=True, autocommit=False)
+session = Session()
+connection = {'base': base, 'metadata': metadata, 'engine': engine, 'session': session}
 
 # USTAN
 
 class USTAN_Serums_IDs(Base):
     __tablename__ = 'serums_ids'
     __table_args__ = {'schema': 'ustan'}
-    serums_id = Column(Integer, primary_key=True)
-    chi = Column(BigInteger, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
+    serums_id = Column(Integer)
+    chi = Column(BigInteger)
 
 class USTAN_Hospital_Doctors(Base):
     __tablename__ = 'hospital_doctors'
@@ -45,7 +53,8 @@ class USTAN_Hospital_Doctors(Base):
 class USTAN_Cycles(Base):
     __tablename__ = 'cycles'
     __table_args__ = {'schema': 'ustan'}
-    chi = Column(BigInteger, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
+    chi = Column(BigInteger)
     regime_id = Column(Integer)
     intention_id = Column(Integer)
     cycle_id = Column(BigInteger)
@@ -72,12 +81,13 @@ class USTAN_Cycles(Base):
     skin = Column(Integer)
     hypersensitivity = Column(Integer)
     fatigue = Column(Integer)
-    required_dose = Column(Numeric(10, 6))
+    required_doses = Column(Numeric(10, 6))
 
 class USTAN_General(Base):
     __tablename__ = 'general'
     __table_args__ = {'schema': 'ustan'}
-    chi = Column(BigInteger, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
+    chi = Column(BigInteger)
     incidence_date = Column(DateTime(timezone=False))
     site_icd_10 = Column(String(5))
     name = Column(String(30))
@@ -86,9 +96,9 @@ class USTAN_General(Base):
     site = Column(String(5))
     histology = Column(Integer)
     primary = Column(Integer)
-    metastatis1 = Column(String(5))
-    metastatis2 = Column(String(5))
-    metastatis3 = Column(String(5))
+    metastasis1 = Column(String(5))
+    metastasis2 = Column(String(5))
+    metastasis3 = Column(String(5))
     smid = Column(Integer)
     smid1 = Column(Integer)
     cong_heart_fail_flag = Column(Integer)
@@ -137,7 +147,8 @@ class USTAN_General(Base):
 class USTAN_Intentions(Base):
     __tablename__ = 'intentions'
     __table_args__ = {'schema': 'ustan'}
-    chi = Column(BigInteger, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
+    chi = Column(BigInteger)
     patient_id = Column(Integer)
     intention_id = Column(Integer)
     intention_seq = Column(Integer)
@@ -146,7 +157,7 @@ class USTAN_Intentions(Base):
     cycle_ratio = Column(Integer)
     intention = Column(String(12))
     first_regime = Column(String(16))
-    int_appointment_date = Column(DateTime(timezone=False))
+    init_appointment_date = Column(DateTime(timezone=False))
     elapsed_days = Column(Integer)
     appointment_date = Column(DateTime(timezone=False))
     
@@ -154,7 +165,8 @@ class USTAN_Intentions(Base):
 class USTAN_Patients(Base):
     __tablename__ = 'patients'
     __table_args__ = {'schema': 'ustan'}
-    chi = Column(BigInteger, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
+    chi = Column(BigInteger)
     patient_id = Column(Integer)
     first_intention = Column(String(12))
     appointment_date = Column(DateTime(timezone=False))
@@ -163,7 +175,8 @@ class USTAN_Patients(Base):
 class USTAN_Regimes(Base):
     __tablename__ = 'regimes'
     __table_args__ = {'schema': 'ustan'}
-    chi = Column(BigInteger, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
+    chi = Column(BigInteger)
     intention_id = Column(Integer)
     regime_id = Column(Integer)
     regime_seq = Column(Integer)
@@ -184,14 +197,16 @@ class USTAN_Regimes(Base):
 class USTAN_ML_Serums_IDs(Base):
     __tablename__ = 'serums_ids'
     __table_args__ = {'schema': 'ustan_ml'}
-    serums_id = Column(Integer, primary_key=True)
-    chi = Column(BigInteger, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
+    serums_id = Column(Integer)
+    chi = Column(BigInteger)
 
 
 class USTAN_ML_Cycles(Base):
     __tablename__ = 'cycles'
     __table_args__ = {'schema': 'ustan_ml'}
-    chi = Column(BigInteger, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
+    chi = Column(BigInteger)
     regime_id = Column(Integer)
     intention_id = Column(Integer)
     cycle_id = Column(BigInteger)
@@ -218,12 +233,13 @@ class USTAN_ML_Cycles(Base):
     skin = Column(Integer)
     hypersensitivity = Column(Integer)
     fatigue = Column(Integer)
-    required_dose = Column(Numeric(10, 6))
+    required_doses = Column(Numeric(10, 6))
 
 class USTAN_ML_General(Base):
     __tablename__ = 'general'
     __table_args__ = {'schema': 'ustan_ml'}
-    chi = Column(BigInteger, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
+    chi = Column(BigInteger)
     incidence_date = Column(DateTime(timezone=False))
     site_icd_10 = Column(String(5))
     name = Column(String(30))
@@ -232,9 +248,9 @@ class USTAN_ML_General(Base):
     site = Column(String(5))
     histology = Column(Integer)
     primary = Column(Integer)
-    metastatis1 = Column(String(5))
-    metastatis2 = Column(String(5))
-    metastatis3 = Column(String(5))
+    metastasis1 = Column(String(5))
+    metastasis2 = Column(String(5))
+    metastasis3 = Column(String(5))
     smid = Column(Integer)
     smid1 = Column(Integer)
     cong_heart_fail_flag = Column(Integer)
@@ -283,7 +299,8 @@ class USTAN_ML_General(Base):
 class USTAN_ML_Intentions(Base):
     __tablename__ = 'intentions'
     __table_args__ = {'schema': 'ustan_ml'}
-    chi = Column(BigInteger, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
+    chi = Column(BigInteger)
     patient_id = Column(Integer)
     intention_id = Column(Integer)
     intention_seq = Column(Integer)
@@ -292,7 +309,7 @@ class USTAN_ML_Intentions(Base):
     cycle_ratio = Column(Integer)
     intention = Column(String(12))
     first_regime = Column(String(16))
-    int_appointment_date = Column(DateTime(timezone=False))
+    init_appointment_date = Column(DateTime(timezone=False))
     elapsed_days = Column(Integer)
     appointment_date = Column(DateTime(timezone=False))
     
@@ -300,7 +317,8 @@ class USTAN_ML_Intentions(Base):
 class USTAN_ML_Patients(Base):
     __tablename__ = 'patients'
     __table_args__ = {'schema': 'ustan_ml'}
-    chi = Column(BigInteger, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
+    chi = Column(BigInteger)
     patient_id = Column(Integer)
     first_intention = Column(String(12))
     appointment_date = Column(DateTime(timezone=False))
@@ -309,7 +327,8 @@ class USTAN_ML_Patients(Base):
 class USTAN_ML_Regimes(Base):
     __tablename__ = 'regimes'
     __table_args__ = {'schema': 'ustan_ml'}
-    chi = Column(BigInteger, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
+    chi = Column(BigInteger)
     intention_id = Column(Integer)
     regime_id = Column(Integer)
     regime_seq = Column(Integer)
@@ -330,8 +349,9 @@ class USTAN_ML_Regimes(Base):
 class FCRB_Serums_IDs(Base):
     __tablename__ = 'serums_ids'
     __table_args__ = {'schema': 'fcrb'}
-    serums_id = Column(Integer, primary_key=True)
-    patnr = Column(BigInteger, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
+    serums_id = Column(Integer)
+    patnr = Column(BigInteger)
 
 class FCRB_Hospital_Doctors(Base):
     __tablename__ = 'hospital_doctors'
@@ -350,8 +370,9 @@ class FCRB_Hospital_Doctors(Base):
 class ZMC_Serums_IDs(Base):
     __tablename__ = 'serums_ids'
     __table_args__ = {'schema': 'zmc'}
-    serums_id = Column(Integer, primary_key=True)
-    patnr = Column(BigInteger, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
+    serums_id = Column(Integer)
+    patnr = Column(BigInteger)
 
 class ZMC_Hospital_Doctors(Base):
     __tablename__ = 'hospital_doctors'
@@ -362,7 +383,6 @@ class ZMC_Hospital_Doctors(Base):
     name = Column(String)
     department_id = Column(Integer)
     department_name = Column(String)
-
 
 
 Base.metadata.create_all(engine)

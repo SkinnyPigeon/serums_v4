@@ -47,6 +47,6 @@ for directory in directories:
         with open("{csv_path}{table}.csv".format(csv_path=csv_path, table=table), 'r') as csv:
             df = pd.read_csv(csv)
             print(df)
-        df.to_sql(table, con=engine, index=False, if_exists="replace", schema=directory)
+        df.to_sql(table, con=engine, if_exists='append', index=False, schema=directory)
 
 engine.dispose()

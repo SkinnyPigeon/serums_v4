@@ -72,7 +72,7 @@ def get_patient_data(body):
     # print(connection)
 
     classes = select_table_classes(connection['schema'], connection['base'])
-    # print(classes)
+    print("CLASSES: {}".format(dir(connection['base'].classes)))
     # try:
     #     print("SERUMS ID: {}".format(connection['base'].classes.serums_ids))
     #     id_class = connection['base'].classes.serums_ids
