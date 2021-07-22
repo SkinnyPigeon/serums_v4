@@ -7,7 +7,7 @@ def refresh_jwt():
     zmc_refresh = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYyOTUzNDg3NSwianRpIjoiZjdiM2MzMTZjNjgyNDU2NDkyZDIyMDk4MDczZjY2MmYiLCJ1c2VySUQiOjM3NiwiaXNzIjoiU2VydW1zQXV0aGVudGljYXRpb24iLCJpYXQiOjE2MjY5NDI4NzUsInN1YiI6ImV1YW4zQHRlc3QuY29tIiwiZ3JvdXBJRHMiOlsiTUVESUNBTF9TVEFGRiJdLCJvcmdJRCI6IlpNQyIsImF1ZCI6Imh0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw_dT1odHRwLTNBX193d3cuc2VydW1zLmNvbSZkPUR3SURhUSZjPWVJR2pzSVRmWFBfeS1ETExYMHVFSFhKdlU4bk9IclVLOElyd05LT3RrVlUmcj11VGZONXVRMWtod2JSeV9UZ0tINmFVZDAtQmJtMEc4Sy1WYWprelpteTk4Jm09MmlVTm4yOUZTYWY3LTAzeHU5eE1CcmNuNHQ2VV8zdzN1cUxpTHl0VGZUNCZzPTVqQjJqbXFoc05BX2cxU1Z5WmdVRlJGOW9FUDhfQVFhLWxpY1lXM0l1ZncmZT0ifQ.2g9wRnPgdxy9DPM7AAQFWQEN_aVoUjpYb1-zSpSXW4g"
     url = "https://authentication.serums.cs.st-andrews.ac.uk/ua/refresh_jwt/"
     payload = '{{"refresh": "{}"}}'.format(ustan_refresh)
-    print(payload)
+    # print(payload)
     headers = {
         "Content-Type": "application/json"
     }

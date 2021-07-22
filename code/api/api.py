@@ -98,7 +98,7 @@ class Department(Resource):
 class MachineLearning(Resource):
     def post(self):
         refreshed_jwt = refresh_jwt()
-        print(refreshed_jwt)
+        # print(refreshed_jwt)
         jwt = refreshed_jwt['body']['resource_str']
         response = validate_jwt(jwt)
         print(response['body'])

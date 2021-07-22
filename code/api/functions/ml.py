@@ -69,10 +69,10 @@ def select_source_patient_id_value(session, id_class, serums_id, key_name):
 def get_patient_data(body):
     tables = ['cycles', 'general', 'intentions', 'patients', 'regimes']
     connection = setup_connection(body)
-    print(connection)
+    # print(connection)
 
     classes = select_table_classes(connection['schema'], connection['base'])
-    print(classes)
+    # print(classes)
     # try:
     #     print("SERUMS ID: {}".format(connection['base'].classes.serums_ids))
     #     id_class = connection['base'].classes.serums_ids

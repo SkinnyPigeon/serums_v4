@@ -34,7 +34,7 @@ def get_departments(body):
             department_table.department_name
         ], department_table.serums_id == body['userID'] )
 
-        print(query)
+        # print(query)
 
         department_ids = []
         for serums_id, staff_id, name, department_id, department_name in session.execute(query):
@@ -46,7 +46,7 @@ def get_departments(body):
                 "department_name": department_name.replace("'", "")
             })
         session.close()
-        print(department_ids)
+        # print(department_ids)
         return department_ids
     except Exception as e:
         return {"error": str(e)}
