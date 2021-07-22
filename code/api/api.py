@@ -20,9 +20,6 @@ from functions.ml import get_patient_data
 
 FLASK_DEBUG=1
 
-# project_folder = os.path.expanduser('~/code/api_v4/code/api')
-# load_dotenv(os.path.join(project_folder, '.env'))
-
 project_folder = subprocess.check_output("pwd", shell=True).decode("utf-8").rstrip()
 load_dotenv(os.path.join(project_folder, '.env'))
 PORT = os.getenv('PGPORT')
