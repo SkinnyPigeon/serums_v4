@@ -21,9 +21,6 @@ if PORT == None:
     PASSWORD = os.environ.get('PGPASSWORD')
     PORT = os.environ.get('PGPORT')
 
-
-print(PORT)
-
 engine = create_engine('postgresql://postgres:{}@localhost:{}/source'.format(PASSWORD, PORT), echo='debug')
 
 # USTAN
@@ -369,3 +366,4 @@ class ZMC_Hospital_Doctors(Base):
 
 
 Base.metadata.create_all(engine)
+engine.dispose()

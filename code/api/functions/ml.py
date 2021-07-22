@@ -24,9 +24,10 @@ if PORT == None:
 def setup_connection(body):
     schema = body['orgID'].lower() + "_ml"
     metadata = MetaData(schema=schema)
-    Base = automap_base(metadata=metadata)
     engine = create_engine('postgresql://postgres:{}@localhost:{}/source'.format(PASSWORD, PORT))
-    Base.prepare(engine, reflect=True)
+    metadata.reflect(engine)
+    Base = automap_base(metadata=metadata)
+    Base.prepare()
     Session = sessionmaker(bind=engine)
     session = Session()
     return {"metadata": metadata, "base": Base, "engine": engine, "session": session, 'schema': schema}
@@ -68,11 +69,21 @@ def select_source_patient_id_value(source_session, id_class, serums_id, key_name
 def get_patient_data(body):
     tables = ['cycles', 'general', 'intentions', 'patients', 'regimes']
     connection = setup_connection(body)
+    # print(connection['base'].classes.USTAN_ML_Serums_IDs)
+    classes = select_table_classes(connection['schema'], connection['base'])
+    for base_class in classes:
+        print(base_class)
     try:
-        key_name = select_source_patient_id_name(body)
-        
+        # print("SERUMS ID: {}".format(connection['base'].classes.serums_ids))
+        # id_class = connection['base'].classes.serums_ids
+        # key_name = select_source_patient_id_name(body)
+        # patient_id = select_source_patient_id_value(connection['session'], 
+        #                                             connection['base'].classes.serums_ids, 
+        #                                             body['serums_id'], key_name)
 
-        
+        # print(patient_id)
+
+        print(dir(connection['base'].classes))
 
         
         connection['engine'].dispose()
