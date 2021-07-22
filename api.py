@@ -13,6 +13,7 @@ import json
 
 from functions.jwt import validate_jwt, refresh_jwt
 from functions.departments import get_departments
+from functions.ml import get_patient_data
 
 
 # Setting up environment
@@ -46,26 +47,40 @@ hello = api.model('Server Check', {
     'hello': fields.String(required=True, description='Quick check that the server is on', example='Welcome to the API. The server is on')
 })
 
-
 parser = api.parser()
+
+
+# Staff 
 
 staff_parser = api.parser()
 staff_parser.add_argument('Authorization', help="The authorization token", location="headers", default="""Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYyMDkwNTkzOCwianRpIjoiNjZjNTgwYmUtOTViMC00YjhiLWE3ZjQtYzU3ODkyOGJhM2NjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE2MjA5MDU5MzgsImV4cCI6MTg4MDEwNTkzOH0.zeJNNiXE7XbeNPC5g2OEQvu1EsYeohUsgvsY2_fg8EM""")
+
+
+# Machine learning
+
+ml_parser = api.parser()
+ml_parser.add_argument('Authorization', help="The authorization token", location="headers", default="""Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYyMDkwNTkzOCwianRpIjoiNjZjNTgwYmUtOTViMC00YjhiLWE3ZjQtYzU3ODkyOGJhM2NjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE2MjA5MDU5MzgsImV4cCI6MTg4MDEwNTkzOH0.zeJNNiXE7XbeNPC5g2OEQvu1EsYeohUsgvsY2_fg8EM""")
 
 
 # Name spaces
 
 hello_space = api.namespace('hello', description='Check the server is on')
 staff_space = api.namespace('staff_tables', description='Return the staff tables')
+ml_space = api.namespace('machine_learning', description='Return the patient data for the machine learning algorithm')
 
 
 # Routes
+
+# Server check
 
 @hello_space.route('/hello')
 class ServerCheck(Resource):
     @api.marshal_with(hello)
     def get(self):
         return {"hello": "Welcome to the API. The server is on"}
+
+
+# Staff tables
 
 @staff_space.route('/department')
 class Department(Resource):
@@ -78,6 +93,21 @@ class Department(Resource):
         if response['status_code'] == 200:
             department_ids = get_departments(response['body'])
         return department_ids
+
+
+# Machine Learning
+
+@ml_space.route('/analytics')
+class MachineLearning(Resource):
+    def post(self):
+        refreshed_jwt = refresh_jwt()
+        print(refreshed_jwt)
+        jwt = refreshed_jwt['body']['resource_str']
+        response = validate_jwt(jwt)
+        print(response['body'])
+        if response['status_code'] == 200:
+            patient_data = get_patient_data(response['body'])
+        return patient_data
 
 
 

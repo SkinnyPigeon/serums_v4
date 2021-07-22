@@ -2,8 +2,6 @@ from sqlalchemy import create_engine, MetaData, inspect, select
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import load_only, sessionmaker, defer
-import pandas as pd
-from tabulate import tabulate
 
 import os
 from dotenv import load_dotenv
