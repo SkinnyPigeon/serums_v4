@@ -182,6 +182,12 @@ class USTAN_Regimes(Base):
 
 # USTAN MACHINE LEARNING
 
+class USTAN_ML_Serums_IDs(Base):
+    __tablename__ = 'serums_ids'
+    __table_args__ = {'schema': 'ustan_ml'}
+    serums_id = Column(Integer, primary_key=True)
+    chi = Column(BigInteger, primary_key=True)
+
 
 class USTAN_ML_Cycles(Base):
     __tablename__ = 'cycles'
@@ -318,6 +324,46 @@ class USTAN_ML_Regimes(Base):
     elapsed_days = Column(Integer)
     init_appointment_date = Column(DateTime(timezone=False))
     appointment_date = Column(DateTime(timezone=False))
+
+
+# FCRB
+
+class FCRB_Serums_IDs(Base):
+    __tablename__ = 'serums_ids'
+    __table_args__ = {'schema': 'fcrb'}
+    serums_id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger, primary_key=True)
+
+class FCRB_Hospital_Doctors(Base):
+    __tablename__ = 'hospital_doctors'
+    __table_args__ = {'schema': 'fcrb'}
+    id = Column(Integer, primary_key=True)
+    serums_id = Column(Integer)
+    staff_id = Column(Integer)
+    name = Column(String)
+    department_id = Column(Integer)
+    department_name = Column(String)
+
+
+
+# ZMC
+
+class ZMC_Serums_IDs(Base):
+    __tablename__ = 'serums_ids'
+    __table_args__ = {'schema': 'zmc'}
+    serums_id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger, primary_key=True)
+
+class ZMC_Hospital_Doctors(Base):
+    __tablename__ = 'hospital_doctors'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    serums_id = Column(Integer)
+    staff_id = Column(Integer)
+    name = Column(String)
+    department_id = Column(Integer)
+    department_name = Column(String)
+
 
 
 Base.metadata.create_all(engine)
