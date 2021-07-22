@@ -17,7 +17,7 @@ ALTER DATABASE data_vault SET search_path TO fcrb, ustan, zmc, public, pg_catalo
 create schema zmc;
 create schema fcrb;
 create schema ustan;
-create_schema ustan_ml;
+create schema ustan_ml;
 
 ALTER DATABASE source SET search_path TO fcrb, ustan, ustan_ml, zmc, public, pg_catalog;
 

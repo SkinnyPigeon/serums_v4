@@ -1,10 +1,17 @@
 # Setup
 from sqlalchemy import create_engine, text
+
 import os
+import subprocess
+import pandas as pd
+
 from dotenv import load_dotenv
 
-project_folder = os.path.expanduser('~/code/api_v3_docker/code/api')
-load_dotenv(os.path.join(project_folder, '.env'))
+project_folder = subprocess.check_output("pwd", shell=True).decode("utf-8").rstrip()
+print(project_folder)
+csv_path = "{project_folder}/code/api/reset_sql/data/zmc/".format(project_folder=project_folder)
+
+
 PORT = os.getenv('PGPORT')
 PASSWORD = os.getenv('PGPASSWORD')
 if PORT == None:
@@ -15,15 +22,32 @@ engine = create_engine("postgresql://postgres:{}@localhost:{}/source".format(PAS
 
 # Creating source tables
 
-tables = ['fcrb_data', 'ustan_data', 'zmc_data']
+directories = ['fcrb', 'ustan', 'zmc', 'ustan_ml']
 
-try:
+fcrb_tables = ['hospital_doctors', 'serums_ids']
+ustan_tables = ['hospital_doctors', 'serums_ids', 'cycles', 'general', 'intentions', 'patients', 'regimes']
+ustan_ml_tables = ['serums_ids', 'cycles', 'general', 'intentions', 'patients', 'regimes']
+zmc_tables = ['hospital_doctors', 'serums_ids']
+
+for directory in directories:
+    schema = ''
+    tables = []
+    csv_path = "{project_folder}/code/api/reset_sql/data/{directory}/".format(project_folder=project_folder, directory=directory)
+
+    if directory == 'fcrb':
+        tables = fcrb_tables
+    elif directory == 'ustan':
+        tables = ustan_tables
+    elif directory == 'ustan_ml':
+        tables = ustan_ml_tables
+    elif directory == 'zmc':
+        tables = zmc_tables
+
     for table in tables:
-        sql_file = open('./code/api/reset_sql/sql/{table}.sql'.format(table=table), 'r')
-        sql = text(sql_file.read())
-        engine.execute(sql)
-except:
-    for table in tables:
-        sql_file = open('/code/api/reset_sql/sql/{table}.sql'.format(table=table), 'r')
-        sql = text(sql_file.read())
-        engine.execute(sql)
+        with open("{csv_path}{table}.csv".format(csv_path=csv_path, table=table), 'r') as csv:
+            df = pd.read_csv(csv)
+            print(df)
+        df.to_sql(table, con=engine, index=True, if_exists="replace", schema=directory)
+
+engine.dispose()
+print(dir(engine))

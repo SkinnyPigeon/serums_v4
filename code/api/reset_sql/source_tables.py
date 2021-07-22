@@ -22,6 +22,8 @@ if PORT == None:
     PORT = os.environ.get('PGPORT')
 
 
+print(PORT)
+
 engine = create_engine('postgresql://postgres:{}@localhost:{}/source'.format(PASSWORD, PORT), echo='debug')
 
 # USTAN
@@ -73,7 +75,7 @@ class USTAN_Cycles(Base):
     skin = Column(Integer)
     hypersensitivity = Column(Integer)
     fatigue = Column(Integer)
-    required_dose = Column(Numeric(6, 10))
+    required_dose = Column(Numeric(10, 6))
 
 class USTAN_General(Base):
     __tablename__ = 'general'
@@ -106,14 +108,14 @@ class USTAN_General(Base):
     charlson_score = Column(Integer)
     dob = Column(DateTime(timezone=False))
     age = Column(Integer)
-    simd = Column(Numeric(2, 5))
-    simd1 = Column(Numeric(2, 5))
+    simd = Column(Numeric(5, 2))
+    simd1 = Column(Numeric(5, 2))
     side = Column(Integer)
     gender = Column(Integer)
-    age_at_diagnosis = Column(Numeric(2, 5))
-    weight = Column(Numeric(2, 5))
-    bmi = Column(Numeric(2, 5))
-    height = Column(Numeric(2, 5))
+    age_at_diagnosis = Column(Numeric(5, 2))
+    weight = Column(Numeric(5, 2))
+    bmi = Column(Numeric(5, 2))
+    height = Column(Numeric(5, 2))
     religion = Column(Integer)
     civil_st = Column(Integer)
     ref_hospital = Column(Integer)
@@ -219,7 +221,7 @@ class USTAN_ML_Cycles(Base):
     skin = Column(Integer)
     hypersensitivity = Column(Integer)
     fatigue = Column(Integer)
-    required_dose = Column(Numeric(6, 10))
+    required_dose = Column(Numeric(10, 6))
 
 class USTAN_ML_General(Base):
     __tablename__ = 'general'
@@ -252,14 +254,14 @@ class USTAN_ML_General(Base):
     charlson_score = Column(Integer)
     dob = Column(DateTime(timezone=False))
     age = Column(Integer)
-    simd = Column(Numeric(2, 5))
-    simd1 = Column(Numeric(2, 5))
+    simd = Column(Numeric(5, 2))
+    simd1 = Column(Numeric(5, 2))
     side = Column(Integer)
     gender = Column(Integer)
-    age_at_diagnosis = Column(Numeric(2, 5))
-    weight = Column(Numeric(2, 5))
-    bmi = Column(Numeric(2, 5))
-    height = Column(Numeric(2, 5))
+    age_at_diagnosis = Column(Numeric(5, 2))
+    weight = Column(Numeric(5, 2))
+    bmi = Column(Numeric(5, 2))
+    height = Column(Numeric(5, 2))
     religion = Column(Integer)
     civil_st = Column(Integer)
     ref_hospital = Column(Integer)
@@ -346,7 +348,7 @@ class FCRB_Hospital_Doctors(Base):
 
 
 
-# ZMC
+# # ZMC
 
 class ZMC_Serums_IDs(Base):
     __tablename__ = 'serums_ids'

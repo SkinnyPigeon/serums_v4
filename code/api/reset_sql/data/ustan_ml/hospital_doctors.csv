@@ -1,0 +1,11 @@
+id,serums_id,staff_id,name,department_id,department_name
+1,364,6000,Isla MacDonald,1,Emergency 
+2,6001,6001,Charles Stewart,1,Emergency     
+3,6002,6002,Oliver Wilson,1,Emergency     
+4,6003,6003,Emily Scott,1,Emergency 
+5,6004,6004,Ella Murray,2,Surgery   
+6,6006,6006,James Campbell,2,Surgery   
+7,6006,6006,Charlotte Watson,2,Surgery   
+8,6007,6007,Amelia Clark,3,Consultant
+9,6008,6008,Noah Thomson,3,Consultant
+10,6009,6009,Jack Smith,3,Consultant
