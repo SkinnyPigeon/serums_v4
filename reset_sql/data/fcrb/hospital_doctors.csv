@@ -1,0 +1,11 @@
+id,serums_id,staff_id,name,department_id,department_name
+1, 375,5000,Mateu Martin Silva,1,Emergency
+2,5001,5001,Lluc Garcia Torres,1,Emergency     
+3,5002,5002,Llora Romero Navarro,1,Emergency     
+4,5003,5003,Laia Ortega Morales,1,Emergency
+5,5004,5004,Neus Ramos Serrano,2,Surgery
+6,5005,5005,Beatriu Iglesias Delgado,2,Surgery
+7,5006,5006,Carles Sanchez Martinez,2,Surgery
+8,5007,5007,Dolors Sanz Rubi,3,Consultant
+9,5008,5008,Francesc Diaz Ruiz,3,Consultant
+10,5009,5009,Àlex Alonso Romero,3,Consultant
