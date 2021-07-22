@@ -22,9 +22,9 @@ if PORT == None:
 # Helper functions
 
 def setup_connection(body):
-    schema = body['orgID'].lower() + "_ml"
-    metadata = MetaData(schema=schema)
     engine = create_engine('postgresql://postgres:{}@localhost:{}/source'.format(PASSWORD, PORT))
+    schema = body['orgID'].lower() + "_ml"
+    metadata = MetaData(schema=schema, bind=engine)
     metadata.reflect(engine)
     Base = automap_base(metadata=metadata)
     Base.prepare()
@@ -36,7 +36,6 @@ def setup_connection(body):
 def select_table_classes(schema, base):
     tables = {}
     for class_name in base._decl_class_registry.values():
-        # if hasattr(class_name, '__table__') and class_name.__table__.fullname not in ['{schema}.serums_ids'.format(schema=schema), '{schema}.patient_rules'.format(schema=schema), '{schema}.hospital_tags'.format(schema=schema), '{schema}.hospital_doctors'.format(schema=schema)]:
         if hasattr(class_name, '__table__'):
             tables.update({class_name.__table__.fullname: class_name})
     return tables
@@ -70,12 +69,10 @@ def select_source_patient_id_value(session, id_class, serums_id, key_name):
 def get_patient_data(body):
     tables = ['cycles', 'general', 'intentions', 'patients', 'regimes']
     connection = setup_connection(body)
-    # try:
-    print(connection['base'].classes.serums_ids)
-    # except Exception as e:
-    #     print(e)
-    # classes = select_table_classes(connection['schema'], connection['base'])
-    # print(classes)
+    print(connection)
+
+    classes = select_table_classes(connection['schema'], connection['base'])
+    print(classes)
     # try:
     #     print("SERUMS ID: {}".format(connection['base'].classes.serums_ids))
     #     id_class = connection['base'].classes.serums_ids
