@@ -56,7 +56,7 @@ def select_source_patient_id_name(body):
     for keys, values in table_dict.items():
         if keys.name == 'serums_ids':
             for column in keys.columns:
-                if ".serums_id" not in str(column):
+                if ".serums_id" not in str(column) and '.id' not in str(column):
                     return str(column).split(".")[1]
 
 
@@ -66,34 +66,38 @@ def select_source_patient_id_value(session, id_class, serums_id, key_name):
     return res[key_name]
 
 
+def select_patient_data(session, table_class, patient_id, key_name):
+    results = session.query(table_class).filter_by(**{key_name: patient_id}).all()
+    data = []
+    for result in results:
+        print(dir(result))
+        # data.append(result)
+    return data 
+
+
 def get_patient_data(body):
     tables = ['cycles', 'general', 'intentions', 'patients', 'regimes']
     connection = setup_connection(body)
-    # print(connection)
-
     classes = select_table_classes(connection['schema'], connection['base'])
     print("CLASSES: {}".format(dir(connection['base'].classes)))
-    # try:
-    #     print("SERUMS ID: {}".format(connection['base'].classes.serums_ids))
-    #     id_class = connection['base'].classes.serums_ids
-    #     print(id_class)
-    #     key_name = select_source_patient_id_name(body)
-    #     patient_id = select_source_patient_id_value(connection['session'], 
-    #                                                 id_class, 
-    #                                                 body['userID'], key_name)
+    id_class = connection['base'].classes.serums_ids
+    key_name = select_source_patient_id_name(body)
+    patient_id = select_source_patient_id_value(connection['session'], 
+                                                id_class, 
+                                                body['userID'], key_name)
+    print("PATIENT ID: {}".format(patient_id))
 
-    #     print(patient_id)
-
-    #     print(dir(connection['base'].classes))
-
-        
-    #     connection['engine'].dispose()
-    #     results = {}
-    #     for table in tables:
-    #         results[table] = 'meh'
-    #     return results
+    results = {}
+    for table in tables:
+        print(table)
+        table_class = connection['base'].classes[table]
+        data = select_patient_data(connection['session'], table_class, patient_id, key_name)
+        results[table] = data
+    
+    connection['engine'].dispose()
+    
+    return results
 
     # except Exception as e:
     #     connection['engine'].dispose()
     #     return {"error": str(e)}
-    return {'meh': 'bah'}
