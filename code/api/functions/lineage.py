@@ -2,6 +2,8 @@ import json
 import requests
 from datetime import datetime
 
+from encryption import encrypt_data, decrypt_data
+
 body = {'rule_id': 123, 'serums_id': 123, 'hospital_ids': ['ZMC', 'FCRB']}
 
 def create_record_on_blockchain(body, jwt):
@@ -20,7 +22,7 @@ def create_record_on_blockchain(body, jwt):
     url = 'http://localhost:3000/proof'
 
     try:
-        response = requests.request('POST', url, headers=headers, data=data)
+        response = requests.request('POST', url, headers=headers, data=encrypt_data(data))
         if response.status_code == 200:
             return {'status_code': response.status_code, 'body': response.json()}
         else:
@@ -28,7 +30,10 @@ def create_record_on_blockchain(body, jwt):
     except Exception as e:
         return {'error': str(e)}
 
-proof_id = create_record_on_blockchain(body, 'jkasjdsajkas')['body']['proofId']
+response = create_record_on_blockchain(body, 'jkasjdsajkas')
+print(response)
+
+proof_id = decrypt_data(response['body']['response'])
 print(proof_id)
 
 
@@ -49,7 +54,7 @@ def add_update_to_blockchain(proof_id, jwt, body):
     url = 'http://localhost:3000/proof/{}'.format(proof_id)
 
     try:
-        response = requests.request('PATCH', url, headers=headers, data=data)
+        response = requests.request('PATCH', url, headers=headers, data=encrypt_data(data))
         if response.status_code == 200:
             return {'status_code': response.status_code, 'body': response.json()}
         else:
@@ -71,3 +76,6 @@ print(body)
 
 response = add_update_to_blockchain('abc123', 'this_is_my_jwt', body)
 print(response)
+
+proof_id = decrypt_data(response['body']['response'])
+print(proof_id)
