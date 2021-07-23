@@ -58,6 +58,18 @@ def object_as_dict(obj):
     return {c.key: getattr(obj, c.key) for c in inspect(obj).mapper.column_attrs}
 
 
+def select_tags(tags_list, request_tags):
+    selected_tags = []
+    for request_tag in request_tags:
+        for tag_definition in tags_list:
+            try:
+                if tag_definition['tag'] == request_tag:
+                    selected_tags.append(tag_definition)
+            except:
+                pass
+    return selected_tags
+
+
 def convert_dates_to_string(df):
     for column in df:
         if df.dtypes[column] in ['datetime64[ns]']:
@@ -96,14 +108,45 @@ def select_source_patient_id_value(session, id_class, serums_id, key_name):
     return res[key_name]
 
 
-
 # Selecting the data based on the tags
 
 
+def select_patient_data(session, tags, patient_id, key_name):
+    results = {}
+    for tag in tags:
+        print(tag)
+
+
+
+    # results = session.query(table_class).filter_by(**{key_name: patient_id}).all()
+    # data = []    
+    # for row in results:
+    #     data.append(object_as_dict(row))
+
+    # df = pd.DataFrame([x for x in data]) 
+    # df = convert_dates_to_string(df)
+    # df = convert_decimal_to_float(df)
+    # return df.to_dict('index')
+    return {"Ha": "Sucker"}
+
+
 def get_patient_data(body):
+    print(body)
+    results = {}
+    results['Hey'] = 'You'
+    for hospital_id in body['hospital_ids']:
+        hospital, tags_list = hospital_picker(hospital_id)
+        tags = select_tags(tags_list, body['tags'])
+        connection = setup_connection(hospital)
+        id_class = connection['base'].classes.serums_ids
+        key_name = select_source_patient_id_name(hospital)
+        patient_id = select_source_patient_id_value(connection['session'], 
+                                                        id_class, 
+                                                        body['serums_id'], key_name)
+        data = select_patient_data(connection['session'], tags, patient_id, key_name)
+        print(data)
 
+        connection['engine'].dispose()
 
-
-
-    return {'Hey': 'You'}
+    return results
 
