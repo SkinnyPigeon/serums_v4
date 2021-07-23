@@ -32,12 +32,6 @@ if PORT == None:
     PORT = os.environ.get('PGPORT')
 
 
-# Nonsense
-
-def check():
-    print("CHECKING")
-
-
 # Helper functions
 
 def hospital_picker(hospital):
@@ -79,3 +73,37 @@ def convert_decimal_to_float(df):
             except:
                 pass
     return df
+
+
+# Converting Serums ID into source system ID    
+
+
+def select_source_patient_id_name(body):
+    connection = setup_connection(body)
+    metadata = connection['metadata']
+    table_dict = dict.fromkeys(metadata.sorted_tables)
+    connection['engine'].dispose()
+    for keys, values in table_dict.items():
+        if keys.name == 'serums_ids':
+            for column in keys.columns:
+                if ".serums_id" not in str(column) and '.id' not in str(column):
+                    return str(column).split(".")[1]
+
+
+def select_source_patient_id_value(session, id_class, serums_id, key_name):
+    result = session.query(id_class).filter_by(serums_id=serums_id).one()
+    res = object_as_dict(result)
+    return res[key_name]
+
+
+
+# Selecting the data based on the tags
+
+
+def get_patient_data(body):
+
+
+
+
+    return {'Hey': 'You'}
+

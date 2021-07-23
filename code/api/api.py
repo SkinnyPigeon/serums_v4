@@ -14,7 +14,7 @@ import json
 from functions.jwt import validate_jwt, refresh_jwt
 from functions.departments import get_departments
 from functions.ml import get_patient_data
-from functions.get_source_data import check
+from functions.get_source_data import get_patient_data
 
 
 # Setting up environment
@@ -104,7 +104,6 @@ class Department(Resource):
 class MachineLearning(Resource):
     def post(self):
         refreshed_jwt = refresh_jwt()
-        # print(refreshed_jwt)
         jwt = refreshed_jwt['body']['resource_str']
         response = validate_jwt(jwt)
         print(response['body'])
@@ -123,9 +122,9 @@ class SPHR(Resource):
         response = validate_jwt(jwt)
         print(response['body'])
         if response['status_code'] == 200:
-            check()
+            patient_data = get_patient_data()
 
-        return {"AGHAGAH": "ALSKDLKS"}
+        return patient_data
 
 
 
