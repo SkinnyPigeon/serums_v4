@@ -100,10 +100,6 @@ def select_patient_data(session, table_class, patient_id, key_name):
     return df.to_dict('index')
 
 
-
-
-
-
 def get_patient_data(body):
     tables = ['cycles', 'general', 'intentions', 'patients', 'regimes']
     try:
@@ -120,7 +116,6 @@ def get_patient_data(body):
             table_class = connection['base'].classes[table]
             data = select_patient_data(connection['session'], table_class, patient_id, key_name)
             results[table] = data
-        print(json.dumps(results, indent=2))
         connection['engine'].dispose()
         return results
     except Exception as e:
