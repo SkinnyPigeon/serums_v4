@@ -123,26 +123,31 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name):
     session = connection['session']
     results = {}
     tables = get_classes_by_name(connection['schema'], connection['base'])
-    print(tables)
-
+    # print(tables)
     for tag_definition in tags_definitions:
-        print(tag_definition)
+        data = []
+        table_class = tables[tag_definition['table']]
+        fields = tag_definition['fields']
+        # fields = ', '.join(tag_definition['fields'])
+        print(dir(table_class))
+        result = session.query(table_class).with_entities(table_class.patnr, table_class.w_cad).filter_by(**{key_name: patient_id}).all()
+        # result = session.query(table_class).options(load_only('patnr', 'w_time')).filter_by(**{key_name: patient_id}).all()
+        print(result)
+        for row in result:
+            # data.append(object_as_dict(row))
+            print(row)
 
+        df = pd.DataFrame([x for x in data])
+        df = convert_dates_to_string(df)
+        df = convert_decimal_to_float(df)
 
-    # results = session.query(table_class).filter_by(**{key_name: patient_id}).all()
-    # data = []    
-    # for row in results:
-    #     data.append(object_as_dict(row))
+        results[tag_definition['table']] = df
 
-    # df = pd.DataFrame([x for x in data]) 
-    # df = convert_dates_to_string(df)
-    # df = convert_decimal_to_float(df)
-    # return df.to_dict('index')
-    return {"Ha": "Sucker"}
+    return results
 
 
 def get_patient_data(body):
-    print(body)
+    # print(body)
     results = {}
     results['Hey'] = 'You'
     for hospital_id in body['hospital_ids']:
@@ -155,7 +160,7 @@ def get_patient_data(body):
                                                         id_class, 
                                                         body['serums_id'], key_name)
         data = select_patient_data(connection, tags, patient_id, key_name)
-        print(data)
+        # print("DATA: {}".format(data))
 
         connection['engine'].dispose()
 

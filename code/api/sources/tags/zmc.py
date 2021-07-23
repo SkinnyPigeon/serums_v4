@@ -1,7 +1,17 @@
 #!/usr/bin/env python3
 
-zmc_wearable = {'tag': 'wearable', 'table': 'zmc.wearable', 'fields': [
-    'patnr', 'date', 'w_time', 'w_steps', 'w_cad', 'sst', 'sst_time', 'cyc_time', 'cyc_steps', 'cyc_cad'], 'key_lookup': {}}
+# zmc_wearable = {'tag': 'wearable', 'table': 'zmc.wearable', 'fields': [
+#     'patnr', 'date', 'w_time', 'w_steps', 'w_cad', 'sst', 'sst_time', 'cyc_time', 'cyc_steps', 'cyc_cad'], 'key_lookup': {}}
+
+
+zmc_wearable = {'tag': 'wearable', 'table': 'zmc.wearable', 'fields': ['patnr', 
+                                                                       'date', 
+                                                                       'w_time', 
+                                                                       'w_steps', 
+                                                                       'w_cad', 
+                                                                       'sst'
+                                          
+                                                                    ], 'key_lookup': {}}
 
 zmc_diagnostic = {}
 
