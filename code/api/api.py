@@ -129,8 +129,8 @@ class SPHR(Resource):
         
         body = {
             'serums_id': 364,
-            'hospital_ids': ['ZMC'],
-            'tags': ['wearable']
+            'hospital_ids': ['ZMC', 'USTAN'],
+            'tags': ['wearable', 'all']
         }
 
         # refreshed_jwt = refresh_jwt()

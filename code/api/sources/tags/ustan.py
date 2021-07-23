@@ -26,7 +26,7 @@ ustan_treatments = {}
 
 ustan_personal = {}
 
-ustan_all_1 = {'tag': 'all', 'table': 'zmc.cycles', 'fields': ['chi',
+ustan_all_1 = {'tag': 'all', 'table': 'ustan.cycles', 'fields': ['chi',
                                                                'regime_id',
                                                                'intention_id',
                                                                'cycle_id',
@@ -54,7 +54,7 @@ ustan_all_1 = {'tag': 'all', 'table': 'zmc.cycles', 'fields': ['chi',
                                                                'fatigue',
                                                                'required_doses'
                                                                ], 'key_lookup': {}}
-ustan_all_2 = {'tag': 'all', 'table': 'zmc.general', 'fields': ['chi',
+ustan_all_2 = {'tag': 'all', 'table': 'ustan.general', 'fields': ['chi',
                                                                 'incidence_date',
                                                                 'site_icd_10',
                                                                 'name',
@@ -111,7 +111,7 @@ ustan_all_2 = {'tag': 'all', 'table': 'zmc.general', 'fields': ['chi',
                                                                 'dat_death',
                                                                 'gp_id'
                                                                 ], 'key_lookup': {}}
-ustan_all_3 = {'tag': 'all', 'table': 'zmc.intentions', 'fields': ['chi',
+ustan_all_3 = {'tag': 'all', 'table': 'ustan.intentions', 'fields': ['chi',
                                                                    'patient_id',
                                                                    'intention_id',
                                                                    'intention_seq',
@@ -124,7 +124,7 @@ ustan_all_3 = {'tag': 'all', 'table': 'zmc.intentions', 'fields': ['chi',
                                                                    'elapsed_days',
                                                                    'appointment_date'
                                                                    ], 'key_lookup': {}}
-ustan_all_4 = {'tag': 'all', 'table': 'zmc.regimes', 'fields': ['chi',
+ustan_all_4 = {'tag': 'all', 'table': 'ustan.regimes', 'fields': ['chi',
                                                                 'intention_id',
                                                                 'regime_id',
                                                                 'regime_seq',
@@ -139,7 +139,7 @@ ustan_all_4 = {'tag': 'all', 'table': 'zmc.regimes', 'fields': ['chi',
                                                                 'init_appointment_date',
                                                                 'appointment_date'
                                                                 ], 'key_lookup': {}}
-ustan_all_5 = {'tag': 'all', 'table': 'zmc.patients', 'fields': ['chi',
+ustan_all_5 = {'tag': 'all', 'table': 'ustan.patients', 'fields': ['chi',
                                                                  'patient_id',
                                                                  'first_intention',
                                                                  'appointment_date'

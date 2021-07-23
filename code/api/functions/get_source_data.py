@@ -119,13 +119,14 @@ def select_source_patient_id_value(session, id_class, serums_id, key_name):
 # Selecting the data based on the tags
 
 
-def select_patient_data(connection, tags, patient_id, key_name):
+def select_patient_data(connection, tags_definitions, patient_id, key_name):
     session = connection['session']
     results = {}
-    for tag in tags:
-        tables = get_classes_by_name(connection['schema'], connection['base'])
-        print(tables)
+    tables = get_classes_by_name(connection['schema'], connection['base'])
+    print(tables)
 
+    for tag_definition in tags_definitions:
+        print(tag_definition)
 
 
     # results = session.query(table_class).filter_by(**{key_name: patient_id}).all()
