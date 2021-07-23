@@ -14,6 +14,7 @@ import json
 from functions.jwt import validate_jwt, refresh_jwt
 from functions.departments import get_departments
 from functions.ml import get_patient_data
+from functions.get_source_data import check
 
 
 # Setting up environment
@@ -59,12 +60,17 @@ ml_parser = api.parser()
 ml_parser.add_argument('Authorization', help="The authorization token", location="headers", default="""Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYyMDkwNTkzOCwianRpIjoiNjZjNTgwYmUtOTViMC00YjhiLWE3ZjQtYzU3ODkyOGJhM2NjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE2MjA5MDU5MzgsImV4cCI6MTg4MDEwNTkzOH0.zeJNNiXE7XbeNPC5g2OEQvu1EsYeohUsgvsY2_fg8EM""")
 
 
+# Smart Patient Health Record
+
+sphr_parser = api.parser()
+sphr_parser.add_argument('Authorization', help="The authorization token", location="headers", default="""Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYyMDkwNTkzOCwianRpIjoiNjZjNTgwYmUtOTViMC00YjhiLWE3ZjQtYzU3ODkyOGJhM2NjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE2MjA5MDU5MzgsImV4cCI6MTg4MDEwNTkzOH0.zeJNNiXE7XbeNPC5g2OEQvu1EsYeohUsgvsY2_fg8EM""")
+
 # Name spaces
 
 hello_space = api.namespace('hello', description='Check the server is on')
 staff_space = api.namespace('staff_tables', description='Return the staff tables')
 ml_space = api.namespace('machine_learning', description='Return the patient data for the machine learning algorithm')
-
+sphr_space = api.namespace('smart_patient_health_record', description='Retrieve the Smart Patient Health Record')
 
 # Routes
 
@@ -105,6 +111,22 @@ class MachineLearning(Resource):
         if response['status_code'] == 200:
             patient_data = get_patient_data(response['body'])
         return patient_data
+
+
+# Smart Patient Health Record
+
+@sphr_space.route('/sphr')
+class SPHR(Resource):
+    def post(self):
+        refreshed_jwt = refresh_jwt()
+        jwt = refreshed_jwt['body']['resource_str']
+        response = validate_jwt(jwt)
+        print(response['body'])
+        if response['status_code'] == 200:
+            check()
+
+        return {"AGHAGAH": "ALSKDLKS"}
+
 
 
 
