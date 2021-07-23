@@ -18,20 +18,12 @@ data = {
     'date': str(datetime.today())
 }
 
-# data = {'proofId': 'abc123'}
-
 def encrypt_data(data):
     encryption = Fernet(secret)
     encrypted_data = encryption.encrypt(json.dumps(data).encode())
     return encrypted_data.decode()
 
-# encrypted_data = encrypt_data(data)
-# print(encrypted_data)
-
 def decrypt_data(data):
     decryption = Fernet(secret)
     decrypted_data = decryption.decrypt(data.encode())
     return decrypted_data.decode()
-
-# decrypted_data = decrypt_data(encrypted_data)
-# print(decrypted_data)

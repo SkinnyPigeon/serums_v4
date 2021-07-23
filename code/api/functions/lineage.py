@@ -30,12 +30,6 @@ def create_record_on_blockchain(body, jwt):
     except Exception as e:
         return {'error': str(e)}
 
-response = create_record_on_blockchain(body, 'jkasjdsajkas')
-print(response)
-
-proof_id = decrypt_data(response['body']['response'])
-print(proof_id)
-
 
 def add_update_to_blockchain(proof_id, jwt, body):
     headers = {
@@ -71,11 +65,3 @@ body = {
     },
     'date': str(datetime.today())
 }
-
-print(body)
-
-response = add_update_to_blockchain('abc123', 'this_is_my_jwt', body)
-print(response)
-
-proof_id = decrypt_data(response['body']['response'])
-print(proof_id)
