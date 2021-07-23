@@ -80,7 +80,8 @@ def get_classes_by_name(schema, base):
 
 def convert_dates_to_string(df):
     for column in df:
-        if df.dtypes[column] in ['datetime64[ns]']:
+        print(df.dtypes[column])
+        if df.dtypes[column] in ['datetime64[ns]', 'object']:
             df[column] = df[column].astype(str)
     return df
 
@@ -93,6 +94,13 @@ def convert_decimal_to_float(df):
             except:
                 pass
     return df
+
+def convert_tuples_to_dict(row, fields):
+    row_dict = {}
+    if len(row) == len(fields):
+        for index, column in enumerate(fields):
+            row_dict[column] = row[index]
+    return row_dict
 
 
 # Converting Serums ID into source system ID    
@@ -123,25 +131,23 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name):
     session = connection['session']
     results = {}
     tables = get_classes_by_name(connection['schema'], connection['base'])
-    # print(tables)
     for tag_definition in tags_definitions:
         data = []
         table_class = tables[tag_definition['table']]
         fields = tag_definition['fields']
-        # fields = ', '.join(tag_definition['fields'])
-        print(dir(table_class))
-        result = session.query(table_class).with_entities(table_class.patnr, table_class.w_cad).filter_by(**{key_name: patient_id}).all()
-        # result = session.query(table_class).options(load_only('patnr', 'w_time')).filter_by(**{key_name: patient_id}).all()
-        print(result)
+        entities = []
+        for field in fields:
+            entities.append(getattr(table_class, field))
+        result = session.query(table_class).with_entities(*entities).filter_by(**{key_name: patient_id}).all()
+        
         for row in result:
-            # data.append(object_as_dict(row))
-            print(row)
+            data.append(convert_tuples_to_dict(row, fields))
 
         df = pd.DataFrame([x for x in data])
         df = convert_dates_to_string(df)
         df = convert_decimal_to_float(df)
 
-        results[tag_definition['table']] = df
+        results[tag_definition['table']] = df.to_dict('index')
 
     return results
 
@@ -160,9 +166,8 @@ def get_patient_data(body):
                                                         id_class, 
                                                         body['serums_id'], key_name)
         data = select_patient_data(connection, tags, patient_id, key_name)
-        # print("DATA: {}".format(data))
-
+        print(data)
         connection['engine'].dispose()
-
+        results[hospital_id] = data
     return results
 
