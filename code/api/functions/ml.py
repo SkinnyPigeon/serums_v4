@@ -36,21 +36,12 @@ def setup_connection(body):
     return {"metadata": metadata, "base": Base, "engine": engine, "session": session, 'schema': schema}
 
 
-def select_table_classes(schema, base):
-    tables = {}
-    for class_name in base._decl_class_registry.values():
-        if hasattr(class_name, '__table__'):
-            tables.update({class_name.__table__.fullname: class_name})
-    return tables
-
-
 def object_as_dict(obj):
     return {c.key: getattr(obj, c.key) for c in inspect(obj).mapper.column_attrs}
 
 
 def convert_dates_to_string(df):
     for column in df:
-        print(df[column].dtypes)
         if df.dtypes[column] in ['datetime64[ns]']:
             df[column] = df[column].astype(str)
     return df
@@ -88,6 +79,8 @@ def select_source_patient_id_value(session, id_class, serums_id, key_name):
     return res[key_name]
 
 
+# Selecting all the data
+
 def select_patient_data(session, table_class, patient_id, key_name):
     results = session.query(table_class).filter_by(**{key_name: patient_id}).all()
     data = []    
@@ -104,7 +97,6 @@ def get_patient_data(body):
     tables = ['cycles', 'general', 'intentions', 'patients', 'regimes']
     try:
         connection = setup_connection(body)
-        classes = select_table_classes(connection['schema'], connection['base'])
         id_class = connection['base'].classes.serums_ids
         key_name = select_source_patient_id_name(body)
         patient_id = select_source_patient_id_value(connection['session'], 
