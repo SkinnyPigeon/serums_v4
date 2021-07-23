@@ -70,6 +70,14 @@ def select_tags(tags_list, request_tags):
     return selected_tags
 
 
+def get_classes_by_name(schema, base):
+    tables = {}
+    for class_name in base._decl_class_registry.values():
+        if hasattr(class_name, '__table__') and class_name.__table__.fullname not in ['{schema}.serums_ids'.format(schema=schema), '{schema}.hospital_doctors'.format(schema=schema)]:
+            tables.update({class_name.__table__.fullname: class_name})
+    return tables
+
+
 def convert_dates_to_string(df):
     for column in df:
         if df.dtypes[column] in ['datetime64[ns]']:
@@ -111,10 +119,12 @@ def select_source_patient_id_value(session, id_class, serums_id, key_name):
 # Selecting the data based on the tags
 
 
-def select_patient_data(session, tags, patient_id, key_name):
+def select_patient_data(connection, tags, patient_id, key_name):
+    session = connection['session']
     results = {}
     for tag in tags:
-        print(tag)
+        tables = get_classes_by_name(connection['schema'], connection['base'])
+        print(tables)
 
 
 
@@ -143,7 +153,7 @@ def get_patient_data(body):
         patient_id = select_source_patient_id_value(connection['session'], 
                                                         id_class, 
                                                         body['serums_id'], key_name)
-        data = select_patient_data(connection['session'], tags, patient_id, key_name)
+        data = select_patient_data(connection, tags, patient_id, key_name)
         print(data)
 
         connection['engine'].dispose()
