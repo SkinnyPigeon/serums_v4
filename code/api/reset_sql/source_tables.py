@@ -384,6 +384,21 @@ class ZMC_Hospital_Doctors(Base):
     department_id = Column(Integer)
     department_name = Column(String)
 
+class ZMC_Wearable(Base):
+    __tablename__ = 'wearable'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    date = Column(DateTime(timezone=False))
+    w_time = Column(Time)
+    w_steps = Column(Integer)
+    w_cad = Column(Integer)
+    sst = Column(Integer)
+    sst_time = Column(Numeric(3, 1))
+    cyc_time = Column(Time)
+    cyc_steps = Column(Integer)
+    cyc_cad = Column(Integer)
+
 
 Base.metadata.create_all(engine)
 engine.dispose()

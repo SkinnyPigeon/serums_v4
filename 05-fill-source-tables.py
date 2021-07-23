@@ -27,7 +27,7 @@ directories = ['fcrb', 'ustan', 'zmc', 'ustan_ml']
 fcrb_tables = ['hospital_doctors', 'serums_ids']
 ustan_tables = ['hospital_doctors', 'serums_ids', 'cycles', 'general', 'intentions', 'patients', 'regimes']
 ustan_ml_tables = ['serums_ids', 'cycles', 'general', 'intentions', 'patients', 'regimes']
-zmc_tables = ['hospital_doctors', 'serums_ids']
+zmc_tables = ['hospital_doctors', 'serums_ids', 'wearable']
 
 for directory in directories:
     schema = ''

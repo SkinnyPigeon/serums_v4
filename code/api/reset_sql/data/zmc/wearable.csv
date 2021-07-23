@@ -1,4 +1,4 @@
-id,PatientID,Date,W_Time,W_Steps,W_Cad,SST,SST_time,Cyc_Time,Cyc_Steps,Cyc_Cad
+id,patnr,date,w_time,w_steps,w_cad,sst,sst_time,cyc_time,cyc_steps,cyc_cad
 1,4,2021-05-04,00:48:00,4513,116,81,4.1,00:00:00,0,0
 2,4,2021-05-05,00:20:00,1706,108,14,4.0,00:00:00,0,0
 3,4,2021-05-06,00:15:00,1179,111,17,4.4,00:01:00,17,125
