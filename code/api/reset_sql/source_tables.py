@@ -394,6 +394,26 @@ class FCRB_Episode(Base):
 	fatxt = Column(String(40))
 	enddtx = Column(String(20))
 
+class FCRB_Medical_Specialty(Base):
+    __tablename__ = 'medical_specialty'
+    __table_args__ = {'schema': 'fcrb'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(String(10))
+	falnr = Column(String(10))
+	vppid = Column(String(15))
+	pernr = Column(String(10))
+	vbem = Column(String(150))
+	datyp = Column(DateTime(timezone=False))
+	wertogr = Column(String(20))
+	wertugr = Column(String(20))
+	wertmax = Column(String(20))
+	wertmin = Column(String(20))
+
+class FCRB_Monitoring_Params(Base):
+    __tablename__ = 'monitoring_params'
+    __table_args__ = {'schema': 'fcrb'}
+    id = Column(Integer, primary_key=True)
+
 class FCRB_Medication(Base):
     __tablename__ = 'medication'
     __table_args__ = {'schema': 'fcrb'}
