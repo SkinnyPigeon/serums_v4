@@ -37,7 +37,14 @@ fcrb_all_1 = fcrb_wearable
 fcrb_all_2 = fcrb_diagnostic
 fcrb_all_3 = fcrb_medication
 fcrb_all_4 = fcrb_patient_details
-# fcrb_all_5 = fcrb_patient_address
+fcrb_all_5 = {'tag': 'all', 'table': 'fcrb.patient_address', 'fields': ['patnr', 
+                                                                                      'pstlz', 
+                                                                                      'stras', 
+                                                                                      'land', 
+                                                                                      'ort', 
+                                                                                      'deck', 
+                                                                                      'adrnr'
+                                                                                      ], 'key_lookup': {}}
 fcrb_all_6 = fcrb_patient_appointment
 fcrb_all_7 = fcrb_operations
 fcrb_all_8 = fcrb_documents
@@ -65,7 +72,7 @@ fcrb_tags = [fcrb_diagnostic,
              fcrb_all_2,
              fcrb_all_3,
              fcrb_all_4,
-             # fcrb_all_5,
+             fcrb_all_5,
              fcrb_all_6,
              fcrb_all_7,
              fcrb_all_8,

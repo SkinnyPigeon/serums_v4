@@ -129,8 +129,8 @@ class SPHR(Resource):
         
         body = {
             'serums_id': 364,
-            'hospital_ids': ['ZMC'],
-            'tags': ['wearable']
+            'hospital_ids': ['ZMC', 'FCRB', 'USTAN'],
+            'tags': ['wearable', 'treatments', 'address']
         }
         patient_data = get_patient_data(body)
 

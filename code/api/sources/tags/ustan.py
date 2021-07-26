@@ -22,7 +22,34 @@ ustan_allergies = {}
 
 ustan_additional_information = {}
 
-ustan_treatments = {}
+ustan_treatments = {'tag': 'treatments', 'table': 'ustan.cycles', 'fields': ['chi',
+                                                               'regime_id',
+                                                               'intention_id',
+                                                               'cycle_id',
+                                                               'drug_names',
+                                                               'diagnosis',
+                                                               'init_appointment_date',
+                                                               'elapsed_days',
+                                                               'interval_days',
+                                                               'appointment_date',
+                                                               'intention',
+                                                               'regime',
+                                                               'cycle',
+                                                               'p_ps',
+                                                               'ps',
+                                                               'nausea',
+                                                               'vomiting',
+                                                               'diarrhoea',
+                                                               'constipation',
+                                                               'oralMucositis',
+                                                               'oesophagitis',
+                                                               'neurotoxicity',
+                                                               'handFoot',
+                                                               'skin',
+                                                               'hypersensitivity',
+                                                               'fatigue',
+                                                               'required_doses'
+                                                               ], 'key_lookup': {}}
 
 ustan_personal = {}
 

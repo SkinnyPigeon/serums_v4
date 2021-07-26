@@ -153,9 +153,7 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name):
 
 
 def get_patient_data(body):
-    # print(body)
     results = {}
-    results['Hey'] = 'You'
     for hospital_id in body['hospital_ids']:
         hospital, tags_list = hospital_picker(hospital_id)
         tags = select_tags(tags_list, body['tags'])
