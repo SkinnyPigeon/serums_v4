@@ -135,13 +135,21 @@ class MachineLearning(Resource):
 # Smart Patient Health Record
 
 
+
 @sphr_space.route('/get_sphr')
 class SPHR(Resource):
     '''Return the Smart Patient Health Record from the Serums data lake'''
     @api.doc(body=request_fields)
     # @api.marshal_with(reply_fields, code=200)
     def post(self):
-        body = request.get_json()
+
+        body = {
+            "serums_id": 364,
+            "tags": ["documents"],
+            "hospital_ids": ["ZMC"],
+            "public_key": "abc"
+        }
+        # body = request.get_json()
         patient_data = get_patient_data(body)
 
         return patient_data

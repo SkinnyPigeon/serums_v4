@@ -146,8 +146,24 @@ def select_tabular_patient_data(session, tables, tag_definition, patient_id, key
     return df.to_dict('index')
 
 
-def select_image_patient_data(session, source, tag_definition, patient_id, key_name):
-    return {}
+def select_image_patient_data(session, tables, tag_definition, patient_id, key_name):
+    data = []
+    table_class = tables[tag_definition['source']]
+    fields = tag_definition['fields']
+    entities = []
+    for field in fields:
+        entities.append(getattr(table_class, field))
+    result = session.query(table_class).with_entities(*entities).filter_by(**{key_name: patient_id}).all()
+    
+    for row in result:
+        data.append(convert_tuples_to_dict(row, fields))
+
+    df = pd.DataFrame([x for x in data])
+    df = convert_dates_to_string(df)
+    df = convert_decimal_to_float(df)
+    print(df)
+
+    return df.to_dict('index')
 
 
 # Selecting the data based on the tags
@@ -160,6 +176,8 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name):
     for tag_definition in tags_definitions:
         if tag_definition['table']:
             results[tag_definition['source']] = select_tabular_patient_data(session, tables, tag_definition, patient_id, key_name)
+        if tag_definition['image']:
+            results[tag_definition['source']] = select_image_patient_data(session, tables, tag_definition, patient_id, key_name)
     return results
 
 
