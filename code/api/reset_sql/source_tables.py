@@ -517,7 +517,7 @@ class FCRB_Vital_Signs(Base):
     vppid = Column(String(15))
     dttyp = Column(String(10))
     erdat = Column(DateTime(timezone=False))
-    typevs = Column(String(5))
+    typevs = Column(String(9))
     vwert = Column(String(7))
     vbem = Column(String(150))
 
