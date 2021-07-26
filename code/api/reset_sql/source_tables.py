@@ -564,6 +564,7 @@ class ZMC_Images(Base):
     __table_args__ = {'schema': 'zmc'}
     id = Column(Integer, primary_key=True)
     patnr = Column(BigInteger)
+    image_title = Column(String(50))
     image = Column(String)
 
 
@@ -572,6 +573,7 @@ class ZMC_Documents(Base):
     __table_args__ = {'schema': 'zmc'}
     id = Column(Integer, primary_key=True)
     patnr = Column(BigInteger)
+    document_title = Column(String(50))
     document = Column(String)
 
 
