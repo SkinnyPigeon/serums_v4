@@ -80,7 +80,6 @@ def get_classes_by_name(schema, base):
 
 def convert_dates_to_string(df):
     for column in df:
-        print(df.dtypes[column])
         if df.dtypes[column] in ['datetime64[ns]', 'object']:
             df[column] = df[column].astype(str)
     return df
@@ -124,6 +123,29 @@ def select_source_patient_id_value(session, id_class, serums_id, key_name):
     return res[key_name]
 
 
+
+# Selecting tabular data:
+
+def select_tabular_patient_data(session, tables, tag_definition, patient_id, key_name):
+    data = []
+    table_class = tables[tag_definition['source']]
+    fields = tag_definition['fields']
+    entities = []
+    for field in fields:
+        entities.append(getattr(table_class, field))
+    result = session.query(table_class).with_entities(*entities).filter_by(**{key_name: patient_id}).all()
+    
+    for row in result:
+        data.append(convert_tuples_to_dict(row, fields))
+
+    df = pd.DataFrame([x for x in data])
+    df = convert_dates_to_string(df)
+    df = convert_decimal_to_float(df)
+    print(df)
+
+    return df.to_dict('index')
+
+
 # Selecting the data based on the tags
 
 
@@ -132,29 +154,15 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name):
     results = {}
     tables = get_classes_by_name(connection['schema'], connection['base'])
     for tag_definition in tags_definitions:
-        data = []
-        table_class = tables[tag_definition['source']]
-        fields = tag_definition['fields']
-        entities = []
-        for field in fields:
-            entities.append(getattr(table_class, field))
-        result = session.query(table_class).with_entities(*entities).filter_by(**{key_name: patient_id}).all()
-        
-        for row in result:
-            data.append(convert_tuples_to_dict(row, fields))
-
-        df = pd.DataFrame([x for x in data])
-        df = convert_dates_to_string(df)
-        df = convert_decimal_to_float(df)
-
-        results[tag_definition['source']] = df.to_dict('index')
-
+        if tag_definition['table']:
+            results[tag_definition['source']] = select_tabular_patient_data(session, tables, tag_definition, patient_id, key_name)
     return results
 
 
 def get_patient_data(body):
     results = {}
     for hospital_id in body['hospital_ids']:
+        # try:
         hospital, tags_list = hospital_picker(hospital_id)
         tags = select_tags(tags_list, body['tags'])
         connection = setup_connection(hospital)
@@ -164,8 +172,10 @@ def get_patient_data(body):
                                                         id_class, 
                                                         body['serums_id'], key_name)
         data = select_patient_data(connection, tags, patient_id, key_name)
-        print(data)
         connection['engine'].dispose()
         results[hospital_id] = data
+        # except Exception as e:
+            # connection['engine'].dispose()
+            # results[hospital_id] = {"Error": str(e)}
     return results
 
