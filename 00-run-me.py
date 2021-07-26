@@ -25,3 +25,8 @@ os.system('python3 /code/04-create-source-tables.py')
 print('Filling the source tables')
 
 os.system('python3 /code/05-fill-source-tables.py')
+
+# converting the additional files
+print('Converting the additional files')
+
+os.system('python3 /code/06-convert-files.py')

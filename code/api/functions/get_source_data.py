@@ -146,6 +146,10 @@ def select_tabular_patient_data(session, tables, tag_definition, patient_id, key
     return df.to_dict('index')
 
 
+def select_image_patient_data(session, source, tag_definition, patient_id, key_name):
+    return {}
+
+
 # Selecting the data based on the tags
 
 
