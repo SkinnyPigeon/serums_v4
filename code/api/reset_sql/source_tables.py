@@ -415,35 +415,18 @@ class FCRB_Medical_Specialty(Base):
     orgid = Column(String(8))
     orgna = Column(String(40))
 
-
-# class FCRB_Medical_Specialty(Base):
-#     __tablename__ = 'medical_specialty'
-#     __table_args__ = {'schema': 'fcrb'}
-#     id = Column(Integer, primary_key=True)
-#     patnr = Column(String(10))
-# 	falnr = Column(String(10))
-# 	vppid = Column(String(15))
-# 	pernr = Column(String(10))
-# 	vbem = Column(String(150))
-# 	datyp = Column(DateTime(timezone=False))
-# 	wertogr = Column(String(20))
-# 	wertugr = Column(String(20))
-# 	wertmax = Column(String(20))
-# 	wertmin = Column(String(20))
-
-
 class FCRB_Medication(Base):
     __tablename__ = 'medication'
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
-    mpresnr = Column(String(10))
+    einri = Column(String(4))
     patnr = Column(String(10))
     falnr = Column(String(10))
-    pernr = Column(String(10))
-    einri = Column(String(4))
     motx = Column(String(60))
     mostx = Column(String(80))
+    mpresnr = Column(String(10))
     motypid = Column(String(2))
+    pernr = Column(String(10))
     erdat = Column(DateTime(timezone=False))
     storn = Column(String(1))
     stusr = Column(String(10))
@@ -489,7 +472,7 @@ class FCRB_Patient_Address(Base):
     stras = Column(String(50))
     land = Column(String(15))
     ort = Column(String(20))
-    stage = Column(String(15))
+    deck = Column(String(15))
     adrnr = Column(String(5))
 
 
