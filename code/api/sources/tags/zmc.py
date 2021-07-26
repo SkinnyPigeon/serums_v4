@@ -39,7 +39,7 @@ zmc_treatments = {}
 
 zmc_personal = {}
 
-zmc_all_1 = zmc_wearable
+# zmc_all_1 = zmc_wearable
 zmc_all_2 = zmc_diagnostic
 zmc_all_3 = zmc_medication
 zmc_all_4 = zmc_patient_details
@@ -67,7 +67,7 @@ zmc_tags = [zmc_diagnostic,
             zmc_additional_information,
             zmc_treatments,
             zmc_personal,
-            zmc_all_1,
+            # zmc_all_1,
             zmc_all_2,
             zmc_all_3,
             zmc_all_4,

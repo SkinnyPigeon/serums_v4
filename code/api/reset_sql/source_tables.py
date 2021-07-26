@@ -379,7 +379,7 @@ class FCRB_Diagnostic(Base):
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
     einri = Column(String(4))
-    patnr = Column(String(10))
+    patnr = Column(BigInteger)
     falnr = Column(String(10))
     pernr = Column(String(12))
     lfdnr = Column(String(3))
@@ -394,7 +394,7 @@ class FCRB_Episode(Base):
     pernr = Column(String(12))
     einri = Column(String(4))
     falar = Column(String(1))
-    patnr = Column(String(10))
+    patnr = Column(BigInteger)
     bekat = Column(String(40))
     einzg = Column(String(9))
     statu = Column(String(1))
@@ -420,7 +420,7 @@ class FCRB_Medication(Base):
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
     einri = Column(String(4))
-    patnr = Column(String(10))
+    patnr = Column(BigInteger)
     falnr = Column(String(10))
     motx = Column(String(60))
     mostx = Column(String(80))
@@ -438,7 +438,7 @@ class FCRB_Monitoring_Params(Base):
     __tablename__ = 'monitoring_params'
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
-    patnr = Column(String(10))
+    patnr = Column(BigInteger)
     falnr = Column(String(10))
     vppid = Column(String(15))
     pernr = Column(String(10))
@@ -457,7 +457,7 @@ class FCRB_Order_Entry(Base):
     idodr = Column(String(10))
     einri = Column(String(10))
     falnr = Column(String(10))
-    patnr = Column(String(10))
+    patnr = Column(BigInteger)
     pernr = Column(String(12))
     erdat = Column(DateTime(timezone=False))
     orgid = Column(String(8))
@@ -467,7 +467,7 @@ class FCRB_Patient_Address(Base):
     __tablename__ = 'patient_address'
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
-    patnr = Column(String(10))
+    patnr = Column(BigInteger)
     pstlz = Column(String(10))
     stras = Column(String(50))
     land = Column(String(15))
@@ -480,7 +480,7 @@ class FCRB_Patient(Base):
     __tablename__ = 'patient'
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
-    patnr = Column(String(10))
+    patnr = Column(BigInteger)
     gschl = Column(String(1))
     nname = Column(String(30))
     vname = Column(String(30))
@@ -512,7 +512,7 @@ class FCRB_Vital_Signs(Base):
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
     idvs = Column(String(10))
-    patnr = Column(String(10))
+    patnr = Column(BigInteger)
     falnr = Column(String(10))
     vppid = Column(String(15))
     dttyp = Column(String(10))
