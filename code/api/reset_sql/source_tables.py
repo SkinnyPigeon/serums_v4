@@ -392,22 +392,20 @@ class FCRB_Episode(Base):
     id = Column(Integer, primary_key=True)
     falnr = Column(String(10))
     pernr = Column(String(12))
-
-
-einri = Column(String(4))
-falar = Column(String(1))
-patnr = Column(String(10))
-bekat = Column(String(40))
-einzg = Column(String(9))
-statu = Column(String(1))
-krzan = Column(String(1))
-enddt = Column(DateTime(timezone=False))
-erdat = Column(DateTime(timezone=False))
-storn = Column(String(1))
-begdt = Column(DateTime(timezone=False))
-casetx = Column(String(20))
-fatxt = Column(String(40))
-enddtx = Column(String(20))
+    einri = Column(String(4))
+    falar = Column(String(1))
+    patnr = Column(String(10))
+    bekat = Column(String(40))
+    einzg = Column(String(9))
+    statu = Column(String(1))
+    krzan = Column(String(1))
+    enddt = Column(DateTime(timezone=False))
+    erdat = Column(DateTime(timezone=False))
+    storn = Column(String(1))
+    begdt = Column(DateTime(timezone=False))
+    casetx = Column(String(20))
+    fatxt = Column(String(40))
+    enddtx = Column(String(20))
 
 
 class FCRB_Medical_Specialty(Base):
@@ -439,20 +437,18 @@ class FCRB_Medication(Base):
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
     mpresnr = Column(String(10))
-
-
-patnr = Column(String(10))
-falnr = Column(String(10))
-pernr = Column(String(10))
-einri = Column(String(4))
-motx = Column(String(60))
-mostx = Column(String(80))
-motypid = Column(String(2))
-erdat = Column(DateTime(timezone=False))
-storn = Column(String(1))
-stusr = Column(String(10))
-stdat = Column(DateTime(timezone=False))
-stoid = Column(String(15))
+    patnr = Column(String(10))
+    falnr = Column(String(10))
+    pernr = Column(String(10))
+    einri = Column(String(4))
+    motx = Column(String(60))
+    mostx = Column(String(80))
+    motypid = Column(String(2))
+    erdat = Column(DateTime(timezone=False))
+    storn = Column(String(1))
+    stusr = Column(String(10))
+    stdat = Column(DateTime(timezone=False))
+    stoid = Column(String(15))
 
 
 class FCRB_Monitoring_Params(Base):
@@ -460,17 +456,15 @@ class FCRB_Monitoring_Params(Base):
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
     patnr = Column(String(10))
-
-
-falnr = Column(String(10))
-vppid = Column(String(15))
-pernr = Column(String(10))
-vbem = Column(String(150))
-datyp = Column(DateTime(timezone=False))
-wertogr = Column(String(20))
-wertugr = Column(String(20))
-wertmax = Column(String(20))
-wertmin = Column(String(20))
+    falnr = Column(String(10))
+    vppid = Column(String(15))
+    pernr = Column(String(10))
+    vbem = Column(String(150))
+    datyp = Column(DateTime(timezone=False))
+    wertogr = Column(String(20))
+    wertugr = Column(String(20))
+    wertmax = Column(String(20))
+    wertmin = Column(String(20))
 
 
 class FCRB_Order_Entry(Base):
@@ -478,14 +472,12 @@ class FCRB_Order_Entry(Base):
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
     idodr = Column(String(10))
-
-
-einri = Column(String(10))
-falnr = Column(String(10))
-patnr = Column(String(10))
-pernr = Column(String(12))
-erdat = Column(DateTime(timezone=False))
-orgid = Column(String(8))
+    einri = Column(String(10))
+    falnr = Column(String(10))
+    patnr = Column(String(10))
+    pernr = Column(String(12))
+    erdat = Column(DateTime(timezone=False))
+    orgid = Column(String(8))
 
 
 class FCRB_Patient_Address(Base):
@@ -493,14 +485,12 @@ class FCRB_Patient_Address(Base):
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
     patnr = Column(String(10))
-
-
-pstlz = Column(String(10))
-stras = Column(String(50))
-land = Column(String(15))
-ort = Column(String(20))
-stage = Column(String(15))
-adrnr = Column(String(5))
+    pstlz = Column(String(10))
+    stras = Column(String(50))
+    land = Column(String(15))
+    ort = Column(String(20))
+    stage = Column(String(15))
+    adrnr = Column(String(5))
 
 
 class FCRB_Patient(Base):
@@ -508,18 +498,16 @@ class FCRB_Patient(Base):
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
     patnr = Column(String(10))
-
-
-gschl = Column(String(1))
-nname = Column(String(30))
-vname = Column(String(30))
-gbdat = Column(DateTime(timezone=False))
-gbnam = Column(String(30))
-namzu = Column(String(5))
-glrand = Column(String(20))
-famst = Column(String(10))
-telf1 = Column(String(15))
-rvnum = Column(String(20))
+    gschl = Column(String(1))
+    nname = Column(String(30))
+    vname = Column(String(30))
+    gbdat = Column(DateTime(timezone=False))
+    gbnam = Column(String(30))
+    namzu = Column(String(5))
+    glrand = Column(String(20))
+    famst = Column(String(10))
+    telf1 = Column(String(15))
+    rvnum = Column(String(20))
 
 
 class FCRB_Professional(Base):
@@ -527,15 +515,13 @@ class FCRB_Professional(Base):
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
     pernr = Column(String(10))
-
-
-erusr = Column(String(12))
-orgid = Column(String(8))
-gbdat = Column(DateTime(timezone=False))
-begdt = Column(DateTime(timezone=False))
-enddt = Column(DateTime(timezone=False))
-erdat = Column(DateTime(timezone=False))
-rank = Column(String(3))
+    erusr = Column(String(12))
+    orgid = Column(String(8))
+    gbdat = Column(DateTime(timezone=False))
+    begdt = Column(DateTime(timezone=False))
+    enddt = Column(DateTime(timezone=False))
+    erdat = Column(DateTime(timezone=False))
+    rank = Column(String(3))
 
 
 class FCRB_Vital_Signs(Base):
@@ -543,16 +529,14 @@ class FCRB_Vital_Signs(Base):
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
     idvs = Column(String(10))
-
-
-patnr = Column(String(10))
-falnr = Column(String(10))
-vppid = Column(String(15))
-dttyp = Column(String(10))
-erdat = Column(DateTime(timezone=False))
-typevs = Column(String(5))
-vwert = Column(String(7))
-vbem = Column(String(150))
+    patnr = Column(String(10))
+    falnr = Column(String(10))
+    vppid = Column(String(15))
+    dttyp = Column(String(10))
+    erdat = Column(DateTime(timezone=False))
+    typevs = Column(String(5))
+    vwert = Column(String(7))
+    vbem = Column(String(150))
 
 
 # # ZMC
