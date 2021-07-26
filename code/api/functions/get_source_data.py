@@ -133,7 +133,7 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name):
     tables = get_classes_by_name(connection['schema'], connection['base'])
     for tag_definition in tags_definitions:
         data = []
-        table_class = tables[tag_definition['table']]
+        table_class = tables[tag_definition['source']]
         fields = tag_definition['fields']
         entities = []
         for field in fields:
@@ -147,7 +147,7 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name):
         df = convert_dates_to_string(df)
         df = convert_decimal_to_float(df)
 
-        results[tag_definition['table']] = df.to_dict('index')
+        results[tag_definition['source']] = df.to_dict('index')
 
     return results
 

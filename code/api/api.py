@@ -135,7 +135,7 @@ class MachineLearning(Resource):
 # Smart Patient Health Record
 
 
-@sphr_space.route('/sphr')
+@sphr_space.route('/get_sphr')
 class SPHR(Resource):
     '''Return the Smart Patient Health Record from the Serums data lake'''
     @api.doc(body=request_fields)

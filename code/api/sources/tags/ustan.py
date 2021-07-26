@@ -22,7 +22,7 @@ ustan_allergies = {}
 
 ustan_additional_information = {}
 
-ustan_treatments = {'tag': 'treatments', 'table': 'ustan.cycles', 'fields': ['chi',
+ustan_treatments = {'tag': 'treatments', 'source': 'ustan.cycles', 'fields': ['chi',
                                                                'regime_id',
                                                                'intention_id',
                                                                'cycle_id',
@@ -49,11 +49,12 @@ ustan_treatments = {'tag': 'treatments', 'table': 'ustan.cycles', 'fields': ['ch
                                                                'hypersensitivity',
                                                                'fatigue',
                                                                'required_doses'
-                                                               ], 'key_lookup': {}}
+                                                               ], 'key_lookup': {},
+                                                               'table': True, 'graph': False, 'image': False}
 
 ustan_personal = {}
 
-ustan_all_1 = {'tag': 'all', 'table': 'ustan.cycles', 'fields': ['chi',
+ustan_all_1 = {'tag': 'all', 'source': 'ustan.cycles', 'fields': ['chi',
                                                                'regime_id',
                                                                'intention_id',
                                                                'cycle_id',
@@ -80,8 +81,9 @@ ustan_all_1 = {'tag': 'all', 'table': 'ustan.cycles', 'fields': ['chi',
                                                                'hypersensitivity',
                                                                'fatigue',
                                                                'required_doses'
-                                                               ], 'key_lookup': {}}
-ustan_all_2 = {'tag': 'all', 'table': 'ustan.general', 'fields': ['chi',
+                                                               ], 'key_lookup': {},
+                                                               'table': True, 'graph': False, 'image': False}
+ustan_all_2 = {'tag': 'all', 'source': 'ustan.general', 'fields': ['chi',
                                                                 'incidence_date',
                                                                 'site_icd_10',
                                                                 'name',
@@ -137,8 +139,9 @@ ustan_all_2 = {'tag': 'all', 'table': 'ustan.general', 'fields': ['chi',
                                                                 'survival_days',
                                                                 'dat_death',
                                                                 'gp_id'
-                                                                ], 'key_lookup': {}}
-ustan_all_3 = {'tag': 'all', 'table': 'ustan.intentions', 'fields': ['chi',
+                                                                ], 'key_lookup': {},
+                                                                'table': True, 'graph': False, 'image': False}
+ustan_all_3 = {'tag': 'all', 'source': 'ustan.intentions', 'fields': ['chi',
                                                                    'patient_id',
                                                                    'intention_id',
                                                                    'intention_seq',
@@ -150,8 +153,9 @@ ustan_all_3 = {'tag': 'all', 'table': 'ustan.intentions', 'fields': ['chi',
                                                                    'init_appointment_date',
                                                                    'elapsed_days',
                                                                    'appointment_date'
-                                                                   ], 'key_lookup': {}}
-ustan_all_4 = {'tag': 'all', 'table': 'ustan.regimes', 'fields': ['chi',
+                                                                   ], 'key_lookup': {},
+                                                                   'table': True, 'graph': False, 'image': False}
+ustan_all_4 = {'tag': 'all', 'source': 'ustan.regimes', 'fields': ['chi',
                                                                 'intention_id',
                                                                 'regime_id',
                                                                 'regime_seq',
@@ -165,12 +169,14 @@ ustan_all_4 = {'tag': 'all', 'table': 'ustan.regimes', 'fields': ['chi',
                                                                 'elapsed_days',
                                                                 'init_appointment_date',
                                                                 'appointment_date'
-                                                                ], 'key_lookup': {}}
-ustan_all_5 = {'tag': 'all', 'table': 'ustan.patients', 'fields': ['chi',
+                                                                ], 'key_lookup': {},
+                                                                'table': True, 'graph': False, 'image': False}
+ustan_all_5 = {'tag': 'all', 'source': 'ustan.patients', 'fields': ['chi',
                                                                  'patient_id',
                                                                  'first_intention',
                                                                  'appointment_date'
-                                                                 ], 'key_lookup': {}}
+                                                                 ], 'key_lookup': {},
+                                                                 'table': True, 'graph': False, 'image': False}
 
 ustan_tags = [ustan_diagnostic,
               ustan_medication,
