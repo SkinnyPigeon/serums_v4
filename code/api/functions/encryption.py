@@ -40,12 +40,12 @@ def decrypt_data(data):
 
 def encrypt_data_with_new_key(data, public_key):
     public_key = public_key.encode()
-    print(public_key)
     public_key = load_pem_public_key(public_key, backend=default_backend())
-    print(public_key)
-    data = data.decode()
+    data = json.dumps(data).encode()
     encryption_key = Fernet.generate_key()
-    encrypted_data = encryption_key.encrypt(data)
+    encryption = Fernet(encryption_key)
+    encrypted_data = encryption.encrypt(data).decode()
+
     return encrypted_data, encryption_key, public_key
 
 def encrypt_key(key_to_encrypt, public_key):
