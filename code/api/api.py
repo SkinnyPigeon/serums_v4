@@ -15,6 +15,7 @@ from functions.jwt import validate_jwt, refresh_jwt
 from functions.departments import get_departments
 from functions.ml import get_patient_data
 from functions.get_source_data import get_patient_data
+from functions.encryption import encrypt_data_with_new_key, encrypt_key
 
 
 # Setting up environment
@@ -69,7 +70,12 @@ request_fields = api.model('Request Smart Patient Health Record', {
     'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=364),
     'tags': fields.String(required=True, description='Rule to be executed', example=['address', 'treatments', 'wearable']),
     'hospital_ids': fields.String(required=True, description='The id of the hospital for the source data', example=['FCRB', 'USTAN', 'ZMC']),
-    'public_key': fields.String(required=True, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA24IJ1BITwdCmERIJgk2vplEwjsXNupYWE23cy8bSvmVhHuZZKRZU5YPGQwaFZERFT0/fJvtRFinYhe9KOmXwHYhrrDCIOgXkYvzJMZ+IWTDMHmrmuXjC/9UfarpzE4mudCIWCVffcGaItP2aMlhuE4dxxH9S7xbr4F6mRDmZBbup7H4hnkJAnsy4LMM8vf8eREk4VqW1MQhougdmDCi9Xt2ZvOxD4tVEW3wTTWUPm+1ZZk3eyV+twnbp2O3T9EIYQ1Nm7vNkjVgucSDXMKT6iCThYCG2a6ogf33Z5mPsSlAT+Q1IfL+8FNkbUH0K/ZJqV8SlI68FPZ/v/rC3TXLs4wIDAQAB-----END PUBLIC KEY-----""")
+    'public_key': fields.String(required=True, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDM+DNCybR7LdizOcK1gH2P7dD
+sajGUEIoPFp7wjhgKykYkCGVQCvl55g/zdh6UI9Cd/i2IEf5wo+Ct9oihy9SnJSp
+3sOp1KESV+ElwdK3vkaIo1AUuj+E8LTe7llyJ61JJdZaozyT0PxM8jB2vIaNEdbO
+bURHcIsIDc64L0e1ZQIDAQAB
+-----END PUBLIC KEY-----""")
 })
 
 reply_fields = api.model('Successful Response', {
@@ -162,8 +168,9 @@ class SPHR_Encrypted(Resource):
     def post(self):
         body = request.get_json()
         patient_data = get_patient_data(body)
-
-        return patient_data
+        encrypted_data, encryption_key, public_key = encrypt_data_with_new_key(patient_data, body['public_key'])
+        encrypted_key = encrypt_key(encryption_key, public_key)
+        return {'data': encrypted_data, 'key': encrypted_key} 
 
 
 if __name__ == '__main__':
