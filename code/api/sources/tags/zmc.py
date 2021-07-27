@@ -3,6 +3,10 @@
 zmc_wearable = {'tag': 'wearable', 'source': 'zmc.wearable', 'fields': [
     'patnr', 'date', 'w_time', 'w_steps', 'w_cad', 'sst', 'sst_time', 'cyc_time', 'cyc_steps', 'cyc_cad'], 'key_lookup': {}, 'table': True, 'graph': True, 'image': False}
 
+# zmc_wearable = {'tag': 'wearable', 'source': 'zmc.wearable', 'fields': [
+#     'patnr', 'date', 'w_time', 'w_steps', 'cyc_steps', 'cyc_cad'], 'key_lookup': {}, 'table': True, 'graph': True, 'image': False}
+
+
 zmc_diagnostic = {}
 
 zmc_medication = {}
@@ -16,7 +20,7 @@ zmc_patient_appointment = {}
 zmc_operations = {}
 
 zmc_documents_1 = {'tag': 'documents', 'source': 'zmc.images', 'fields': ['patnr', 'image_title', 'image'], 'key_lookup': {}, 'table': False, 'graph': False, 'image': True}
-zmc_documents_2 = {'tag': 'documents', 'source': 'zmc.documents', 'fields': ['patnr', 'document_title', 'document'], 'key_lookup': {}, 'table': False, 'graph': False, 'image': True}
+# zmc_documents_2 = {'tag': 'documents', 'source': 'zmc.documents', 'fields': ['patnr', 'document_title', 'document'], 'key_lookup': {}, 'table': False, 'graph': False, 'image': True}
 
 zmc_healthcare_providers = {}
 
@@ -53,7 +57,7 @@ zmc_tags = [zmc_diagnostic,
             zmc_patient_appointment,
             zmc_operations,
             zmc_documents_1,
-            zmc_documents_2,
+            # zmc_documents_2,
             zmc_healthcare_providers,
             zmc_drugs_and_alcohol,
             zmc_allergies,
