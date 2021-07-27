@@ -151,7 +151,7 @@ class SPHR(Resource):
 
         body = {
             "serums_id": 364,
-            "tags": ["documents"],
+            "tags": ["wearable"],
             "hospital_ids": ["ZMC"],
             "public_key": "abc"
         }

@@ -577,5 +577,88 @@ class ZMC_Documents(Base):
     document = Column(String)
 
 
+class ZMC_Complaints(Base):
+    __tablename__ = 'complaints_and_diagnosis'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    complaints_and_diagnosis = Column(String(50))
+    status = Column(String(20))
+    specialism = Column(String(20))
+    type = Column(String(20))
+    name_of_diagnosis_or_complaint = Column(String(30))
+    anatomical_location = Column(String(20))
+    laterality = Column(String(10))
+    begin_date = Column(DateTime(timezone=False))
+    end_date = Column(DateTime(timezone=False))
+
+
+class ZMC_Medication_Agreements(Base):
+    __tablename__ = 'medication_agreements'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    medicines = Column(String(30))
+    prescribed_by = Column(String(40))
+    description = Column(String(50))
+
+
+class ZMC_Medication_Use(Base):
+    __tablename__ = 'medication_use'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    product = Column(String(30))
+    use = Column(String(40))
+    reason = Column(String(50))
+
+
+class ZMC_Medical_Aids(Base):
+    __tablename__ = 'medical_aids_and_tools'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    product_description = Column(String(50))
+    anatomical_location = Column(String(40))
+    description = Column(String(50))
+
+
+class ZMC_Medical_Aids(Base):
+    __tablename__ = 'medical_aids_and_tools'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    value  = Column(String(20))
+    description = Column(String(40))
+    date = Column(DateTime(timezone=False))
+    systolic_bloodpressure = Column(Integer)
+    diastolic_bloodpressure = Column(Integer)
+    position = Column(String(40))
+    measurement_method = Column(String(40))
+    manchette_type = Column(String(40))
+    measurement_location = Column(String(40))
+    description = Column(String(40))
+
+
+class ZMC_Weights(Base):
+    __tablename__ = 'weight'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    measurement = = Column(String(10))
+    clothes = Column(String(20))
+    description = Column(String(40))
+    date = Column(DateTime(timezone=False))
+
+
+class ZMC_Length(Base):
+    __tablename__ = 'length'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    measurement = = Column(String(10))
+    description = Column(String(40))
+    date = Column(DateTime(timezone=False))
+
 Base.metadata.create_all(engine)
 engine.dispose()
