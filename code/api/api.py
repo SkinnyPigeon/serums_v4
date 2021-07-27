@@ -155,5 +155,16 @@ class SPHR(Resource):
         return patient_data
 
 
+@sphr_space.route('/encrypted')
+class SPHR_Encrypted(Resource):
+    '''Return the encrypted Smart Patient Health Record from the Serums data lake'''
+    @api.doc(body=request_fields)
+    def post(self):
+        body = request.get_json()
+        patient_data = get_patient_data(body)
+
+        return patient_data
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port='5001')
