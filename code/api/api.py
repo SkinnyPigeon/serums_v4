@@ -151,8 +151,8 @@ class SPHR(Resource):
 
         body = {
             "serums_id": 364,
-            "tags": ["wearable"],
-            "hospital_ids": ["ZMC"],
+            "tags": ["all"],
+            "hospital_ids": ["FCRB"],
             "public_key": "abc"
         }
         # body = request.get_json()

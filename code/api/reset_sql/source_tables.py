@@ -559,26 +559,26 @@ class ZMC_Wearable(Base):
     cyc_cad = Column(Integer)
 
 
-# class ZMC_Images(Base):
-#     __tablename__ = 'images'
-#     __table_args__ = {'schema': 'zmc'}
-#     id = Column(Integer, primary_key=True)
-#     patnr = Column(BigInteger)
-#     image_title = Column(String(50))
-#     type = Column(String(50))
-#     date = Column(DateTime(timezone=False))
-    # image = Column(String)
+class ZMC_Images(Base):
+    __tablename__ = 'images'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    image_title = Column(String(50))
+    type = Column(String(50))
+    date = Column(DateTime(timezone=False))
+    image = Column(String)
 
 
-# class ZMC_Documents(Base):
-#     __tablename__ = 'documents'
-#     __table_args__ = {'schema': 'zmc'}
-#     id = Column(Integer, primary_key=True)
-#     patnr = Column(BigInteger)
-#     document_title = Column(String(50))
-#     type = Column(String(50))
-#     date = Column(DateTime(timezone=False))
-    # document = Column(String)
+class ZMC_Documents(Base):
+    __tablename__ = 'documents'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    document_title = Column(String(50))
+    type = Column(String(50))
+    date = Column(DateTime(timezone=False))
+    document = Column(String)
 
 
 class ZMC_Complaints(Base):
