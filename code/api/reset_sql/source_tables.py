@@ -559,26 +559,26 @@ class ZMC_Wearable(Base):
     cyc_cad = Column(Integer)
 
 
-class ZMC_Images(Base):
-    __tablename__ = 'images'
-    __table_args__ = {'schema': 'zmc'}
-    id = Column(Integer, primary_key=True)
-    patnr = Column(BigInteger)
-    image_title = Column(String(50))
-    type = Column(String(50))
-    date = Column(DateTime(timezone=False))
-    image = Column(String)
+# class ZMC_Images(Base):
+#     __tablename__ = 'images'
+#     __table_args__ = {'schema': 'zmc'}
+#     id = Column(Integer, primary_key=True)
+#     patnr = Column(BigInteger)
+#     image_title = Column(String(50))
+#     type = Column(String(50))
+#     date = Column(DateTime(timezone=False))
+    # image = Column(String)
 
 
-class ZMC_Documents(Base):
-    __tablename__ = 'documents'
-    __table_args__ = {'schema': 'zmc'}
-    id = Column(Integer, primary_key=True)
-    patnr = Column(BigInteger)
-    document_title = Column(String(50))
-    type = Column(String(50))
-    date = Column(DateTime(timezone=False))
-    document = Column(String)
+# class ZMC_Documents(Base):
+#     __tablename__ = 'documents'
+#     __table_args__ = {'schema': 'zmc'}
+#     id = Column(Integer, primary_key=True)
+#     patnr = Column(BigInteger)
+#     document_title = Column(String(50))
+#     type = Column(String(50))
+#     date = Column(DateTime(timezone=False))
+    # document = Column(String)
 
 
 class ZMC_Complaints(Base):
@@ -633,7 +633,6 @@ class ZMC_Blood_Pressure(Base):
     id = Column(Integer, primary_key=True)
     patnr = Column(BigInteger)
     value  = Column(String(20))
-    description = Column(String(40))
     date = Column(DateTime(timezone=False))
     systolic_bloodpressure = Column(Integer)
     diastolic_bloodpressure = Column(Integer)
@@ -673,14 +672,14 @@ class ZMC_Registered_Events(Base):
     type = Column(String(40))
     method = Column(String(40))
     anatomical_location = Column(String(40))
+    description = Column(String(255))
     laterality = Column(String(40))
     start_date = Column(DateTime(timezone=False))
     end_date = Column(DateTime(timezone=False))
     indication = Column(String(40))
     executor = Column(String(40))
     requested_by = Column(String(40))
-    location = Column(String(40))
-    description = Column(String(40))
+    location = Column(String(100))
     date = Column(DateTime(timezone=False))
 
 

@@ -1,0 +1,4 @@
+patnr,type,method,anatomical_location,description,laterality,start_date,end_date,indication,executor,requested_by,location,date
+1075835,consultation,,,Debiliating pain on the rights side of the hip. Needs an operation.,,,,,,,Stichting Zuyderland Medisch Centrum (Sittard-Geleen),2020-09-01
+1075835,operation,,Right hip,See operation report,,,,,,,Stichting Zuyderland Medisch Centrum (Sittard-Geleen),2020-09-20
+1075835,control appointments,,,Progress measured via Activity Monitor. No physical appointment needed,,,,,,,Stichting Zuyderland Medisch Centrum (Sittard-Geleen),2020-10-26

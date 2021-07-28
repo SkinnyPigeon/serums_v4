@@ -60,8 +60,8 @@ with open('{document_path}/converted/concat.png'.format(document_path=document_p
 
 # Saving to database
 
-images = {'patnr': [1075835, 1075835], 'image_title': ['Left hip x-ray', 'Left pelvis x-ray'], 'image': [image_1, image_2]}
-document = {'patnr': [1075835], 'document_title': ['Random Serums paper for testing'], 'document': document}
+images = {'patnr': [1075835, 1075835], 'image_title': ['Right hip x-ray', 'Right pelvis x-ray'], 'type': ['x-ray', 'x-ray'], 'date': ['2020-09-01', '2020-09-01'], 'image': [image_1, image_2]}
+document = {'patnr': [1075835], 'document_title': ['Operation report'], 'type': ['orthopedics'], 'date': ['2020-09-20'],'document': [document]}
 image_df = pd.DataFrame.from_dict(images)
 document_df = pd.DataFrame.from_dict(document)
 
