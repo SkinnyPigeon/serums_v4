@@ -565,6 +565,8 @@ class ZMC_Images(Base):
     id = Column(Integer, primary_key=True)
     patnr = Column(BigInteger)
     image_title = Column(String(50))
+    type = Column(String(50))
+    date = Column(DateTime(timezone=False))
     image = Column(String)
 
 
@@ -574,6 +576,8 @@ class ZMC_Documents(Base):
     id = Column(Integer, primary_key=True)
     patnr = Column(BigInteger)
     document_title = Column(String(50))
+    type = Column(String(50))
+    date = Column(DateTime(timezone=False))
     document = Column(String)
 
 
@@ -623,8 +627,8 @@ class ZMC_Medical_Aids(Base):
     description = Column(String(50))
 
 
-class ZMC_Medical_Aids(Base):
-    __tablename__ = 'medical_aids_and_tools'
+class ZMC_Blood_Pressure(Base):
+    __tablename__ = 'bloodpressure'
     __table_args__ = {'schema': 'zmc'}
     id = Column(Integer, primary_key=True)
     patnr = Column(BigInteger)
@@ -645,7 +649,7 @@ class ZMC_Weights(Base):
     __table_args__ = {'schema': 'zmc'}
     id = Column(Integer, primary_key=True)
     patnr = Column(BigInteger)
-    measurement = = Column(String(10))
+    measurement = Column(String(10))
     clothes = Column(String(20))
     description = Column(String(40))
     date = Column(DateTime(timezone=False))
@@ -656,9 +660,104 @@ class ZMC_Length(Base):
     __table_args__ = {'schema': 'zmc'}
     id = Column(Integer, primary_key=True)
     patnr = Column(BigInteger)
-    measurement = = Column(String(10))
+    measurement = Column(String(10))
     description = Column(String(40))
     date = Column(DateTime(timezone=False))
+
+
+class ZMC_Registered_Events(Base):
+    __tablename__ = 'registered_events'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    type = Column(String(40))
+    method = Column(String(40))
+    anatomical_location = Column(String(40))
+    laterality = Column(String(40))
+    start_date = Column(DateTime(timezone=False))
+    end_date = Column(DateTime(timezone=False))
+    indication = Column(String(40))
+    executor = Column(String(40))
+    requested_by = Column(String(40))
+    location = Column(String(40))
+    description = Column(String(40))
+    date = Column(DateTime(timezone=False))
+
+
+class ZMC_Warning(Base):
+    __tablename__ = 'warning'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    alerts = Column(String(40))
+    begindate = Column(DateTime(timezone=False))
+    type = Column(String(40))
+
+
+class ZMC_Functional_State(Base):
+    __tablename__ = 'functional_or_mental_state'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    name = Column(String(40))
+    value = Column(String(40))
+    date = Column(DateTime(timezone=False))
+
+
+class ZMC_Living_Situation(Base):
+    __tablename__ = 'living_situation'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    house_type = Column(String(40))
+    description = Column(String(40))
+
+
+class ZMC_Drug_Use(Base):
+    __tablename__ = 'drug_use'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    substance = Column(String(40))
+    quantity = Column(String(40))
+    description = Column(String(40))
+
+
+
+class ZMC_Alcohol_Use(Base):
+    __tablename__ = 'alcohol_use'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    usage_status = Column(String(40))
+    quantity = Column(String(40))
+    description = Column(String(40))
+
+
+
+class ZMC_Tobacco_Use(Base):
+    __tablename__ = 'tobacco_use'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    substance = Column(String(40))
+    quantity = Column(Integer)
+    description = Column(String(40))
+
+
+
+class ZMC_Allergies(Base):
+    __tablename__ = 'allergies'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger)
+    caustive_substance = Column(String(40))
+    critical = Column(String(20))
+    description = Column(String(40))
+
+
+
+
 
 Base.metadata.create_all(engine)
 engine.dispose()
