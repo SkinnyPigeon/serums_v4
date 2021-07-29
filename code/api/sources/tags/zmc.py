@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-# zmc_wearable = {'tag': 'wearable', 'source': 'zmc.wearable', 'fields': [
-#     'patnr', 'date', 'w_time', 'w_steps', 'w_cad', 'sst', 'sst_time', 'cyc_time', 'cyc_steps', 'cyc_cad'], 'key_lookup': {}, 'table': True, 'graph': True, 'image': False}
-
 zmc_wearable = {'tag': 'wearable', 'source': 'zmc.wearable', 'fields': [
-    'patnr', 'date', 'w_time', 'w_steps', 'cyc_steps', 'cyc_cad'], 'key_lookup': {}, 'table': True, 'graph': True, 'image': False}
+    'patnr', 'date', 'w_time', 'w_steps', 'w_cad', 'sst', 'sst_time', 'cyc_time', 'cyc_steps', 'cyc_cad'], 'key_lookup': {}, 'table': True, 'graph': True, 'image': False}
+
+# zmc_wearable = {'tag': 'wearable', 'source': 'zmc.wearable', 'fields': [
+#     'patnr', 'date', 'w_time', 'w_steps', 'cyc_steps', 'cyc_cad'], 'key_lookup': {}, 'table': True, 'graph': True, 'image': False}
 
 
 zmc_diagnostic = {}
