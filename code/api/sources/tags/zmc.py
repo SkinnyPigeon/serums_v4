@@ -20,7 +20,7 @@ zmc_patient_appointment = {}
 zmc_operations = {}
 
 zmc_documents_1 = {'tag': 'documents', 'source': 'zmc.images', 'fields': ['patnr', 'image_title', 'image'], 'key_lookup': {}, 'table': False, 'graph': False, 'image': True}
-# zmc_documents_2 = {'tag': 'documents', 'source': 'zmc.documents', 'fields': ['patnr', 'document_title', 'document'], 'key_lookup': {}, 'table': False, 'graph': False, 'image': True}
+zmc_documents_2 = {'tag': 'documents', 'source': 'zmc.documents', 'fields': ['patnr', 'document_title', 'document'], 'key_lookup': {}, 'table': False, 'graph': False, 'image': True}
 
 zmc_healthcare_providers = {}
 
@@ -57,7 +57,7 @@ zmc_tags = [zmc_diagnostic,
             zmc_patient_appointment,
             zmc_operations,
             zmc_documents_1,
-            # zmc_documents_2,
+            zmc_documents_2,
             zmc_healthcare_providers,
             zmc_drugs_and_alcohol,
             zmc_allergies,

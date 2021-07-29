@@ -93,7 +93,8 @@ def select_patient_data(session, table_class, patient_id, key_name):
     return df.to_dict('index')
 
 
-def get_patient_data(body):
+def get_patient_data_for_ml(body):
+    results = {}
     tables = ['cycles', 'general', 'intentions', 'patients', 'regimes']
     try:
         connection = setup_connection(body)
@@ -102,7 +103,6 @@ def get_patient_data(body):
         patient_id = select_source_patient_id_value(connection['session'], 
                                                     id_class, 
                                                     body['userID'], key_name)
-        results = {}
         for table in tables:
             print(table)
             table_class = connection['base'].classes[table]

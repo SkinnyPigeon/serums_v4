@@ -13,7 +13,7 @@ import json
 
 from functions.jwt import validate_jwt, refresh_jwt
 from functions.departments import get_departments
-from functions.ml import get_patient_data
+from functions.ml import get_patient_data_for_ml
 from functions.get_source_data import get_patient_data
 from functions.encryption import encrypt_data_with_new_key, encrypt_key
 
@@ -134,7 +134,7 @@ class MachineLearning(Resource):
         response = validate_jwt(jwt)
         print(response['body'])
         if response['status_code'] == 200:
-            patient_data = get_patient_data(response['body'])
+            patient_data = get_patient_data_for_ml(response['body'])
         return patient_data
 
 
@@ -149,13 +149,13 @@ class SPHR(Resource):
     # @api.marshal_with(reply_fields, code=200)
     def post(self):
 
-        body = {
-            "serums_id": 364,
-            "tags": ["all"],
-            "hospital_ids": ["FCRB"],
-            "public_key": "abc"
-        }
-        # body = request.get_json()
+        # body = {
+        #     "serums_id": 364,
+        #     "tags": ["all"],
+        #     "hospital_ids": ["FCRB"],
+        #     "public_key": "abc"
+        # }
+        body = request.get_json()
         patient_data = get_patient_data(body)
 
         return patient_data
