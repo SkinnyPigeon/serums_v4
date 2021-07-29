@@ -16,6 +16,7 @@ from functions.departments import get_departments
 from functions.ml import get_patient_data_for_ml
 from functions.get_source_data import get_patient_data
 from functions.encryption import encrypt_data_with_new_key, encrypt_key
+from functions.search import search_for_serums_id
 
 
 # Setting up environment
@@ -57,6 +58,30 @@ staff_parser.add_argument('Authorization', help="The authorization token", locat
                           default="""Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYyMDkwNTkzOCwianRpIjoiNjZjNTgwYmUtOTViMC00YjhiLWE3ZjQtYzU3ODkyOGJhM2NjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE2MjA5MDU5MzgsImV4cCI6MTg4MDEwNTkzOH0.zeJNNiXE7XbeNPC5g2OEQvu1EsYeohUsgvsY2_fg8EM""")
 
 
+# Search
+
+search_parser = api.parser()
+search_parser.add_argument('Authorization', help="The authorization token", location="headers",
+                          default="""Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYyMDkwNTkzOCwianRpIjoiNjZjNTgwYmUtOTViMC00YjhiLWE3ZjQtYzU3ODkyOGJhM2NjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE2MjA5MDU5MzgsImV4cCI6MTg4MDEwNTkzOH0.zeJNNiXE7XbeNPC5g2OEQvu1EsYeohUsgvsY2_fg8EM""")
+
+
+search_fields = api.model('Search for a patient\'s SERUMS id', {
+    'patient_id': fields.Integer(required=False, description='The patient\'s id within a hospital\'s internal systems', example=4641202),
+    'first_name': fields.String(required=True, description='The patient\'s first name', example='Joana'),
+    'first_surname': fields.String(required=False, description='The patient\'s first surname', example='Soler'),
+    'family_name': fields.String(required=True, description='The patient\'s family name', example='Rodríguez'),
+    'dob': fields.DateTime(required=True, description='The patient\'s date of birth', example='1935-05-12'),
+    'gender': fields.Integer(required=True, description='The patient\'s gender', example=2),
+    'hospital_id': fields.String(required=True, description='The id of the hospital for the source data', example='FCRB'),
+    'public_key': fields.String(required=True, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDM+DNCybR7LdizOcK1gH2P7dD
+sajGUEIoPFp7wjhgKykYkCGVQCvl55g/zdh6UI9Cd/i2IEf5wo+Ct9oihy9SnJSp
+3sOp1KESV+ElwdK3vkaIo1AUuj+E8LTe7llyJ61JJdZaozyT0PxM8jB2vIaNEdbO
+bURHcIsIDc64L0e1ZQIDAQAB
+-----END PUBLIC KEY-----""")
+})
+
+
 # Machine learning
 
 ml_parser = api.parser()
@@ -92,6 +117,8 @@ sphr_parser.add_argument('Authorization', help="The authorization token", locati
 hello_space = api.namespace('hello', description='Check the server is on')
 staff_space = api.namespace(
     'staff_tables', description='Return the staff tables')
+
+search_space = api.namespace('search', description='Search for a patient\s SERUMS ID')
 ml_space = api.namespace(
     'machine_learning', description='Return the patient data for the machine learning algorithm')
 sphr_space = api.namespace('smart_patient_health_record',
@@ -136,6 +163,18 @@ class MachineLearning(Resource):
         if response['status_code'] == 200:
             patient_data = get_patient_data_for_ml(response['body'])
         return patient_data
+
+
+@search_space.route('/serums_id')
+class Search(Resource):
+    @api.doc(body=search_fields)
+    def post(self):
+        refreshed_jwt = refresh_jwt()
+        jwt = refreshed_jwt['body']['resource_str']
+        response = validate_jwt(jwt)
+        if response['status_code'] == 200:
+            patient_details = search_for_serums_id(request.get_json())
+        return patient_details
 
 
 # Smart Patient Health Record
