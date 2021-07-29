@@ -71,7 +71,7 @@ search_fields = api.model('Search for a patient\'s SERUMS id', {
     'first_surname': fields.String(required=False, description='The patient\'s first surname', example='Soler'),
     'family_name': fields.String(required=True, description='The patient\'s family name', example='Rodríguez'),
     'dob': fields.DateTime(required=True, description='The patient\'s date of birth', example='1935-05-12'),
-    'gender': fields.Integer(required=True, description='The patient\'s gender', example=2),
+    'gender': fields.String(required=True, description='The patient\'s gender', example='2'),
     'hospital_id': fields.String(required=True, description='The id of the hospital for the source data', example='FCRB'),
     'public_key': fields.String(required=True, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDM+DNCybR7LdizOcK1gH2P7dD
