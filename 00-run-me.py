@@ -30,3 +30,8 @@ os.system('python3 /code/05-fill-source-tables.py')
 print('Converting the additional files')
 
 os.system('python3 /code/06-convert-files.py')
+
+# starting the api
+print('Starting the API')
+
+os.system('python3 /code/07-run-api.py')
