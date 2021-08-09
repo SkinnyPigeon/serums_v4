@@ -37,8 +37,8 @@ with open("{image_path}/hip.png".format(image_path=image_path), "rb") as image_f
 with open("{image_path}/pelvis.png".format(image_path=image_path), "rb") as image_file:
     image_2 = str(base64.b64encode(image_file.read())).replace("b'", "").replace("'", "")
 
-# print(image_1)
-# print(image_2)
+print(image_1)
+print(image_2)
 
 # Converting PDF into image then transforming into string
 
