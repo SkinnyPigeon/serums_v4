@@ -95,7 +95,7 @@ def select_patient_data(session, table_class, patient_id, key_name):
 
 def get_patient_data_for_ml(body):
     results = {}
-    tables = ['cycles', 'general', 'intentions', 'patients', 'regimes']
+    tables = ['cycles', 'general', 'intentions', 'patients', 'regimes', 'smr01', 'smr06']
     try:
         connection = setup_connection(body)
         id_class = connection['base'].classes.serums_ids
