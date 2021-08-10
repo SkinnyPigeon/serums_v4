@@ -708,7 +708,7 @@ class ZMC_Blood_Pressure(Base):
     description = Column(String(40))
 
 
-class ZMC_Weights(Base):
+class ZMC_Weight(Base):
     __tablename__ = 'weight'
     __table_args__ = {'schema': 'zmc'}
     id = Column(Integer, primary_key=True)

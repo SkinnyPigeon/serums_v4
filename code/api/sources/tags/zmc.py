@@ -71,7 +71,7 @@ zmc_all_11 = {'tag': 'all', 'source': 'zmc.functional_or_mental_state', 'fields'
 zmc_all_12 = {'tag': 'all', 'source': 'zmc.living_situation', 'fields': ['patnr', 'house_type', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_all_13 = {'tag': 'all', 'source': 'zmc.drug_use', 'fields': ['patnr', 'substance', 'quantity', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_all_14 = {'tag': 'all', 'source': 'zmc.alcohol_use', 'fields': ['patnr', 'usage_status', 'quantity', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
-zmc_all_15 = {'tag': 'all', 'source': 'zmc.tobacco_use', 'fields': ['patnr', 'substance', 'quantity', 'description'] 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+zmc_all_15 = {'tag': 'all', 'source': 'zmc.tobacco_use', 'fields': ['patnr', 'substance', 'quantity', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_all_16 = {'tag': 'all', 'source': 'zmc.allergies', 'fields': ['patnr', 'caustive_substance', 'critical', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
 zmc_tags = [
