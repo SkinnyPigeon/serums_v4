@@ -22,8 +22,8 @@ engine = create_engine("postgresql://postgres:{}@localhost:{}/source".format(PAS
 
 # Creating source tables
 
-# directories = ['fcrb', 'ustan', 'zmc', 'ustan_ml']
-directories = ['fcrb']
+directories = ['fcrb', 'ustan', 'zmc', 'ustan_ml']
+# directories = ['fcrb']
 
 fcrb_tables = ['hospital_doctors', 'serums_ids', 'diagnostic', 'episode', 'medical_specialty', 'medication', 'monitoring_params', 'order_entry', 'patient_address', 'patient', 'professional', 'vital_signs']
 ustan_tables = ['hospital_doctors', 'serums_ids', 'cycles', 'general', 'intentions', 'patients', 'regimes', 'smr01', 'smr06']
