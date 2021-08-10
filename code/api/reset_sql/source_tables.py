@@ -198,6 +198,38 @@ class USTAN_Regimes(Base):
     init_appointment_date = Column(DateTime(timezone=False))
     appointment_date = Column(DateTime(timezone=False))
 
+class USTAN_Smr01(Base):
+    __tablename__ = 'smr01'
+    __table_args__ = {'schema': 'ustan'}
+    id = Column(BigInteger, primary_key=True)
+    chi = Column(BigInteger)
+    incidence_date = Column(DateTime(timezone=False))
+    admission_date = Column(DateTime(timezone=False))
+    length_of_stay = Column(Integer)
+    other_condition1 = Column(String(5))
+    other_condition2 = Column(String(5))
+    other_condition3 = Column(String(5))
+    main_operation_b = Column(String(5))
+    discharge_date = Column(DateTime(timezone=False))
+    waiting_list_type = Column(Integer)
+    main_condition = Column(String(4))
+    main_operation_a = Column(String(4))
+    marital_status = Column(String(1))
+    ethnic_group = Column(String(2))
+
+class USTAN_Smr06(Base):
+    __tablename__ = 'smr06'
+    __table_args__ = {'schema': 'ustan'}
+    id = Column(BigInteger, primary_key=True)
+    chi = Column(BigInteger)
+    incidence_date = Column(DateTime(timezone=False))
+    er_status = Column(Integer)
+    her2_status = Column(Integer)
+    stage_clinical_t = Column(String(2))
+    stage_clinical_n = Column(String(2))
+    stage_clinical_m = Column(String(2))
+    num_positive = Column(Integer)
+    pathological_tum_size = Column(Integer)
 
 # USTAN MACHINE LEARNING
 
@@ -351,6 +383,39 @@ class USTAN_ML_Regimes(Base):
     elapsed_days = Column(Integer)
     init_appointment_date = Column(DateTime(timezone=False))
     appointment_date = Column(DateTime(timezone=False))
+
+class USTAN_ML_Smr01(Base):
+    __tablename__ = 'smr01'
+    __table_args__ = {'schema': 'ustan_ml'}
+    id = Column(BigInteger, primary_key=True)
+    chi = Column(BigInteger)
+    incidence_date = Column(DateTime(timezone=False))
+    admission_date = Column(DateTime(timezone=False))
+    length_of_stay = Column(Integer)
+    other_condition1 = Column(String(5))
+    other_condition2 = Column(String(5))
+    other_condition3 = Column(String(5))
+    main_operation_b = Column(String(5))
+    discharge_date = Column(DateTime(timezone=False))
+    waiting_list_type = Column(Integer)
+    main_condition = Column(String(4))
+    main_operation_a = Column(String(4))
+    marital_status = Column(String(1))
+    ethnic_group = Column(String(2))
+
+class USTAN_ML_Smr06(Base):
+    __tablename__ = 'smr06'
+    __table_args__ = {'schema': 'ustan_ml'}
+    id = Column(BigInteger, primary_key=True)
+    chi = Column(BigInteger)
+    incidence_date = Column(DateTime(timezone=False))
+    er_status = Column(Integer)
+    her2_status = Column(Integer)
+    stage_clinical_t = Column(String(2))
+    stage_clinical_n = Column(String(2))
+    stage_clinical_m = Column(String(2))
+    num_positive = Column(Integer)
+    pathological_tum_size = Column(Integer)
 
 
 # FCRB
