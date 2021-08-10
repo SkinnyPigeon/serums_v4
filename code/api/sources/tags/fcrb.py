@@ -1,86 +1,99 @@
-fcrb_wearable = {}
+fcrb_diagnostic_1 = {'tag': 'diagnostic', 'source': 'fcrb.diagnostic', 'fields': ['einri', 'patnr', 'falnr', 'pernr', 'lfdnr', 'dkey1'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_diagnostic_2= {'tag': 'diagnostic', 'source': 'fcrb.episode', 'fields': ['falnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
-fcrb_diagnostic = {}
+fcrb_patient_details_1 = {'tag': 'patient_details', 'source': 'fcrb.diagnostic', 'fields': ['patnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_patient_details_2 = {'tag': 'patient_details', 'source': 'fcrb.episode', 'fields': ['patnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_patient_details_3 = {'tag': 'patient_details', 'source': 'fcrb.medication', 'fields': ['falnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_patient_details_4 = {'tag': 'patient_details', 'source': 'fcrb.monitoring_params', 'fields': ['patnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_patient_details_5 = {'tag': 'patient_details', 'source': 'fcrb.order_entry', 'fields': ['patnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_patient_details_6 = {'tag': 'patient_details', 'source': 'fcrb.patient_address', 'fields': ['patnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_patient_details_7 = {'tag': 'patient_details', 'source': 'fcrb.patient', 'fields': ['patnr', 'gschl', 'nname', 'vname', 'gbdat', 'gbnam', 'namzu', 'glrand', 'famst', 'telf1', 'rvnum'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_patient_details_8 = {'tag': 'patient_details', 'source': 'fcrb.vital_signs', 'fields': ['patnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
-fcrb_medication = {}
+fcrb_healthcare_providers_1 = {'tag': 'healthcare_providers', 'source': 'fcrb.diagnostic', 'fields': ['einri', 'falnr', 'pernr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_healthcare_providers_2 = {'tag': 'healthcare_providers', 'source': 'fcrb.episode', 'fields': ['pernr', 'einri', 'einzg', 'casetx'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_healthcare_providers_3 = {'tag': 'healthcare_providers', 'source': 'fcrb.medical_specialty', 'fields': ['orgid', 'orgna'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_healthcare_providers_4 = {'tag': 'healthcare_providers', 'source': 'fcrb.medication', 'fields': ['falnr', 'einri'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_healthcare_providers_5 = {'tag': 'healthcare_providers', 'source': 'fcrb.monitoring_params', 'fields': ['pernr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_healthcare_providers_6 = {'tag': 'healthcare_providers', 'source': 'fcrb.order_entry', 'fields': ['einri', 'pernr', 'orgid'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+# fcrb_healthcare_providers_7 = {'tag': 'healthcare_providers', 'source': 'fcrb.professional', 'fields': ['pernr', 'orgid', 'erdat'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
-fcrb_patient_details = {}
+fcrb_patient_appointments_1 = {'tag': 'patient_appointments', 'source': 'fcrb.episode', 'fields': ['pernr', 'falar', 'statu', 'enddt', 'storn', 'begdt', 'casetx', 'fatxt'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_patient_appointments_2 = {'tag': 'patient_appointments', 'source': 'fcrb.monitoring_params', 'fields': ['falnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_patient_appointments_3 = {'tag': 'patient_appointments', 'source': 'fcrb.order_entry', 'fields': ['idodr', 'falnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_patient_appointments_4 = {'tag': 'patient_appointments', 'source': 'fcrb.vital_signs', 'fields': ['falnr', 'erdat'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
-fcrb_patient_address = {'tag': 'address', 'source': 'fcrb.patient_address', 'fields': ['patnr', 
-                                                                                      'pstlz', 
-                                                                                      'stras', 
-                                                                                      'land', 
-                                                                                      'ort', 
-                                                                                      'deck', 
-                                                                                      'adrnr'
-                                                                                      ], 'key_lookup': {}, 
-                                                                                      'table': True, 'graph': False, 'image': False}
+fcrb_treatments = {'tag': 'treatments', 'source': 'fcrb.episode', 'fields': ['bekat'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
-fcrb_patient_appointment = {}
+fcrb_medication = {'tag': 'medication', 'source': 'fcrb.medication', 'fields': ['mpresnr', 'motx', 'mostx', 'motypid', 'erdat'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
-fcrb_operations = {}
+fcrb_documents = {'tag': 'documents', 'source': 'fcrb.medication', 'fields': ['mostx'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
-fcrb_documents = {}
+fcrb_additional_information_1 = {'tag': 'additional_information', 'source': 'fcrb.medication', 'fields': ['erdat', 'storn', 'stusr', 'stdat', 'stoid'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_additional_information_2 = {'tag': 'additional_information', 'source': 'fcrb.monitoring_params', 'fields': ['vbem '], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_additional_information_3 = {'tag': 'additional_information', 'source': 'fcrb.order_entry', 'fields': ['erdat'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+# fcrb_additional_information_4 = {'tag': 'additional_information', 'source': 'fcrb.professional', 'fields': ['erusr', 'orgid', 'gbdat', 'begdt', 'enddt'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
-fcrb_healthcare_providers = {}
+fcrb_wearable_1 = {'tag': 'wearable', 'source': 'fcrb.monitoring_params', 'fields': ['vppid', 'vbem ', 'datyp', 'wertogr', 'wertugr', 'wertmax', 'wertmin'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_wearable_2 = {'tag': 'wearable', 'source': 'fcrb.vital_signs', 'fields': ['idvs', 'vppid', 'dttyp', 'typevs', 'vwert', 'vbem'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
-fcrb_drugs_and_alcohol = {}
+fcrb_patient_address = {'tag': 'patient_address', 'source': 'fcrb.patient_address', 'fields': ['pstlz', 'stras', 'land', 'ort', 'stage', 'adrnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
-fcrb_allergies = {}
+fcrb_personal = {'tag': 'personal', 'source': 'fcrb.patient', 'fields': ['gschl', 'nname', 'vname', 'gbdat', 'gbnam', 'namzu', 'glrand', 'famst', 'telf1'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
-fcrb_additional_information = {}
+fcrb_all_1 =  {'tag': 'all', 'source': 'fcrb.diagnostic', 'fields': ['einri', 'patnr', 'falnr', 'pernr', 'lfdnr', 'dkey1'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_all_2 =  {'tag': 'all', 'source': 'fcrb.episode', 'fields': ['falnr', 'pernr', 'einri', 'falar', 'patnr', 'bekat', 'einzg', 'statu', 'krzan', 'enddt', 'erdat', 'storn', 'begdt', 'casetx', 'fatxt', 'enddtx'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_all_3 =  {'tag': 'all', 'source': 'fcrb.medical_specialty', 'fields': ['orgid', 'orgna'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_all_4 =  {'tag': 'all', 'source': 'fcrb.medication', 'fields': ['mpresnr', 'patnr', 'falnr', 'pernr', 'einri', 'motx', 'mostx', 'motypid', 'erdat', 'storn', 'stusr', 'stdat', 'stoid'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_all_5 =  {'tag': 'all', 'source': 'fcrb.monitoring_params', 'fields': ['patnr', 'falnr', 'vppid', 'pernr', 'vbem' , 'datyp', 'wertogr', 'wertugr', 'wertmax', 'wertmin'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_all_6 =  {'tag': 'all', 'source': 'fcrb.order_entry', 'fields': ['idodr', 'einri', 'falnr', 'patnr', 'pernr', 'erdat', 'orgid'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_all_7 =  {'tag': 'all', 'source': 'fcrb.patient_address', 'fields': ['patnr', 'pstlz', 'stras', 'land', 'ort', 'stage', 'adrnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_all_8 =  {'tag': 'all', 'source': 'fcrb.patient', 'fields': ['patnr', 'gschl', 'nname', 'vname', 'gbdat', 'gbnam', 'namzu', 'glrand', 'famst', 'telf1', 'rvnum'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+# fcrb_all_9 =  {'tag': 'all', 'source': 'fcrb.professional', 'fields': ['pernr', 'erusr', 'orgid', 'gbdat', 'begdt', 'enddt', 'erdat', 'rank'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_all_10 =  {'tag': 'all', 'source': 'fcrb.vital_signs', 'fields': ['idvs', 'patnr', 'falnr', 'vppid', 'dttyp', 'erdat', 'typevs', 'vwert', 'vbem'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
-fcrb_treatments = {}
 
-fcrb_personal = {}
-
-fcrb_all_1 = fcrb_wearable
-fcrb_all_2 = fcrb_diagnostic
-fcrb_all_3 = fcrb_medication
-fcrb_all_4 = fcrb_patient_details
-fcrb_all_5 = {'tag': 'all', 'source': 'fcrb.patient_address', 'fields': ['patnr', 
-                                                                        'pstlz', 
-                                                                        'stras', 
-                                                                        'land', 
-                                                                        'ort', 
-                                                                        'deck', 
-                                                                        'adrnr'
-                                                                        ], 'key_lookup': {}, 
-                                                                        'table': True, 'graph': False, 'image': False}
-fcrb_all_6 = fcrb_patient_appointment
-fcrb_all_7 = fcrb_operations
-fcrb_all_8 = fcrb_documents
-fcrb_all_9 = fcrb_healthcare_providers
-fcrb_all_10 = fcrb_drugs_and_alcohol
-fcrb_all_12 = fcrb_allergies
-fcrb_all_13 = fcrb_additional_information
-fcrb_all_14 = fcrb_treatments
-fcrb_all_15 = fcrb_personal
-
-fcrb_tags = [fcrb_diagnostic,
-             fcrb_medication,
-             fcrb_patient_details,
-             fcrb_patient_address,
-             fcrb_patient_appointment,
-             fcrb_operations,
-             fcrb_documents,
-             fcrb_healthcare_providers,
-             fcrb_drugs_and_alcohol,
-             fcrb_allergies,
-             fcrb_additional_information,
-             fcrb_treatments,
-             fcrb_personal,
-             fcrb_all_1,
-             fcrb_all_2,
-             fcrb_all_3,
-             fcrb_all_4,
-             fcrb_all_5,
-             fcrb_all_6,
-             fcrb_all_7,
-             fcrb_all_8,
-             fcrb_all_9,
-             fcrb_all_10,
-             fcrb_all_12,
-             fcrb_all_13,
-             fcrb_all_14,
-             fcrb_all_15]
+fcrb_tags = [
+    fcrb_diagnostic_1, 
+    fcrb_diagnostic_2, 
+    fcrb_patient_details_1, 
+    fcrb_patient_details_2, 
+    fcrb_patient_details_3, 
+    fcrb_patient_details_4, 
+    fcrb_patient_details_5, 
+    fcrb_patient_details_6, 
+    fcrb_patient_details_7, 
+    fcrb_patient_details_8, 
+    fcrb_healthcare_providers_1, 
+    fcrb_healthcare_providers_2, 
+    fcrb_healthcare_providers_3, 
+    fcrb_healthcare_providers_4, 
+    fcrb_healthcare_providers_5, 
+    fcrb_healthcare_providers_6, 
+    # fcrb_healthcare_providers_7, 
+    fcrb_patient_appointments_1, 
+    fcrb_patient_appointments_2, 
+    fcrb_patient_appointments_3, 
+    fcrb_patient_appointments_4, 
+    fcrb_treatments, 
+    fcrb_medication, 
+    fcrb_documents, 
+    fcrb_additional_information_1, 
+    fcrb_additional_information_2, 
+    fcrb_additional_information_3, 
+    # fcrb_additional_information_4, 
+    fcrb_wearable_1, 
+    fcrb_wearable_2, 
+    fcrb_patient_address, 
+    fcrb_personal, 
+    fcrb_all_1, 
+    fcrb_all_2, 
+    fcrb_all_3, 
+    fcrb_all_4, 
+    fcrb_all_5, 
+    fcrb_all_6, 
+    fcrb_all_7, 
+    fcrb_all_8, 
+    # fcrb_all_9, 
+    fcrb_all_10
+]
