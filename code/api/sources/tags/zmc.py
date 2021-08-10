@@ -1,9 +1,9 @@
-zmc_wearable_1 = {'tag': 'wearable', 'source': 'zmc.wearable', 'fields': ['patnr', 'date', 'w_time', 'w_steps', 'w_cad', 'sst', 'sst_time', 'cyc_time', 'cyc_steps', 'cyc_cad'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+zmc_wearable_1 = {'tag': 'wearable', 'source': 'zmc.wearable', 'fields': ['patnr', 'date', 'w_time', 'w_steps', 'w_cad', 'sst', 'sst_time', 'cyc_time', 'cyc_steps', 'cyc_cad'], 'key_lookup': {}, 'table': True, 'graph': True, 'image': False}
 zmc_wearable_2 = {'tag': 'wearable', 'source': 'zmc.medical_aids_and_tools', 'fields': ['patnr', 'product_description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
 zmc_diagnostic_1 = {'tag': 'diagnostic', 'source': 'zmc.complaints_and_diagnosis', 'fields': ['patnr', 'complaints_and_diagnosis', 'status', 'specialism', 'type', 'name_of_diagnosis_or_complaint', 'anatomical_location', 'laterality', 'begin_date', 'end_date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_diagnostic_2 = {'tag': 'diagnostic', 'source': 'zmc.bloodpressure', 'fields': ['patnr', 'value', 'position', 'description', 'date', 'systolic_bloodpressure', 'diastolic_bloodpressure', 'measurement_method', 'manchette_type', 'measurement_location', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
-zmc_diagnostic_3 = {'tag': 'diagnostic', 'source': 'zmc.weights', 'fields': ['patnr', 'measurement', 'clothes', 'description', 'date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+zmc_diagnostic_3 = {'tag': 'diagnostic', 'source': 'zmc.weight', 'fields': ['patnr', 'measurement', 'clothes', 'description', 'date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_diagnostic_4 = {'tag': 'diagnostic', 'source': 'zmc.length', 'fields': ['patnr', 'measurement', 'description', 'date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_diagnostic_5 = {'tag': 'diagnostic', 'source': 'zmc.registered_events', 'fields': ['patnr', 'type', 'method', 'anatomical_location', 'laterality', 'start_date', 'end_date', 'indication', 'requested_by', 'date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}        
 zmc_diagnostic_6 = {'tag': 'diagnostic', 'source': 'zmc.functional_or_mental_state', 'fields': ['patnr', 'name', 'value', 'date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
@@ -24,6 +24,9 @@ zmc_documents_1 = {'tag': 'documents', 'source': 'zmc.complaints_and_diagnosis',
 zmc_documents_2 = {'tag': 'documents', 'source': 'zmc.medical_aids_and_tools', 'fields': ['patnr', 'product_description', 'anatomical_location', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_documents_3 = {'tag': 'documents', 'source': 'zmc.registered_events', 'fields': ['patnr', 'type', 'method', 'anatomical_location', 'laterality', 'start_date', 'end_date', 'indication', 'executor', 'requested_by', 'location', 'description', 'date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_documents_4 = {'tag': 'documents', 'source': 'zmc.warning', 'fields': ['patnr', 'alerts', 'begindate', 'type'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+zmc_documents_5 = {'tag': 'documents', 'source': 'zmc.documents', 'fields': ['patnr', 'document_title', 'type', 'date', 'document'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': True}
+zmc_documents_6 = {'tag': 'documents', 'source': 'zmc.images', 'fields': ['patnr', 'image_title', 'type', 'date', 'image'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': True}
+
 
 zmc_treatments_1 = {'tag': 'treatments', 'source': 'zmc.complaints_and_diagnosis', 'fields': ['patnr', 'complaints_and_diagnosis', 'status', 'specialism', 'type', 'name_of_diagnosis_or_complaint', 'anatomical_location', 'laterality', 'begin_date', 'end_date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_treatments_2 = {'tag': 'treatments', 'source': 'zmc.medication_agreements', 'fields': ['patnr', 'medicines', 'prescribed_by'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
@@ -42,7 +45,7 @@ zmc_healthcare_providers_2 = {'tag': 'healthcare_providers', 'source': 'zmc.regi
 zmc_allergies_1 = {'tag': 'allergies', 'source': 'zmc.medication_agreements', 'fields': ['patnr', 'medicines'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_allergies_2 = {'tag': 'allergies', 'source': 'zmc.allergies', 'fields': ['patnr', 'caustive_substance', 'critical', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
-zmc_personal_1 = {'tag': 'personal', 'source': 'zmc.weights', 'fields': ['patnr', 'measurement', 'clothes', 'description', 'date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+zmc_personal_1 = {'tag': 'personal', 'source': 'zmc.weight', 'fields': ['patnr', 'measurement', 'clothes', 'description', 'date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_personal_2 = {'tag': 'personal', 'source': 'zmc.length', 'fields': ['patnr', 'measurement', 'description', 'date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_personal_3 = {'tag': 'personal', 'source': 'zmc.functional_or_mental_state', 'fields': ['patnr', 'name', 'value', 'date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_personal_4 = {'tag': 'personal', 'source': 'zmc.living_situation', 'fields': ['patnr', 'house_type', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
@@ -58,12 +61,12 @@ zmc_drugs_and_alcohol_2 = {'tag': 'drugs_and_alcohol', 'source': 'zmc.alcohol_us
 zmc_drugs_and_alcohol_3 = {'tag': 'drugs_and_alcohol', 'source': 'zmc.tobacco_use', 'fields': ['patnr', 'substance', 'quantity', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
 zmc_all_1 = {'tag': 'all', 'source': 'zmc.wearable', 'fields': ['patnr', 'date', 'w_time', 'w_steps', 'w_cad', 'sst', 'sst_time', 'cyc_time', 'cyc_steps', 'cyc_cad'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
-zmc_all_2 = {'tag': 'all', 'source': 'zmc.complains_and_diagnosis', 'fields': ['patnr', 'complaints_and_diagnosis', 'status', 'specialism', 'type', 'name_of_diagnosis_or_complaint', 'anatomical_location', 'laterality', 'begin_date', 'end_date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+zmc_all_2 = {'tag': 'all', 'source': 'zmc.complaints_and_diagnosis', 'fields': ['patnr', 'complaints_and_diagnosis', 'status', 'specialism', 'type', 'name_of_diagnosis_or_complaint', 'anatomical_location', 'laterality', 'begin_date', 'end_date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_all_3 = {'tag': 'all', 'source': 'zmc.medication_agreements', 'fields': ['patnr', 'medicines', 'prescribed_by', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_all_4 = {'tag': 'all', 'source': 'zmc.medication_use', 'fields': ['patnr', 'product', 'use', 'reason'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_all_5 = {'tag': 'all', 'source': 'zmc.medical_aids_and_tools', 'fields': ['patnr', 'product_description', 'anatomical_location', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_all_6 = {'tag': 'all', 'source': 'zmc.bloodpressure', 'fields': ['patnr', 'value', 'position', 'description', 'date', 'systolic_bloodpressure', 'diastolic_bloodpressure', 'measurement_method', 'manchette_type', 'measurement_location', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
-zmc_all_7 = {'tag': 'all', 'source': 'zmc.weights', 'fields': ['patnr', 'measurement', 'clothes', 'description', 'date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+zmc_all_7 = {'tag': 'all', 'source': 'zmc.weight', 'fields': ['patnr', 'measurement', 'clothes', 'description', 'date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_all_8 = {'tag': 'all', 'source': 'zmc.length', 'fields': ['patnr', 'measurement', 'description', 'date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_all_9 = {'tag': 'all', 'source': 'zmc.registered_events', 'fields': ['patnr', 'type', 'method', 'anatomical_location', 'laterality', 'start_date', 'end_date', 'indication', 'executor', 'requested_by', 'location', 'description', 'date'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_all_10 = {'tag': 'all', 'source': 'zmc.warning', 'fields': ['patnr', 'alerts', 'begindate', 'type'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
@@ -73,6 +76,8 @@ zmc_all_13 = {'tag': 'all', 'source': 'zmc.drug_use', 'fields': ['patnr', 'subst
 zmc_all_14 = {'tag': 'all', 'source': 'zmc.alcohol_use', 'fields': ['patnr', 'usage_status', 'quantity', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_all_15 = {'tag': 'all', 'source': 'zmc.tobacco_use', 'fields': ['patnr', 'substance', 'quantity', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 zmc_all_16 = {'tag': 'all', 'source': 'zmc.allergies', 'fields': ['patnr', 'caustive_substance', 'critical', 'description'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+zmc_all_17 = {'tag': 'all', 'source': 'zmc.documents', 'fields': ['patnr', 'document_title', 'type', 'date', 'document'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': True}
+zmc_all_18 = {'tag': 'all', 'source': 'zmc.images', 'fields': ['patnr', 'image_title', 'type', 'date', 'image'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': True}
 
 zmc_tags = [
     zmc_wearable_1,
@@ -97,6 +102,8 @@ zmc_tags = [
     zmc_documents_2,
     zmc_documents_3,
     zmc_documents_4,
+    zmc_documents_5,
+    zmc_documents_6,
     zmc_treatments_1,
     zmc_treatments_2,
     zmc_treatments_3,
@@ -138,5 +145,7 @@ zmc_tags = [
     zmc_all_13,
     zmc_all_14,
     zmc_all_15,
-    zmc_all_16
+    zmc_all_16,
+    zmc_all_17,
+    zmc_all_18
 ]
