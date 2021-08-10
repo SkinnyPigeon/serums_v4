@@ -5,7 +5,7 @@ from sqlalchemy.schema import CreateSchema
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, Numeric, DateTime, Time, Text, ForeignKey, BigInteger
-
+from sqlalchemy.dialects.postgresql import ARRAY, JSON
 
 from dotenv import load_dotenv
 from pathlib import Path
@@ -230,6 +230,19 @@ class USTAN_Smr06(Base):
     stage_clinical_m = Column(String(2))
     num_positive = Column(Integer)
     pathological_tum_size = Column(Integer)
+
+class USTAN_TAGS(Base):
+    __tablename__ = 'hospital_tags'
+    __table_args__ = {'schema': 'ustan'}
+    id = Column(Integer, primary_key=True)
+    tags = Column(ARRAY(String)) 
+
+class USTAN_Translated_TAGS(Base):
+    __tablename__ = 'translated_tags'
+    __table_args__ = {'schema': 'ustan'}
+    id = Column(Integer, primary_key=True)
+    tags = Column(JSON) 
+
 
 # USTAN MACHINE LEARNING
 
@@ -587,6 +600,19 @@ class FCRB_Vital_Signs(Base):
     vbem = Column(String(150))
 
 
+class FCRB_TAGS(Base):
+    __tablename__ = 'hospital_tags'
+    __table_args__ = {'schema': 'fcrb'}
+    id = Column(Integer, primary_key=True)
+    tags = Column(ARRAY(String))  
+
+class FCRB_Translated_TAGS(Base):
+    __tablename__ = 'translated_tags'
+    __table_args__ = {'schema': 'fcrb'}
+    id = Column(Integer, primary_key=True)
+    tags = Column(JSON) 
+
+
 # # ZMC
 
 class ZMC_Serums_IDs(Base):
@@ -819,7 +845,17 @@ class ZMC_Allergies(Base):
     critical = Column(String(20))
     description = Column(String(40))
 
+class ZMC_TAGS(Base):
+    __tablename__ = 'hospital_tags'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    tags = Column(ARRAY(String)) 
 
+class ZMC_Translated_TAGS(Base):
+    __tablename__ = 'translated_tags'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    tags = Column(JSON) 
 
 
 
