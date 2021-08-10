@@ -232,7 +232,7 @@ class USTAN_Smr06(Base):
     pathological_tum_size = Column(Integer)
 
 class USTAN_TAGS(Base):
-    __tablename__ = 'hospital_tags'
+    __tablename__ = 'tags'
     __table_args__ = {'schema': 'ustan'}
     id = Column(Integer, primary_key=True)
     tags = Column(ARRAY(String)) 
@@ -601,7 +601,7 @@ class FCRB_Vital_Signs(Base):
 
 
 class FCRB_TAGS(Base):
-    __tablename__ = 'hospital_tags'
+    __tablename__ = 'tags'
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
     tags = Column(ARRAY(String))  
@@ -846,7 +846,7 @@ class ZMC_Allergies(Base):
     description = Column(String(40))
 
 class ZMC_TAGS(Base):
-    __tablename__ = 'hospital_tags'
+    __tablename__ = 'tags'
     __table_args__ = {'schema': 'zmc'}
     id = Column(Integer, primary_key=True)
     tags = Column(ARRAY(String)) 

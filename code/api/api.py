@@ -17,6 +17,7 @@ from functions.ml import get_patient_data_for_ml
 from functions.get_source_data import get_patient_data
 from functions.encryption import encrypt_data_with_new_key, encrypt_key
 from functions.search import search_for_serums_id
+from functions.tags import get_tags
 
 
 # Setting up environment
@@ -57,6 +58,10 @@ staff_parser = api.parser()
 staff_parser.add_argument('Authorization', help="The authorization token", location="headers",
                           default="""Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYyMDkwNTkzOCwianRpIjoiNjZjNTgwYmUtOTViMC00YjhiLWE3ZjQtYzU3ODkyOGJhM2NjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE2MjA5MDU5MzgsImV4cCI6MTg4MDEwNTkzOH0.zeJNNiXE7XbeNPC5g2OEQvu1EsYeohUsgvsY2_fg8EM""")
 
+# Tags
+
+tags_parser = api.parser()
+# tags_parser.add_argument()
 
 # Search
 
@@ -117,7 +122,8 @@ sphr_parser.add_argument('Authorization', help="The authorization token", locati
 hello_space = api.namespace('hello', description='Check the server is on')
 staff_space = api.namespace(
     'staff_tables', description='Return the staff tables')
-
+tags_space = api.namespace(
+    'tags_tables', description='Return the tags tables')
 search_space = api.namespace('search', description='Search for a patient\s SERUMS ID')
 ml_space = api.namespace(
     'machine_learning', description='Return the patient data for the machine learning algorithm')
@@ -149,6 +155,22 @@ class Department(Resource):
         if response['status_code'] == 200:
             department_ids = get_departments(response['body'])
         return department_ids
+
+
+# Staff tables
+
+@tags_space.route('/tags')
+class Tags(Resource):
+    def post(self):
+        refreshed_jwt = refresh_jwt()
+        print(refreshed_jwt)
+        jwt = refreshed_jwt['body']['resource_str']
+        response = validate_jwt(jwt)
+        print(response['body'])
+        if response['status_code'] == 200:
+            tags = get_tags(response['body'])
+        return tags
+
 
 
 # Machine Learning
