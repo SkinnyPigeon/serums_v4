@@ -6,6 +6,9 @@ from encryption import encrypt_data, decrypt_data
 
 body = {'rule_id': 123, 'serums_id': 123, 'hospital_ids': ['ZMC', 'FCRB']}
 
+
+# STILL ENTIRELY UNDER CONSTRUCTION. NOT FOR USE YET!!!!!!
+
 def create_record_on_blockchain(body, jwt):
     headers = {
         'Authorization': 'Bearer {}'.format(jwt),
