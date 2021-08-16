@@ -171,7 +171,6 @@ class StaffDepartment(Resource):
 @staff_space.route('/departments')
 class Departments(Resource):
     @api.expect(staff_parser_body, staff_parser_body_fields)
-    # @api.doc(staff_parser_body_fields)
     def post(self):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
@@ -188,14 +187,14 @@ class Departments(Resource):
 
 @tags_space.route('/tags')
 class Tags(Resource):
-    @api.expect(tags_parser)
-    @api.doc(tags_fields)
+    @api.expect(tags_parser, tags_fields)
     def post(self):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         print(response['body'])
         if response['status_code'] == 200:
-            tags = get_tags(response['body'])
+            body = request.get_json()
+            tags = get_tags(body)
         return tags
 
 

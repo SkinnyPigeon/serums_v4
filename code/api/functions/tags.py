@@ -15,7 +15,7 @@ if PORT == None:
     PORT = os.environ.get('PGPORT')
 
 def get_tags(body):
-    schema = body['orgID'].lower()
+    schema = body['hospital_id'].lower()
     engine = create_engine('postgresql://postgres:{}@localhost:{}/source'.format(PASSWORD, PORT))
     metadata = MetaData(bind=engine, schema=schema)
     metadata.reflect(engine)
