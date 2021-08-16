@@ -1,7 +1,6 @@
-from sqlalchemy import create_engine, MetaData, inspect, select
+from sqlalchemy import create_engine, MetaData, select
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import load_only, sessionmaker, defer
+from sqlalchemy.orm import sessionmaker
 
 import os
 from dotenv import load_dotenv
@@ -41,7 +40,7 @@ def get_department_of_staff_member(body):
                 "staff_id": staff_id,
                 "name": name.replace("'", ""),
                 "department_id": department_id,
-                "department_name": department_name.replace("'", "")
+                "department_name": department_name.replace("'", "").strip()
             })
         session.close()
         return department_ids
@@ -52,7 +51,7 @@ def get_department_of_staff_member(body):
 
 def get_departments(body):
     try:
-        metadata = MetaData(schema=body['orgID'].lower())
+        metadata = MetaData(schema=body['hospital_id'].lower())
         Base = automap_base(metadata=metadata)
         engine = create_engine('postgresql://postgres:{}@localhost:{}/source'.format(PASSWORD, PORT))
         Base.prepare(engine, reflect=True)
@@ -75,7 +74,7 @@ def get_departments(body):
                 "staff_id": staff_id,
                 "name": name.replace("'", ""),
                 "department_id": department_id,
-                "department_name": department_name.replace("'", "")
+                "department_name": department_name.replace("'", "").strip()
             })
         session.close()
         return department_ids

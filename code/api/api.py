@@ -62,13 +62,18 @@ staff_parser_body = api.parser()
 staff_parser_body.add_argument('Authorization', help="The authorization token", location="headers",
                           default="""Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjI5NzE0NTUyLCJqdGkiOiJlMTUzMmIxMjYxZmY0MmMwOWZiNzUwOGExMzE0YzdiOSIsInVzZXJJRCI6MzY0LCJpc3MiOiJTZXJ1bXNBdXRoZW50aWNhdGlvbiIsImlhdCI6MTYyOTEwOTc1Miwic3ViIjoiZXVhbkB0ZXN0LmNvbSIsImdyb3VwSURzIjpbIlBBVElFTlQiXSwib3JnSUQiOiJVU1RBTiIsImF1ZCI6Imh0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw_dT1odHRwLTNBX193d3cuc2VydW1zLmNvbSZkPUR3SURhUSZjPWVJR2pzSVRmWFBfeS1ETExYMHVFSFhKdlU4bk9IclVLOElyd05LT3RrVlUmcj11VGZONXVRMWtod2JSeV9UZ0tINmFVZDAtQmJtMEc4Sy1WYWprelpteTk4Jm09MmlVTm4yOUZTYWY3LTAzeHU5eE1CcmNuNHQ2VV8zdzN1cUxpTHl0VGZUNCZzPTVqQjJqbXFoc05BX2cxU1Z5WmdVRlJGOW9FUDhfQVFhLWxpY1lXM0l1ZncmZT0ifQ.TULgoYwvaSYmPPccoUnMMr-dou5hMqcFgMPqXNPtm_0""")
 staff_parser_body_fields = api.model('Return the staff tables', {
-    'organisation_id': fields.String(required=True, description='The id of the organisation to return the staff tables for', example='ZMC')
+    'hospital_id': fields.String(required=True, description='The id of the organisation to return the staff tables for', example='ZMC')
 })
 
 # Tags
 
 tags_parser = api.parser()
-# tags_parser.add_argument()
+tags_parser.add_argument('Authorization', help="The authorization token", location="headers",
+                          default="""Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjI5NzE0NTUyLCJqdGkiOiJlMTUzMmIxMjYxZmY0MmMwOWZiNzUwOGExMzE0YzdiOSIsInVzZXJJRCI6MzY0LCJpc3MiOiJTZXJ1bXNBdXRoZW50aWNhdGlvbiIsImlhdCI6MTYyOTEwOTc1Miwic3ViIjoiZXVhbkB0ZXN0LmNvbSIsImdyb3VwSURzIjpbIlBBVElFTlQiXSwib3JnSUQiOiJVU1RBTiIsImF1ZCI6Imh0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw_dT1odHRwLTNBX193d3cuc2VydW1zLmNvbSZkPUR3SURhUSZjPWVJR2pzSVRmWFBfeS1ETExYMHVFSFhKdlU4bk9IclVLOElyd05LT3RrVlUmcj11VGZONXVRMWtod2JSeV9UZ0tINmFVZDAtQmJtMEc4Sy1WYWprelpteTk4Jm09MmlVTm4yOUZTYWY3LTAzeHU5eE1CcmNuNHQ2VV8zdzN1cUxpTHl0VGZUNCZzPTVqQjJqbXFoc05BX2cxU1Z5WmdVRlJGOW9FUDhfQVFhLWxpY1lXM0l1ZncmZT0ifQ.TULgoYwvaSYmPPccoUnMMr-dou5hMqcFgMPqXNPtm_0""")
+tags_fields = api.model('Return the available tags for an institute', {
+    'hospital_id': fields.String(required=True, description='The id of the organisation to return the tags tables for', example='ZMC')
+})
+
 
 # Search
 
@@ -151,7 +156,7 @@ class ServerCheck(Resource):
 # Staff tables
 
 @staff_space.route('/get_department_of_staff_member')
-class Department(Resource):
+class StaffDepartment(Resource):
     @api.expect(staff_parser_token)
     def post(self):
         jwt = request.headers['Authorization']
@@ -164,23 +169,27 @@ class Department(Resource):
 
 
 @staff_space.route('/departments')
-class Department(Resource):
-    @api.expect(staff_parser_body)
+class Departments(Resource):
+    @api.expect(staff_parser_body, staff_parser_body_fields)
+    # @api.doc(staff_parser_body_fields)
     def post(self):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            department_ids = get_departments(response['body'])
+            body = request.get_json()
+            department_ids = get_departments(body)
             return department_ids, 200
         else:
             return {'message': 'Unable to retrieve department ids'}, 500
 
 
 
-# Staff tables
+# Tags
 
 @tags_space.route('/tags')
 class Tags(Resource):
+    @api.expect(tags_parser)
+    @api.doc(tags_fields)
     def post(self):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
