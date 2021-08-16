@@ -25,7 +25,7 @@ def validate_jwt(jwt):
     # url = "https://localhost:9000/ua/verify_jwt/"
     payload = ""
     headers = {
-        "Authorization": "Bearer {}".format(jwt),
+        "Authorization": f"{jwt}",
         "Content-Type": "application/json"
     }
     try:
