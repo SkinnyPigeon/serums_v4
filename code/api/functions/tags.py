@@ -15,6 +15,21 @@ if PORT == None:
     PORT = os.environ.get('PGPORT')
 
 def get_tags(body):
+    """Returns a list of tags and translated tags available for an individual hospital
+
+            Parameters:
+
+                body (dict): The request body from the api call
+
+            Returns:
+
+                tags (dict): A dictionary with two keys:
+                
+                \t\t - tags: A list of the available tags for a hospital
+                \t\t - translated_tags: A dictionary where the keys are the tags from the tag list and the values contain the translation/human friendly version
+    
+    """
+
     schema = body['hospital_id'].lower()
     engine = create_engine('postgresql://postgres:{}@localhost:{}/source'.format(PASSWORD, PORT))
     metadata = MetaData(bind=engine, schema=schema)
