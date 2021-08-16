@@ -136,7 +136,7 @@ staff_space = api.namespace(
     'staff_tables', description='Return the staff tables')
 tags_space = api.namespace(
     'tags_tables', description='Return the tags tables')
-search_space = api.namespace('search', description='Search for a patient\s SERUMS ID')
+search_space = api.namespace('search', description='Search for a patient\s SERUMS ID. This is still in an early stage and will need updating to make it more flexible')
 ml_space = api.namespace(
     'machine_learning', description='Return the patient data for the machine learning algorithm')
 sphr_space = api.namespace('smart_patient_health_record',
@@ -182,7 +182,6 @@ class Departments(Resource):
             return {'message': 'Unable to retrieve department ids'}, 500
 
 
-
 # Tags
 
 @tags_space.route('/tags')
@@ -197,16 +196,13 @@ class Tags(Resource):
             tags = get_tags(body)
         return tags
 
-
-
 # Machine Learning
 
 @ml_space.route('/analytics')
 class MachineLearning(Resource):
+    @api.expect(ml_parser)
     def post(self):
-        # refreshed_jwt = refresh_jwt()
         jwt = request.headers['Authorization']
-        # jwt = refreshed_jwt['body']['resource_str']
         response = validate_jwt(jwt)
         print(response['body'])
         if response['status_code'] == 200:
@@ -219,11 +215,9 @@ class MachineLearning(Resource):
 
 @search_space.route('/serums_id')
 class Search(Resource):
-    @api.doc(body=search_fields)
+    @api.expect(search_parser, search_fields)
     def post(self):
         jwt = request.headers['Authorization']
-        # refreshed_jwt = refresh_jwt()
-        # jwt = refreshed_jwt['body']['resource_str']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
             patient_details = search_for_serums_id(request.get_json())
