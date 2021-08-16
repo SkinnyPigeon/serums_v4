@@ -4,7 +4,6 @@ from sqlalchemy.orm import sessionmaker
 
 import os
 from dotenv import load_dotenv
-from pathlib import Path
 import subprocess
 
 project_folder = subprocess.check_output("pwd", shell=True).decode("utf-8").rstrip()
@@ -16,6 +15,16 @@ if PORT == None:
     PORT = os.environ.get('PGPORT')
 
 def get_department_of_staff_member(body):
+    """Returns the details about a single staff member for a healthcare provider.
+
+            Parameters:
+
+                body (dict): The response body of the validate_jwt function
+
+            Returns:
+
+                department_ids (list):  A list of dictionaries containing the details of a single staff member for a particular healthcare provider
+    """
     try:
         metadata = MetaData(schema=body['orgID'].lower())
         Base = automap_base(metadata=metadata)
@@ -50,6 +59,16 @@ def get_department_of_staff_member(body):
 
 
 def get_departments(body):
+    """Returns the details about all of the staff members for a healthcare provider.
+
+            Parameters:
+
+                body (dict): The request body that must include 'hospital_id'
+
+            Returns:
+
+                department_ids (list):  A list of dictionaries containing the details of staff members for a particular healthcare provider
+    """
     try:
         metadata = MetaData(schema=body['hospital_id'].lower())
         Base = automap_base(metadata=metadata)
