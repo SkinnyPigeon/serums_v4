@@ -74,6 +74,10 @@ tags_fields = api.model('Return the available tags for an institute', {
     'hospital_id': fields.String(required=True, description='The id of the organisation to return the tags tables for', example='ZMC')
 })
 
+multiple_tags_fields = api.model('Return the available tags for multiple institutes', {
+    'hospital_ids': fields.String(required=True, description='The id of the organisation to return the tags tables for', example=['FCRB', 'USTAN', 'ZMC'])
+})
+
 
 # Search
 
@@ -197,6 +201,23 @@ class Tags(Resource):
             body = request.get_json()
             tags = get_tags(body)
             return tags, 200
+        else:
+            return {"message": "Unable to retrieve tags"}, 500
+
+@tags_space.route('/all_tags')
+class MultipleTags(Resource):
+    @api.expect(tags_parser, multiple_tags_fields)
+    def post(self):
+        jwt = request.headers['Authorization']
+        response = validate_jwt(jwt)
+        print(response['body'])
+        if response['status_code'] == 200:
+            body = request.get_json()
+            multiple_tags = {}
+            for hospital_id in body['hospital_ids']:
+                tags = get_tags({'hospital_id': hospital_id})
+                multiple_tags[hospital_id] = tags
+            return multiple_tags, 200
         else:
             return {"message": "Unable to retrieve tags"}, 500
 
