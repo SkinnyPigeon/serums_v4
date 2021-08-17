@@ -152,7 +152,7 @@ sphr_space = api.namespace('smart_patient_health_record',
 
 # Routes
 
-# Server check
+# Server check: Check that the server is actually on
 
 
 @hello_space.route('/hello')
@@ -161,7 +161,8 @@ class ServerCheck(Resource):
     def get(self):
         return {"hello": "Welcome to the API. The server is on"}, 200
 
-# Staff tables
+
+# Staff tables: Return details about staff members for use in checking they belong to an appropriate department
 
 @staff_space.route('/get_department_of_staff_member')
 class StaffDepartment(Resource):
@@ -190,7 +191,7 @@ class Departments(Resource):
             return {"message": "Unable to retrieve department ids"}, 500
 
 
-# Tags
+# Tags: Return the lists of available tags during the rule construction in the front end 
 
 @tags_space.route('/tags')
 class Tags(Resource):
@@ -223,7 +224,8 @@ class MultipleTags(Resource):
         else:
             return {"message": "Unable to retrieve tags"}, 500
 
-# Machine Learning
+
+# Machine Learning: Used by SCCH's machine learning algorithm
 
 @ml_space.route('/analytics')
 class MachineLearning(Resource):
@@ -239,7 +241,7 @@ class MachineLearning(Resource):
             return {"message": "Unable to retrieve the data for analytics"}, 500
 
 
-# Search function
+# Search function: Returns a Serums ID for an individual patient based on known details such as name, dob, etc.
 
 @search_space.route('/serums_id')
 class Search(Resource):
@@ -254,8 +256,8 @@ class Search(Resource):
             return {"message": "Unable to find that patient"}, 500
 
 
-# Smart Patient Health Record
 
+# Smart Patient Health Record: Returns data based on the rules created by the patients
 
 @sphr_space.route('/get_sphr')
 class SPHR(Resource):
