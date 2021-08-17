@@ -813,7 +813,6 @@ class ZMC_Drug_Use(Base):
     description = Column(String(40))
 
 
-
 class ZMC_Alcohol_Use(Base):
     __tablename__ = 'alcohol_use'
     __table_args__ = {'schema': 'zmc'}
@@ -822,8 +821,6 @@ class ZMC_Alcohol_Use(Base):
     usage_status = Column(String(40))
     quantity = Column(String(40))
     description = Column(String(40))
-
-
 
 class ZMC_Tobacco_Use(Base):
     __tablename__ = 'tobacco_use'
@@ -834,8 +831,6 @@ class ZMC_Tobacco_Use(Base):
     quantity = Column(Integer)
     description = Column(String(40))
 
-
-
 class ZMC_Allergies(Base):
     __tablename__ = 'allergies'
     __table_args__ = {'schema': 'zmc'}
@@ -844,6 +839,19 @@ class ZMC_Allergies(Base):
     caustive_substance = Column(String(40))
     critical = Column(String(20))
     description = Column(String(40))
+
+class ZMC_Patient_Details(Base):
+    __tablename__ = 'patient_details'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(BigInteger) 
+    nname = Column(String(40))
+    nnams = Column(String(40))
+    vname = Column(String(6))
+    titel = Column(String(6))
+    gschl = Column(String(10))
+    gbdat = Column(DateTime(timezone=False))
+    natio = Column(String(3))
 
 class ZMC_TAGS(Base):
     __tablename__ = 'tags'
