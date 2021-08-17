@@ -144,7 +144,7 @@ staff_space = api.namespace(
     'staff_tables', description='Return the staff tables')
 tags_space = api.namespace(
     'tags_tables', description='Return the tags tables')
-search_space = api.namespace('search', description='Search for a patient\s SERUMS ID. This is still in an early stage and will need updating to make it more flexible')
+search_space = api.namespace('search', description='Search for a patient\s SERUMS ID')
 ml_space = api.namespace(
     'machine_learning', description='Return the patient data for the machine learning algorithm')
 sphr_space = api.namespace('smart_patient_health_record',
