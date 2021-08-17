@@ -250,8 +250,7 @@ class Search(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            patient_details = search_for_serums_id(request.get_json())
-            return patient_details, 200
+            return search_for_serums_id(request.get_json())
         else:
             return {"message": "Unable to find that patient"}, 500
 

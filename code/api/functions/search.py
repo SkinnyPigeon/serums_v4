@@ -164,9 +164,9 @@ def get_serums_id(connection, patient_id, key_name):
     """
     id_class = connection['base'].classes.serums_ids
     serums_id_column = id_class.serums_id
-    result = connection['session'].query(id_class).with_entities(serums_id_column).filter_by(**{key_name: int(patient_id)}).all()
-
-    return result[0][0]
+    results = connection['session'].query(id_class).with_entities(serums_id_column).filter_by(**{key_name: int(patient_id)}).all()
+    print(results)
+    return results
 
 def search_for_serums_id(body):
     """Search function to find a patient's Serums id based on information provided such as: name, dob, gender, native patient id, etc.
@@ -177,28 +177,42 @@ def search_for_serums_id(body):
 
             Returns:
 
-                serums_id (int): The id used throughout the serums network linking a single patient across multiple hospitals
+                serums_ids (list): A list of patients who match the search criteria
     """
     schema, tablename, search_fields = hospital_picker(body['hospital_id'])
     connection = setup_connection(schema)
     table_class = get_class_by_name(tablename, connection['base'])
+    
     filters = {search_fields['fields'][key]: body[key] for key in body if key in search_fields['fields'] and body[key] not in ["", None]} 
-    fields = [*search_fields['fields'].values()]
-    entities = [getattr(table_class, field) for field in fields]
-    try:
-        result = connection['session'].query(table_class).with_entities(*entities).filter_by(**filters).one()
-        data = {field: result[index]for index, field in enumerate(fields)}
-        df = pd.DataFrame(data, index=[0])
-
-        df = convert_dates_to_string(df)
-        df = convert_decimal_to_float(df)
-        print(df[search_fields['fields']['patient_id']][0])
-        serums_id = get_serums_id(connection, df[search_fields['fields']['patient_id']][0], search_fields['fields']['patient_id']) 
-        df['serums_id'] = serums_id
-        print(df)
+    if len(filters) > 0:
+        fields = [*search_fields['fields'].values()]
+        entities = [getattr(table_class, field) for field in fields]
+        try:
+            ids = []
+            results = connection['session'].query(table_class).with_entities(*entities).filter_by(**filters)
+            for result in results:
+                data = {field: result[index]for index, field in enumerate(fields)}
+                df = pd.DataFrame(data, index=[0])
+                df = convert_dates_to_string(df)
+                df = convert_decimal_to_float(df)
+                print(df[search_fields['fields']['patient_id']][0])
+                serums_ids = get_serums_id(connection, df[search_fields['fields']['patient_id']][0], search_fields['fields']['patient_id']) 
+                for serums_id in serums_ids:
+                    df_copy = df.copy()
+                    df_copy['serums_id'] = serums_id[0]
+                    print(df_copy)
+                    connection['engine'].dispose()
+                    ids.append(df_copy.to_dict('index')[0])
+            if len(ids) > 1:
+                return ids, 200
+            else:
+                return {"message": "No patient found with those details"}, 500
+        except sqlalchemy.orm.exc.NoResultFound:
+            connection['engine'].dispose()
+            return {"message": "No patient found with those details"}, 500
+        except Exception as e:
+            connection['engine'].dispose()
+            return {"message": str(e)}, 500
+    else:
         connection['engine'].dispose()
-        return df.to_dict('index')[0]
-    except sqlalchemy.orm.exc.NoResultFound:
-        return {"message": "No patient found with those details"}
-    except Exception as e:
-        return {"message": str(e)}
+        return {"message": "Please include at least one search term"}, 500
