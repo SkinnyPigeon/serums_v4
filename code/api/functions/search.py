@@ -24,8 +24,7 @@ if PORT == None:
 
 from sources.search_details.fcrb import fcrb_patient_details
 from sources.search_details.zmc import zmc_patient_details
-
-# Currently only available for FCRB. Under development
+from sources.search_details.ustan import ustan_patient_details
 
 # Helper functions
 
@@ -47,6 +46,8 @@ def hospital_picker(hospital):
         return 'fcrb', 'fcrb.patient', fcrb_patient_details
     elif hospital == 'ZMC':
         return 'zmc', 'zmc.patient_details', zmc_patient_details
+    elif hospital == 'USTAN':
+        return 'ustan', 'ustan.general', ustan_patient_details
 
 
 def setup_connection(schema):
