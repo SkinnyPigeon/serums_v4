@@ -1,6 +1,7 @@
 # Imports and setup
 
 from sqlalchemy import create_engine, MetaData, inspect, select
+import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import load_only, sessionmaker, defer
@@ -177,18 +178,23 @@ def search_for_serums_id(body):
     schema, tablename, search_fields = hospital_picker(body['hospital_id'])
     connection = setup_connection(schema)
     table_class = get_class_by_name(tablename, connection['base'])
-    filters = {search_fields['fields'][key]: body[key] for key in body if key in search_fields['fields']}
+    filters = {search_fields['fields'][key]: body[key] for key in body if key in search_fields['fields'] and body[key] not in ["", None]} 
     fields = [*search_fields['fields'].values()]
     entities = [getattr(table_class, field) for field in fields]
-    result = connection['session'].query(table_class).with_entities(*entities).filter_by(**filters).one()
-    data = {field: result[index]for index, field in enumerate(fields)}
-    df = pd.DataFrame(data, index=[0])
+    try:
+        result = connection['session'].query(table_class).with_entities(*entities).filter_by(**filters).one()
+        data = {field: result[index]for index, field in enumerate(fields)}
+        df = pd.DataFrame(data, index=[0])
 
-    df = convert_dates_to_string(df)
-    df = convert_decimal_to_float(df)
-    print(df[search_fields['fields']['patient_id']][0])
-    serums_id = get_serums_id(connection, df[search_fields['fields']['patient_id']][0], search_fields['fields']['patient_id']) 
-    df['serums_id'] = serums_id
-    print(df)
-    connection['engine'].dispose()
-    return df.to_dict('index')[0]
+        df = convert_dates_to_string(df)
+        df = convert_decimal_to_float(df)
+        print(df[search_fields['fields']['patient_id']][0])
+        serums_id = get_serums_id(connection, df[search_fields['fields']['patient_id']][0], search_fields['fields']['patient_id']) 
+        df['serums_id'] = serums_id
+        print(df)
+        connection['engine'].dispose()
+        return df.to_dict('index')[0]
+    except sqlalchemy.orm.exc.NoResultFound:
+        return {"message": "No patient found with those details"}
+    except Exception as e:
+        return {"message": str(e)}

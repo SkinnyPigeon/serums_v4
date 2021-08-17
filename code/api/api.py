@@ -90,13 +90,13 @@ search_parser.add_argument('Authorization', help="The authorization token", loca
 
 search_fields = api.model('Search for a patient\'s SERUMS id', {
     'patient_id': fields.Integer(required=False, description='The patient\'s id within a hospital\'s internal systems', example=4641202),
-    'first_name': fields.String(required=True, description='The patient\'s first name', example='Joana'),
+    'first_name': fields.String(required=False, description='The patient\'s first name', example='Joana'),
     'first_surname': fields.String(required=False, description='The patient\'s first surname', example='Soler'),
-    'family_name': fields.String(required=True, description='The patient\'s family name', example='Rodríguez'),
-    'dob': fields.DateTime(required=True, description='The patient\'s date of birth', example='1935-05-12'),
-    'gender': fields.String(required=True, description='The patient\'s gender', example='2'),
-    'hospital_id': fields.String(required=True, description='The id of the hospital for the source data', example='FCRB'),
-    'public_key': fields.String(required=True, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
+    'family_name': fields.String(required=False, description='The patient\'s family name', example='Rodríguez'),
+    'dob': fields.DateTime(required=False, description='The patient\'s date of birth', example='1935-05-12'),
+    'gender': fields.String(required=False, description='The patient\'s gender', example='2'),
+    'hospital_id': fields.String(required=False, description='The id of the hospital for the source data', example='FCRB'),
+    'public_key': fields.String(required=False, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDM+DNCybR7LdizOcK1gH2P7dD
 sajGUEIoPFp7wjhgKykYkCGVQCvl55g/zdh6UI9Cd/i2IEf5wo+Ct9oihy9SnJSp
 3sOp1KESV+ElwdK3vkaIo1AUuj+E8LTe7llyJ61JJdZaozyT0PxM8jB2vIaNEdbO
