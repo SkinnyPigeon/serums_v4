@@ -59,8 +59,8 @@ This project directory is structured as follows:
 ***
 
 **/code/api/sources/** - A couple sets of control files used in backend functions:
-- `search_details` - Used to map the request query columns to their native values for use by the search functionality
-- `tags` - A very important set of files which provide the *tag* definitions. Tags are used by the end users to create rules governing access to their data. They achieve this by selecting tags in the frontend to suit their current requirements. Tags are designed by the hospitals themselves in order to intelligently group subsets of data into useful packets as well as ensuring any data that can be selected falls within their governance
+- `search_details/` - Used to map the request query columns to their native values for use by the search functionality
+- `tags/` - A very important set of files which provide the *tag* definitions. Tags are used by the end users to create rules governing access to their data. They achieve this by selecting tags in the frontend to suit their current requirements. Tags are designed by the hospitals themselves in order to intelligently group subsets of data into useful packets as well as ensuring any data that can be selected falls within their governance
 
 ***
 
