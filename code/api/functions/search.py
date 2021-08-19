@@ -3,6 +3,7 @@
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.exc import NoResultFound
 
 import os
 from dotenv import load_dotenv
@@ -203,7 +204,7 @@ def search_for_serums_id(body):
                 return ids, 200
             else:
                 return {"message": "No patient found with those details"}, 500
-        except sqlalchemy.orm.exc.NoResultFound:
+        except NoResultFound:
             connection['engine'].dispose()
             return {"message": "No patient found with those details"}, 500
         except Exception as e:
