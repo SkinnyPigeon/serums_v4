@@ -1,5 +1,4 @@
 import requests
-import json
 
 def refresh_jwt(hospital):
     """Used in testing to generate a fresh JWT quickly. New JWTs can be selected by logging into the Serums portal, however, they have a finite life on them. Using the refresh tokens limits the need to do the logging in. Calls the authentication module to refresh the token

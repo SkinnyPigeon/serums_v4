@@ -1,17 +1,13 @@
 # Imports and setup
 
-from sqlalchemy import create_engine, MetaData, inspect, select
-import sqlalchemy
+from sqlalchemy import create_engine, MetaData
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import load_only, sessionmaker, defer
+from sqlalchemy.orm import sessionmaker
 
 import os
 from dotenv import load_dotenv
-from pathlib import Path
 import subprocess
 
-import json
 import pandas as pd
 
 project_folder = subprocess.check_output("pwd", shell=True).decode("utf-8").rstrip()

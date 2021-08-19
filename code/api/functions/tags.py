@@ -3,7 +3,6 @@ from sqlalchemy.ext.automap import automap_base
 
 import os
 from dotenv import load_dotenv
-from pathlib import Path
 import subprocess
 
 project_folder = subprocess.check_output("pwd", shell=True).decode("utf-8").rstrip()
