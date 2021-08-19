@@ -18,6 +18,7 @@ from functions.get_source_data import get_patient_data
 from functions.encryption import encrypt_data_with_new_key, encrypt_key
 from functions.search import search_for_serums_id
 from functions.tags import get_tags
+from functions.add_and_remove_users import add_user, remove_user
 
 
 # Setting up environment
@@ -80,6 +81,22 @@ multiple_tags_fields = api.model('Return the available tags for multiple institu
     'hospital_ids': fields.String(required=True, description='The id of the organisation to return the tags tables for', example=['FCRB', 'USTAN', 'ZMC'])
 })
 
+# Users
+
+user_parser = api.parser()
+user_parser.add_argument('Authorization', help="The authorization token", location="headers",
+                          default=default_jwt)
+add_user_fields = api.model('Add a new user to the Serums network', {
+    'serums_id': fields.Integer(required=True, description='The Serums ID for the patient to add to the network', example=500),
+    'patient_id': fields.Integer(required=False, description="The patient\'s id within a hospital\'s internal systems to link to a Serums ID", example=4641202),
+    'hospital_id': fields.String(required=True, description='The id of the organisation to add a user to', example='FCRB')
+})
+
+remove_user_fields = api.model('Remove a user from the Serums network', {
+    'serums_id': fields.Integer(required=True, description='The Serums ID for the patient to add to the network', example=500),
+    'hospital_ids': fields.String(required=True, description='A list of the ids of the organisations to remove a user from', example=['ZMC', 'FCRB'])
+})
+
 
 # Search
 
@@ -88,14 +105,14 @@ search_parser.add_argument('Authorization', help="The authorization token", loca
                           default=default_jwt)
 
 
-search_fields = api.model('Search for a patient\'s SERUMS id', {
-    'patient_id': fields.Integer(required=False, description='The patient\'s id within a hospital\'s internal systems', example=4641202),
-    'first_name': fields.String(required=False, description='The patient\'s first name', example='Joana'),
-    'first_surname': fields.String(required=False, description='The patient\'s first surname', example='Soler'),
-    'family_name': fields.String(required=False, description='The patient\'s family name', example='Rodríguez'),
-    'dob': fields.DateTime(required=False, description='The patient\'s date of birth', example='1935-05-12'),
-    'gender': fields.String(required=False, description='The patient\'s gender', example='2'),
-    'hospital_id': fields.String(required=False, description='The id of the hospital for the source data', example='FCRB'),
+search_fields = api.model("Search for a patient\'s SERUMS id", {
+    'patient_id': fields.Integer(required=False, description="The patient\'s id within a hospital\'s internal systems", example=4641202),
+    'first_name': fields.String(required=False, description="The patient\'s first name", example='Joana'),
+    'first_surname': fields.String(required=False, description="The patient\'s first surname", example='Soler'),
+    'family_name': fields.String(required=False, description="The patient\'s family name", example='Rodríguez'),
+    'dob': fields.DateTime(required=False, description="The patient\'s date of birth", example='1935-05-12'),
+    'gender': fields.String(required=False, description="The patient\'s gender", example='2'),
+    'hospital_id': fields.String(required=False, description="The id of the hospital for the source data", example='FCRB'),
     'public_key': fields.String(required=False, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDM+DNCybR7LdizOcK1gH2P7dD
 sajGUEIoPFp7wjhgKykYkCGVQCvl55g/zdh6UI9Cd/i2IEf5wo+Ct9oihy9SnJSp
@@ -144,7 +161,8 @@ staff_space = api.namespace(
     'staff_tables', description='Return the staff tables')
 tags_space = api.namespace(
     'tags_tables', description='Return the tags tables')
-search_space = api.namespace('search', description='Search for a patient\s SERUMS ID')
+users_space = api.namespace('users', description='Add or remove a user from the Serums network')
+search_space = api.namespace('search', description="Search for a patient\'s SERUMS ID")
 ml_space = api.namespace(
     'machine_learning', description='Return the patient data for the machine learning algorithm')
 sphr_space = api.namespace('smart_patient_health_record',
@@ -223,6 +241,38 @@ class MultipleTags(Resource):
             return multiple_tags, 200
         else:
             return {"message": "Unable to retrieve tags"}, 500
+
+
+# Add and remove users
+
+@users_space.route('/add_user')
+class AddUser(Resource):
+    @api.expect(user_parser, add_user_fields)
+    def post(self):
+        jwt = request.headers['Authorization']
+        response = validate_jwt(jwt)
+        print(response['body'])
+        if response['status_code'] == 200:
+            body = request.get_json()
+            response = add_user(body['serums_id'], body['patient_id'], body['hospital_id'])
+            return response
+        else:
+            return {"message": "Unable to add user"}, 500
+
+
+@users_space.route('/remove_user')
+class RemoveUser(Resource):
+    @api.expect(user_parser, remove_user_fields)
+    def post(self):
+        jwt = request.headers['Authorization']
+        response = validate_jwt(jwt)
+        print(response['body'])
+        if response['status_code'] == 200:
+            body = request.get_json()
+            response = remove_user(body['serums_id'], body['hospital_ids'])
+            return response
+        else:
+            return {"message": "Unable to remove user"}, 500
 
 
 # Machine Learning: Used by SCCH's machine learning algorithm
