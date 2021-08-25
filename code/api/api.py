@@ -139,7 +139,7 @@ sphr_parser.add_argument('Authorization', help="The authorization token", locati
 request_fields = api.model('Request Smart Patient Health Record', {
     'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=364),
     'rule_id': fields.String(required=True, description='The rule id as stored in the blockchain', example='RULE_0df8eb8b-a469-46ae-8119-fbf98fa05b92'),
-    'tags': fields.String(required=True, description='Rule to be executed', example=['address', 'treatments', 'wearable']),
+    'tags': fields.String(required=True, description='Rule to be executed', example=['patient_address', 'treatments', 'wearable']),
     'hospital_ids': fields.String(required=True, description='The id of the hospital for the source data', example=['FCRB', 'USTAN', 'ZMC']),
     'public_key': fields.String(required=True, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDM+DNCybR7LdizOcK1gH2P7dD

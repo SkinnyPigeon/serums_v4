@@ -21,6 +21,7 @@ if PORT == None:
 from sources.tags.fcrb import fcrb_tags
 from sources.tags.ustan import ustan_tags
 from sources.tags.zmc import zmc_tags
+from functions.lineage import create_record, update_record, schema_string
 
 PORT = os.getenv('PGPORT')
 PASSWORD = os.getenv('PGPASSWORD')
@@ -238,12 +239,12 @@ def select_source_patient_id_value(session, id_class, serums_id, key_name):
 
 # Selecting tabular data:
 
-def select_tabular_patient_data(session, tables, tag_definition, patient_id, key_name):
+def select_tabular_patient_data(connection, tables, tag_definition, patient_id, key_name):
     """Selects the tabular data within from a hospital's source system
     
             Parameters:
 
-                session (Session): The SQLAlchemy session to run the query with\n
+                connection (dict): The connection dictionary that contains all of the aspects to work with SQLAlchemy\n
                 tables (dict): A dictionary that uses the table names as the keys and SQLAlchemy table classes as the values\n
                 tag_definition (dict): A tag definition that is based on the tags field in the request body\n
                 patient_id (int): The native patient id within the hospital's system\n
@@ -260,7 +261,7 @@ def select_tabular_patient_data(session, tables, tag_definition, patient_id, key
     entities = []
     for field in fields:
         entities.append(getattr(table_class, field))
-    result = session.query(table_class).with_entities(*entities).filter_by(**{key_name: patient_id}).all()
+    result = connection['session'].query(table_class).with_entities(*entities).filter_by(**{key_name: patient_id}).all()
     
     for row in result:
         data.append(convert_tuples_to_dict(row, fields))
@@ -268,9 +269,12 @@ def select_tabular_patient_data(session, tables, tag_definition, patient_id, key
     df = pd.DataFrame([x for x in data])
     df = convert_dates_to_string(df)
     df = convert_decimal_to_float(df)
-    print(df)
-
-    return df.to_dict('index')
+    # print(df)
+    columns = []
+    for column in df.columns:
+        columns.append(column)
+    column_hash = schema_string(columns)
+    return df.to_dict('index'), column_hash
 
 
 def select_image_patient_data(session, tables, tag_definition, patient_id, key_name):
@@ -300,7 +304,7 @@ def select_image_patient_data(session, tables, tag_definition, patient_id, key_n
     df = pd.DataFrame([x for x in data])
     df = convert_dates_to_string(df)
     df = convert_decimal_to_float(df)
-    print(df)
+    # print(df)
 
     return df.to_dict('index')
 
@@ -308,7 +312,7 @@ def select_image_patient_data(session, tables, tag_definition, patient_id, key_n
 # Selecting the data based on the tags
 
 
-def select_patient_data(connection, tags_definitions, patient_id, key_name):
+def select_patient_data(connection, tags_definitions, patient_id, key_name, proof_id):
     """Used to determine the type of data selection to be used i.e. image, tabular, or graph. Calls the relevant function.
     
             Parameters:
@@ -325,12 +329,16 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name):
     """
     session = connection['session']
     results = {}
+    column_hashes = []
     tables = get_classes(connection['schema'], connection['base'])
     for tag_definition in tags_definitions:
         if tag_definition['table']:
-            results[tag_definition['source']] = select_tabular_patient_data(session, tables, tag_definition, patient_id, key_name)
+            results[tag_definition['source']], column_hash = select_tabular_patient_data(connection, tables, tag_definition, patient_id, key_name)
+            column_hashes.append(column_hash)
         if tag_definition['image']:
             results[tag_definition['source']] = select_image_patient_data(session, tables, tag_definition, patient_id, key_name)
+    sorted_hashes = sorted(column_hashes)
+    update_record(proof_id, 'data_selected', connection['schema'].upper(), 'success', {'columns_hash': "".join(sorted_hashes)})
     return results
 
 
@@ -346,6 +354,7 @@ def get_patient_data(body):
                 smart_patient_health_record (DataFrame): A DataFrame containing the selected patient data
     """
     results = {}
+    proof_id = create_record(body['serums_id'], body['rule_id'], body['hospital_ids'])
     for hospital_id in body['hospital_ids']:
         try:
             hospital, tags_list = hospital_picker(hospital_id)
@@ -356,7 +365,7 @@ def get_patient_data(body):
             patient_id = select_source_patient_id_value(connection['session'], 
                                                             id_class, 
                                                             body['serums_id'], key_name)
-            data = select_patient_data(connection, tags, patient_id, key_name)
+            data = select_patient_data(connection, tags, patient_id, key_name, proof_id)
             connection['engine'].dispose()
             if len(data) > 0:
                 results[hospital_id] = data
