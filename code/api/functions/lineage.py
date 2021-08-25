@@ -68,6 +68,7 @@ def update_record(proof_id, stage, hospital_id, status, content):
     }
     try:
         response = requests.patch(update_url, json=body, headers=header)
+        print(response.json())
         if response.status_code == 200:
             return {'stage': stage, 'updated': 'success'}, 200
         else:

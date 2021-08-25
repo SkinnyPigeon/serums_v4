@@ -373,4 +373,4 @@ def get_patient_data(body):
             connection['engine'].dispose()
             if str(e) == "No row was found for one()":
                 results[hospital_id] = {"Error": "Serums ID not found with healthcare provider: {}".format(hospital_id)}
-    return results
+    return results, proof_id

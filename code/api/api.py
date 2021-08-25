@@ -11,7 +11,7 @@ import json
 
 # Functions
 
-from functions.jwt import validate_jwt, refresh_jwt
+from functions.jwt import validate_jwt
 from functions.departments import get_department_of_staff_member, get_departments
 from functions.ml import get_patient_data_for_ml
 from functions.get_source_data import get_patient_data
@@ -19,6 +19,7 @@ from functions.encryption import encrypt_data_with_new_key, encrypt_key
 from functions.search import search_for_serums_id
 from functions.tags import get_tags
 from functions.add_and_remove_users import add_user, remove_user
+from functions.lineage import update_record
 
 
 # Setting up environment
@@ -318,7 +319,7 @@ class SPHR(Resource):
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
             body = request.get_json()
-            patient_data = get_patient_data(body)
+            patient_data, proof_id = get_patient_data(body)
             return patient_data, 200
         else:
             return {"message": "Unable to create SPHR"}, 500
@@ -333,9 +334,11 @@ class SPHR_Encrypted(Resource):
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
             body = request.get_json()
-            patient_data = get_patient_data(body)
+            patient_data, proof_id = get_patient_data(body)
             encrypted_data, encryption_key, public_key = encrypt_data_with_new_key(patient_data, body['public_key'])
             encrypted_key = encrypt_key(encryption_key, public_key)
+            check = update_record(proof_id, 'encryption', 'ZMC', 'success', {'encrypted_key': encrypted_key, 'public_key': body['public_key']})
+            print(f"CHECK: {check}")
             return {"data": encrypted_data, "key": encrypted_key}, 200
         else:
             return {"message": "Unable to create SPHR"}, 500
