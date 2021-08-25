@@ -87,9 +87,6 @@ def schema_string(columns):
                 column_hash (str): A hash derived from the stringified ordered list
     """
     sorted_columns = sorted(columns)
-    print(f"SORTED COLUMNS: {sorted_columns}")
     sorted_string = "".join(sorted_columns)
-    print(f"SORTED STRING: {sorted_string}")
     column_hash = sha256(sorted_string.encode()).hexdigest()
-    print(f"COLUMN HASH: {column_hash}")
     return column_hash
