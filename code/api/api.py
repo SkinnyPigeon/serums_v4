@@ -179,6 +179,7 @@ sphr_space = api.namespace('smart_patient_health_record',
 class ServerCheck(Resource):
     @api.marshal_with(hello)
     def get(self):
+        """Checks that the server is online"""
         return {"hello": "Welcome to the API. The server is on"}, 200
 
 
@@ -188,6 +189,7 @@ class ServerCheck(Resource):
 class StaffDepartment(Resource):
     @api.expect(staff_parser_token)
     def post(self):
+        """Returns the department details of a single staff member based on the serums_id within the body of the jwt verification response"""
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
@@ -201,6 +203,7 @@ class StaffDepartment(Resource):
 class Departments(Resource):
     @api.expect(staff_parser_body, staff_parser_body_fields)
     def post(self):
+        """Returns the details about all of the staff members for a healthcare provider"""
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
@@ -217,6 +220,7 @@ class Departments(Resource):
 class Tags(Resource):
     @api.expect(tags_parser, tags_fields)
     def post(self):
+        """Returns a list of tags and translated tags available for an individual hospital"""
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         print(response['body'])
@@ -231,6 +235,7 @@ class Tags(Resource):
 class MultipleTags(Resource):
     @api.expect(tags_parser, multiple_tags_fields)
     def post(self):
+        """Returns a list of tags and translated tags available for multiple hospitals"""
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         print(response['body'])
@@ -251,6 +256,7 @@ class MultipleTags(Resource):
 class AddUser(Resource):
     @api.expect(user_parser, add_user_fields)
     def post(self):
+        """Adds a user to a hospital's serums_ids table. This allows their serums id to be linked to any of their available data in the data lake"""
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         print(response['body'])
@@ -266,6 +272,7 @@ class AddUser(Resource):
 class RemoveUser(Resource):
     @api.expect(user_parser, remove_user_fields)
     def post(self):
+        """Deletes a user from one or more hospital's serums_ids table. This instantly severs the system's ability to access the patient's records even before their medical data is removed during the next nightly ETL process"""
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         print(response['body'])
@@ -283,6 +290,7 @@ class RemoveUser(Resource):
 class MachineLearning(Resource):
     @api.expect(ml_parser)
     def post(self):
+        """Returns the data within from a hospital's source system for use by the machine learning algorithm"""
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         print(response['body'])
@@ -299,6 +307,7 @@ class MachineLearning(Resource):
 class Search(Resource):
     @api.expect(search_parser, search_fields)
     def post(self):
+        """Search function to find a patient's Serums id based on information provided such as: name, dob, gender, native patient id, etc."""
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
@@ -312,9 +321,9 @@ class Search(Resource):
 
 @sphr_space.route('/get_sphr')
 class SPHR(Resource):
-    '''Return the Smart Patient Health Record from the Serums data lake'''
     @api.expect(sphr_parser, request_fields)
     def post(self):
+        '''Return the Smart Patient Health Record from the Serums data lake'''
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
@@ -327,9 +336,9 @@ class SPHR(Resource):
 
 @sphr_space.route('/encrypted')
 class SPHR_Encrypted(Resource):
-    '''Return the encrypted Smart Patient Health Record from the Serums data lake'''
     @api.expect(sphr_parser, request_fields)
     def post(self):
+        '''Return the encrypted Smart Patient Health Record from the Serums data lake'''
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
