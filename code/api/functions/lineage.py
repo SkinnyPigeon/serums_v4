@@ -44,7 +44,7 @@ def create_record(serums_id, rule_id, hospital_ids):
     else:
         return False
 
-def update_record(proof_id, stage, hospital_id, status, content):
+def update_record(proof_id, stage, status, content, hospital_id=None):
     """Update the record on the lineage blockchain during each stage of the creation of a Smart Patient Health Record
 
             Parameters:
@@ -58,10 +58,19 @@ def update_record(proof_id, stage, hospital_id, status, content):
     token = jwt.encode({}, BCPASSWORD, algorithm='HS256')
     header = {"Authorization": f"Bearer {token}"}
     update_url = url + proof_id
-    body = {
+    if hospital_id != None:
+        body = {
+            'id': proof_id,
+            'type': stage,
+            'hospitalId': hospital_id,
+            'status': status,
+            'content': content,
+            'date': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+        }
+    else:
+        body = {
         'id': proof_id,
         'type': stage,
-        'hospitalId': hospital_id,
         'status': status,
         'content': content,
         'date': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")

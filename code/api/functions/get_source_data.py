@@ -338,7 +338,7 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name, proo
         if tag_definition['image']:
             results[tag_definition['source']] = select_image_patient_data(session, tables, tag_definition, patient_id, key_name)
     sorted_hashes = sorted(column_hashes)
-    update_record(proof_id, 'data_selected', connection['schema'].upper(), 'success', {'columns_hash': "".join(sorted_hashes)})
+    update_record(proof_id, 'data_selected', 'success', {'columns_hash': "".join(sorted_hashes)}, hospital_id=connection['schema'].upper())
     return results
 
 

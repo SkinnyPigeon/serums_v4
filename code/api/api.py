@@ -45,7 +45,7 @@ api = Api(
     description='Return the encrypted Smart Patient Health Record from the Serums data lake',
 )
 
-default_jwt="""Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMwNDg1NDkyLCJqdGkiOiJlMWM0NDAyZjgyM2M0YTJhOGU1MWNkNjc2NGMzNjUxOCIsInVzZXJJRCI6MzY0LCJpc3MiOiJTZXJ1bXNBdXRoZW50aWNhdGlvbiIsImlhdCI6MTYyOTg4MDY5Miwic3ViIjoiZXVhbkB0ZXN0LmNvbSIsImdyb3VwSURzIjpbIlBBVElFTlQiXSwib3JnSUQiOiJVU1RBTiIsImF1ZCI6Imh0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw_dT1odHRwLTNBX193d3cuc2VydW1zLmNvbSZkPUR3SURhUSZjPWVJR2pzSVRmWFBfeS1ETExYMHVFSFhKdlU4bk9IclVLOElyd05LT3RrVlUmcj11VGZONXVRMWtod2JSeV9UZ0tINmFVZDAtQmJtMEc4Sy1WYWprelpteTk4Jm09MmlVTm4yOUZTYWY3LTAzeHU5eE1CcmNuNHQ2VV8zdzN1cUxpTHl0VGZUNCZzPTVqQjJqbXFoc05BX2cxU1Z5WmdVRlJGOW9FUDhfQVFhLWxpY1lXM0l1ZncmZT0ifQ.CNbU4AhwOYYAPZkJ3ujHc-qICS8A6aPowsAfzWMJd14"""
+default_jwt="""Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMyMzg4MjgzLCJqdGkiOiIzZmMxOTFkZWYyNmY0MzU4YmZkZDkwMjZlYTRhMTYxNiIsInVzZXJJRCI6MzY0LCJpc3MiOiJTZXJ1bXNBdXRoZW50aWNhdGlvbiIsImlhdCI6MTYzMTc4MzQ4Mywic3ViIjoiZXVhbkB0ZXN0LmNvbSIsImdyb3VwSURzIjpbIlBBVElFTlQiXSwib3JnSUQiOiJVU1RBTiIsImF1ZCI6Imh0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw_dT1odHRwLTNBX193d3cuc2VydW1zLmNvbSZkPUR3SURhUSZjPWVJR2pzSVRmWFBfeS1ETExYMHVFSFhKdlU4bk9IclVLOElyd05LT3RrVlUmcj11VGZONXVRMWtod2JSeV9UZ0tINmFVZDAtQmJtMEc4Sy1WYWprelpteTk4Jm09MmlVTm4yOUZTYWY3LTAzeHU5eE1CcmNuNHQ2VV8zdzN1cUxpTHl0VGZUNCZzPTVqQjJqbXFoc05BX2cxU1Z5WmdVRlJGOW9FUDhfQVFhLWxpY1lXM0l1ZncmZT0ifQ.d0DBb1ZLLtaOuPofpPpaFABFLSkIpI2LS3Ne92fXASk"""
 
 # Models
 
@@ -341,13 +341,15 @@ class SPHR_Encrypted(Resource):
         '''Return the encrypted Smart Patient Health Record from the Serums data lake'''
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
+        print(response)
         if response['status_code'] == 200:
             body = request.get_json()
             patient_data, proof_id = get_patient_data(body)
+            print(patient_data)
             encrypted_data, encryption_key, public_key = encrypt_data_with_new_key(patient_data, body['public_key'])
             encrypted_key = encrypt_key(encryption_key, public_key)
-            check = update_record(proof_id, 'encryption', 'ZMC', 'success', {'encrypted_key': encrypted_key, 'public_key': body['public_key']})
-            print(f"CHECK: {check}")
+            record_updated = update_record(proof_id, 'encryption', 'success', {'public_key': body['public_key']})
+            print(f"Record updated: {record_updated}")
             return {"data": encrypted_data, "key": encrypted_key}, 200
         else:
             return {"message": "Unable to create SPHR"}, 500
