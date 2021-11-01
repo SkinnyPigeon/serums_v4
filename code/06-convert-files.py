@@ -44,24 +44,38 @@ print(image_2)
 
 document_path = "{project_folder}/code/api/reset_sql/data/zmc/documents/".format(project_folder=project_folder)
 
-pages = convert_from_path("{document_path}/EFMI_STC_2020-JB_etal.pdf".format(document_path=document_path), 500)
-print(pages)
-for i in range(len(pages)):
-    pages[i].save('{document_path}/converted/page'.format(document_path=document_path) + str(i) +'.png', 'PNG')
+doc1 = convert_from_path("{document_path}/2020.02.14 Resultaten verwijzing orthopedisch onderzoek.pdf".format(document_path=document_path), 500)
+print(doc1)
+for i in range(len(doc1)):
+    doc1[i].save('{document_path}/converted/page'.format(document_path=document_path) + str(i) +'.png', 'PNG')
     page_img = Image.open('{document_path}/converted/page'.format(document_path=document_path) + str(i) + '.png')
     if i == 0:
-        img = Image.new('RGB', (page_img.width, page_img.height * len(pages)))
+        img = Image.new('RGB', (page_img.width, page_img.height * len(doc1)))
     img.paste(page_img, (0, page_img.height * i))
     os.remove('{document_path}/converted/page'.format(document_path=document_path) + str(i) +'.png')
 
 img.save('{document_path}/converted/concat.png'.format(document_path=document_path), 'PNG')
 with open('{document_path}/converted/concat.png'.format(document_path=document_path), "rb") as image_file:
-    document = str(base64.b64encode(image_file.read())).replace("b'", "").replace("'", "")
+    document1 = str(base64.b64encode(image_file.read())).replace("b'", "").replace("'", "")
+
+doc2 = convert_from_path("{document_path}/2020.03.16 Operatieraport vervanging rechter heupgewricht.pdf".format(document_path=document_path), 500)
+print(doc2)
+for i in range(len(doc2)):
+    doc2[i].save('{document_path}/converted/page'.format(document_path=document_path) + str(i) +'.png', 'PNG')
+    page_img = Image.open('{document_path}/converted/page'.format(document_path=document_path) + str(i) + '.png')
+    if i == 0:
+        img = Image.new('RGB', (page_img.width, page_img.height * len(doc2)))
+    img.paste(page_img, (0, page_img.height * i))
+    os.remove('{document_path}/converted/page'.format(document_path=document_path) + str(i) +'.png')
+
+img.save('{document_path}/converted/concat.png'.format(document_path=document_path), 'PNG')
+with open('{document_path}/converted/concat.png'.format(document_path=document_path), "rb") as image_file:
+    document2 = str(base64.b64encode(image_file.read())).replace("b'", "").replace("'", "")
 
 # Saving to database
 
 images = {'patnr': [1075835, 1075835], 'image_title': ['Right hip x-ray', 'Right pelvis x-ray'], 'type': ['x-ray', 'x-ray'], 'date': ['2020-09-01', '2020-09-01'], 'image': [image_1, image_2]}
-document = {'patnr': [1075835], 'document_title': ['Operation report'], 'type': ['orthopedics'], 'date': ['2020-09-20'],'document': [document]}
+document = {'patnr': [1075835, 1075835], 'document_title': ['Resultaten verwijzing orthopedisch onderzoek', 'Operatieraport vervanging rechter heupgewricht'], 'type': ['orthopedics', 'orthopedics'], 'date': ['2020.02.14', '2020.03.16'],'document': [document1, document1]}
 image_df = pd.DataFrame.from_dict(images)
 document_df = pd.DataFrame.from_dict(document)
 
