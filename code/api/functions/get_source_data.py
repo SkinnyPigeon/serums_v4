@@ -354,23 +354,28 @@ def get_patient_data(body):
                 smart_patient_health_record (DataFrame): A DataFrame containing the selected patient data
     """
     results = {}
-    proof_id = create_record(body['serums_id'], body['rule_id'], body['hospital_ids'])
+    # proof_id = create_record(body['serums_id'], body['rule_id'], body['hospital_ids'])
+    proof_id = 'abc123'
     for hospital_id in body['hospital_ids']:
-        try:
-            hospital, tags_list = hospital_picker(hospital_id)
-            tags = select_tags(tags_list, body['tags'])
-            connection = setup_connection(hospital)
-            id_class = connection['base'].classes.serums_ids
-            key_name = select_source_patient_id_name(hospital)
-            patient_id = select_source_patient_id_value(connection['session'], 
-                                                            id_class, 
-                                                            body['serums_id'], key_name)
-            data = select_patient_data(connection, tags, patient_id, key_name, proof_id)
-            connection['engine'].dispose()
-            if len(data) > 0:
-                results[hospital_id] = data
-        except Exception as e:
-            connection['engine'].dispose()
-            if str(e) == "No row was found for one()":
-                results[hospital_id] = {"Error": "Serums ID not found with healthcare provider: {}".format(hospital_id)}
+        # CHANGED THIS TO ADD THE HOSPITAL LAYER
+        results[hospital_id.upper()] = {}
+        # try:
+        hospital, tags_list = hospital_picker(hospital_id)
+        tags = select_tags(tags_list, body['tags'])
+        connection = setup_connection(hospital)
+        id_class = connection['base'].classes.serums_ids
+        key_name = select_source_patient_id_name(hospital)
+        patient_id = select_source_patient_id_value(connection['session'], 
+                                                        id_class, 
+                                                        body['serums_id'], key_name)
+        data = select_patient_data(connection, tags, patient_id, key_name, proof_id)
+        connection['engine'].dispose()
+        if len(data) > 0:
+            # CHANGED THIS TO ADD THE DATA LAYER
+            results[hospital_id.upper()]['data'] = data
+        # except Exception as e:
+        #     connection['engine'].dispose()
+        #     if str(e) == "No row was found for one()":
+        #         results[hospital_id] = {"Error": "Serums ID not found with healthcare provider: {}".format(hospital_id)}
+    print(f"GET DATA RESULT: {results}")
     return results, proof_id

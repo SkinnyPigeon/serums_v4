@@ -98,13 +98,13 @@ user_parser = api.parser()
 user_parser.add_argument('Authorization', help="The authorization token", location="headers",
                           default=default_jwt)
 add_user_fields = api.model('Add a new user to the Serums network', {
-    'serums_id': fields.Integer(required=True, description='The Serums ID for the patient to add to the network', example=500),
+    'serums_id': fields.Integer(required=True, description='The Serums ID for the patient to add to the network', example=118),
     'patient_id': fields.Integer(required=False, description="The patient\'s id within a hospital\'s internal systems to link to a Serums ID", example=4641202),
     'hospital_id': fields.String(required=True, description='The id of the organisation to add a user to', example='FCRB')
 })
 
 remove_user_fields = api.model('Remove a user from the Serums network', {
-    'serums_id': fields.Integer(required=True, description='The Serums ID for the patient to add to the network', example=500),
+    'serums_id': fields.Integer(required=True, description='The Serums ID for the patient to add to the network', example=118),
     'hospital_ids': fields.String(required=True, description='A list of the ids of the organisations to remove a user from', example=['ZMC', 'FCRB'])
 })
 
@@ -148,7 +148,7 @@ sphr_parser.add_argument('Authorization', help="The authorization token", locati
                          default=default_jwt)
 
 request_fields = api.model('Request Smart Patient Health Record', {
-    'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=364),
+    'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=118),
     'rule_id': fields.String(required=True, description='The rule id as stored in the blockchain', example='RULE_0df8eb8b-a469-46ae-8119-fbf98fa05b92'),
     'tags': fields.String(required=True, description='Rule to be executed', example=['patient_address', 'treatments', 'wearable']),
     'hospital_ids': fields.String(required=True, description='The id of the hospital for the source data', example=['FCRB', 'USTAN', 'ZMC']),
@@ -173,8 +173,9 @@ dv_parser.add_argument('Authorization', help="The authorization token", location
                          default=default_jwt)
 
 dv_request_fields = api.model('Request Smart Patient Health Record As Data Vault', {
-    'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=364),
+    'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=118),
     'rule_id': fields.String(required=True, description='The rule id as stored in the blockchain', example='RULE_0df8eb8b-a469-46ae-8119-fbf98fa05b92'),
+    'tags': fields.String(required=True, description='Rule to be executed', example=['diagnostic']),
     'hospital_ids': fields.String(required=True, description='The id of the hospital for the source data', example=['FCRB', 'USTAN', 'ZMC']),
     'public_key': fields.String(required=True, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDM+DNCybR7LdizOcK1gH2P7dD
