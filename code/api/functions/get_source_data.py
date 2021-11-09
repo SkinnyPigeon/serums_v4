@@ -8,7 +8,7 @@ import os
 from dotenv import load_dotenv
 import subprocess
 
-import pandas as pd
+from pandas import DataFrame
 
 project_folder = subprocess.check_output("pwd", shell=True).decode("utf-8").rstrip()
 load_dotenv(os.path.join(project_folder, '.env'))
@@ -266,10 +266,6 @@ def select_tabular_patient_data(connection, tables, tag_definition, patient_id, 
     for row in result:
         data.append(convert_tuples_to_dict(row, fields))
 
-    # df = pd.DataFrame([x for x in data])
-    # df = convert_dates_to_string(df)
-    # df = convert_decimal_to_float(df)
-    # # print(df)
     # columns = []
     # for column in df.columns:
     #     columns.append(column)
@@ -302,7 +298,7 @@ def select_image_patient_data(session, tables, tag_definition, patient_id, key_n
     for row in result:
         data.append(convert_tuples_to_dict(row, fields))
 
-    df = pd.DataFrame([x for x in data])
+    df = DataFrame([x for x in data])
     df = convert_dates_to_string(df)
     df = convert_decimal_to_float(df)
     # print(df)
@@ -381,6 +377,17 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name, proo
 #         #         results[hospital_id] = {"Error": "Serums ID not found with healthcare provider: {}".format(hospital_id)}
 #     print(f"GET DATA RESULT: {results}")
 #     return results, proof_id
+
+def parse_sphr(patient_data):
+    result = {}
+    for hospital in patient_data:
+        result[hospital] = {}
+        for table in patient_data[hospital]['data']:
+            df = DataFrame([x for x in patient_data[hospital]['data'][table]])
+            df = convert_dates_to_string(df)
+            df = convert_decimal_to_float(df)
+            result[hospital][table] = df.to_dict('index')
+    return result
 
 def get_patient_data(body):
     results = {}

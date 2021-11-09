@@ -16,7 +16,7 @@ from pandas import DataFrame
 from functions.jwt import validate_jwt
 from functions.departments import get_department_of_staff_member, get_departments
 from functions.ml import get_patient_data_for_ml
-from functions.get_source_data import get_patient_data, convert_dates_to_string, convert_decimal_to_float
+from functions.get_source_data import get_patient_data, parse_sphr, convert_dates_to_string, convert_decimal_to_float
 from functions.encryption import encrypt_data_with_new_key, encrypt_key
 from functions.search import search_for_serums_id
 from functions.tags import get_tags
@@ -54,7 +54,7 @@ api = Api(
 )
 
 # default_jwt="""Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMyMzg4MjgzLCJqdGkiOiIzZmMxOTFkZWYyNmY0MzU4YmZkZDkwMjZlYTRhMTYxNiIsInVzZXJJRCI6MzY0LCJpc3MiOiJTZXJ1bXNBdXRoZW50aWNhdGlvbiIsImlhdCI6MTYzMTc4MzQ4Mywic3ViIjoiZXVhbkB0ZXN0LmNvbSIsImdyb3VwSURzIjpbIlBBVElFTlQiXSwib3JnSUQiOiJVU1RBTiIsImF1ZCI6Imh0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw_dT1odHRwLTNBX193d3cuc2VydW1zLmNvbSZkPUR3SURhUSZjPWVJR2pzSVRmWFBfeS1ETExYMHVFSFhKdlU4bk9IclVLOElyd05LT3RrVlUmcj11VGZONXVRMWtod2JSeV9UZ0tINmFVZDAtQmJtMEc4Sy1WYWprelpteTk4Jm09MmlVTm4yOUZTYWY3LTAzeHU5eE1CcmNuNHQ2VV8zdzN1cUxpTHl0VGZUNCZzPTVqQjJqbXFoc05BX2cxU1Z5WmdVRlJGOW9FUDhfQVFhLWxpY1lXM0l1ZncmZT0ifQ.d0DBb1ZLLtaOuPofpPpaFABFLSkIpI2LS3Ne92fXASk"""
-response = get_jwt(patient_emails['zmc'])
+response = get_jwt(staff_emails['zmc'])
 jwt_value = response['body']['resource_obj']['access']
 
 default_jwt = "Bearer {jwt_value}".format(jwt_value=jwt_value)
@@ -381,14 +381,7 @@ class SPHR(Resource):
         if response['status_code'] == 200:
             body = request.get_json()
             patient_data = get_patient_data(body)
-            result = {}
-            for hospital in patient_data:
-                result[hospital] = {}
-                for table in patient_data[hospital]['data']:
-                    df = DataFrame([x for x in patient_data[hospital]['data'][table]])
-                    df = convert_dates_to_string(df)
-                    df = convert_decimal_to_float(df)
-                    result[hospital][table] = df.to_dict('index')
+            result = parse_sphr(patient_data)
             return result, 200
         else:
             return {"message": "Unable to create SPHR"}, 500
