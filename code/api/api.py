@@ -20,6 +20,8 @@ from functions.search import search_for_serums_id
 from functions.tags import get_tags
 from functions.add_and_remove_users import add_user, remove_user
 from functions.lineage import update_record
+from utils.jwt_functions import get_jwt, staff_emails
+
 
 
 # Setting up environment
@@ -45,7 +47,12 @@ api = Api(
     description='Return the encrypted Smart Patient Health Record from the Serums data lake',
 )
 
-default_jwt="""Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMyMzg4MjgzLCJqdGkiOiIzZmMxOTFkZWYyNmY0MzU4YmZkZDkwMjZlYTRhMTYxNiIsInVzZXJJRCI6MzY0LCJpc3MiOiJTZXJ1bXNBdXRoZW50aWNhdGlvbiIsImlhdCI6MTYzMTc4MzQ4Mywic3ViIjoiZXVhbkB0ZXN0LmNvbSIsImdyb3VwSURzIjpbIlBBVElFTlQiXSwib3JnSUQiOiJVU1RBTiIsImF1ZCI6Imh0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw_dT1odHRwLTNBX193d3cuc2VydW1zLmNvbSZkPUR3SURhUSZjPWVJR2pzSVRmWFBfeS1ETExYMHVFSFhKdlU4bk9IclVLOElyd05LT3RrVlUmcj11VGZONXVRMWtod2JSeV9UZ0tINmFVZDAtQmJtMEc4Sy1WYWprelpteTk4Jm09MmlVTm4yOUZTYWY3LTAzeHU5eE1CcmNuNHQ2VV8zdzN1cUxpTHl0VGZUNCZzPTVqQjJqbXFoc05BX2cxU1Z5WmdVRlJGOW9FUDhfQVFhLWxpY1lXM0l1ZncmZT0ifQ.d0DBb1ZLLtaOuPofpPpaFABFLSkIpI2LS3Ne92fXASk"""
+# default_jwt="""Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMyMzg4MjgzLCJqdGkiOiIzZmMxOTFkZWYyNmY0MzU4YmZkZDkwMjZlYTRhMTYxNiIsInVzZXJJRCI6MzY0LCJpc3MiOiJTZXJ1bXNBdXRoZW50aWNhdGlvbiIsImlhdCI6MTYzMTc4MzQ4Mywic3ViIjoiZXVhbkB0ZXN0LmNvbSIsImdyb3VwSURzIjpbIlBBVElFTlQiXSwib3JnSUQiOiJVU1RBTiIsImF1ZCI6Imh0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw_dT1odHRwLTNBX193d3cuc2VydW1zLmNvbSZkPUR3SURhUSZjPWVJR2pzSVRmWFBfeS1ETExYMHVFSFhKdlU4bk9IclVLOElyd05LT3RrVlUmcj11VGZONXVRMWtod2JSeV9UZ0tINmFVZDAtQmJtMEc4Sy1WYWprelpteTk4Jm09MmlVTm4yOUZTYWY3LTAzeHU5eE1CcmNuNHQ2VV8zdzN1cUxpTHl0VGZUNCZzPTVqQjJqbXFoc05BX2cxU1Z5WmdVRlJGOW9FUDhfQVFhLWxpY1lXM0l1ZncmZT0ifQ.d0DBb1ZLLtaOuPofpPpaFABFLSkIpI2LS3Ne92fXASk"""
+response = get_jwt(staff_emails['zmc'])
+jwt_value = response['body']['resource_obj']['access']
+# jwt = response['body']['resource_obj']['access']
+
+default_jwt = "Bearer {jwt_value}".format(jwt_value=jwt_value)
 
 # Models
 
@@ -397,4 +404,4 @@ class DV(Resource):
             return patient_data
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port='5001')
+    app.run(debug=True, host='0.0.0.0', port=5001)
