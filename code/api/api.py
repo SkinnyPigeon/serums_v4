@@ -403,7 +403,7 @@ class DV(Resource):
         print(response)
         if response['status_code'] == 200:
             body = request.get_json()
-            data, proof_id = get_patient_data(body)
+            data = get_patient_data(body)
             # return patient_data
             satellites = process_satellites(data)
             data_vault = create_data_vault(satellites)

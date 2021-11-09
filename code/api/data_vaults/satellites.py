@@ -21,12 +21,15 @@ def process_satellites(data):
             results[hospital][table_name]['links'] = satellite_definitions[table_name]['links']
             for satellite_name in satellite_definitions[table_name]:
                 if satellite_name != 'links':
-                    columns = satellite_definitions[table_name][satellite_name]['columns']
-                    results
-                    results[hospital][table_name][satellite_name] = {}
-                    results[hospital][table_name][satellite_name]['hub'] = satellite_definitions[table_name][satellite_name]['hub']
-                    results[hospital][table_name][satellite_name]['data'] = [{k: row[k] for k in row if k in columns} for row in source_data]
-                    results[hospital][table_name][satellite_name]['keys'] = [{k: row[k] for k in row if k in keys} for row in source_data]
+                    print(satellite_name)
+                    if satellite_name == 'sat_time_complaints_and_diagnosis':
+                        for row in source_data:
+                            print(row)
+                    # columns = satellite_definitions[table_name][satellite_name]['columns']
+                    # results[hospital][table_name][satellite_name] = {}
+                    # results[hospital][table_name][satellite_name]['hub'] = satellite_definitions[table_name][satellite_name]['hub']
+                    # results[hospital][table_name][satellite_name]['data'] = [{k: row[k] for k in row if k in columns} for row in source_data]
+                    # results[hospital][table_name][satellite_name]['keys'] = [{k: row[k] for k in row if k in keys} for row in source_data]
     return results
 
             
