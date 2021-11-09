@@ -25,11 +25,11 @@ def process_satellites(data):
                     if satellite_name == 'sat_time_complaints_and_diagnosis':
                         for row in source_data:
                             print(row)
-                    # columns = satellite_definitions[table_name][satellite_name]['columns']
-                    # results[hospital][table_name][satellite_name] = {}
-                    # results[hospital][table_name][satellite_name]['hub'] = satellite_definitions[table_name][satellite_name]['hub']
-                    # results[hospital][table_name][satellite_name]['data'] = [{k: row[k] for k in row if k in columns} for row in source_data]
-                    # results[hospital][table_name][satellite_name]['keys'] = [{k: row[k] for k in row if k in keys} for row in source_data]
+                    columns = satellite_definitions[table_name][satellite_name]['columns']
+                    results[hospital][table_name][satellite_name] = {}
+                    results[hospital][table_name][satellite_name]['hub'] = satellite_definitions[table_name][satellite_name]['hub']
+                    results[hospital][table_name][satellite_name]['data'] = [{k: row[k] for k in row if k in columns} for row in source_data]
+                    results[hospital][table_name][satellite_name]['keys'] = [{k: row[k] for k in row if k in keys} for row in source_data]
     return results
 
             

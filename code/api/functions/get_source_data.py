@@ -266,15 +266,16 @@ def select_tabular_patient_data(connection, tables, tag_definition, patient_id, 
     for row in result:
         data.append(convert_tuples_to_dict(row, fields))
 
-    df = pd.DataFrame([x for x in data])
-    df = convert_dates_to_string(df)
-    df = convert_decimal_to_float(df)
-    # print(df)
-    columns = []
-    for column in df.columns:
-        columns.append(column)
-    column_hash = schema_string(columns)
-    return df.to_dict('index'), column_hash
+    # df = pd.DataFrame([x for x in data])
+    # df = convert_dates_to_string(df)
+    # df = convert_decimal_to_float(df)
+    # # print(df)
+    # columns = []
+    # for column in df.columns:
+    #     columns.append(column)
+    # column_hash = schema_string(columns)
+    # return df.to_dict('index'), column_hash
+    return data
 
 
 def select_image_patient_data(session, tables, tag_definition, patient_id, key_name):
@@ -333,12 +334,13 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name, proo
     tables = get_classes(connection['schema'], connection['base'])
     for tag_definition in tags_definitions:
         if tag_definition['table']:
-            results[tag_definition['source']], column_hash = select_tabular_patient_data(connection, tables, tag_definition, patient_id, key_name)
-            column_hashes.append(column_hash)
-        if tag_definition['image']:
-            results[tag_definition['source']] = select_image_patient_data(session, tables, tag_definition, patient_id, key_name)
-    sorted_hashes = sorted(column_hashes)
-    update_record(proof_id, 'data_selected', 'success', {'columns_hash': "".join(sorted_hashes)}, hospital_id=connection['schema'].upper())
+            # results[tag_definition['source']], column_hash = select_tabular_patient_data(connection, tables, tag_definition, patient_id, key_name)
+            # column_hashes.append(column_hash)
+            results[tag_definition['source']] = select_tabular_patient_data(connection, tables, tag_definition, patient_id, key_name)
+    #     if tag_definition['image']:
+    #         results[tag_definition['source']] = select_image_patient_data(session, tables, tag_definition, patient_id, key_name)
+    # sorted_hashes = sorted(column_hashes)
+    # update_record(proof_id, 'data_selected', 'success', {'columns_hash': "".join(sorted_hashes)}, hospital_id=connection['schema'].upper())
     return results
 
 

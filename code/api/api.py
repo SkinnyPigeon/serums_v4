@@ -173,7 +173,7 @@ dv_parser.add_argument('Authorization', help="The authorization token", location
                          default=default_jwt)
 
 dv_request_fields = api.model('Request Smart Patient Health Record As Data Vault', {
-    'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=118),
+    'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=364),
     'rule_id': fields.String(required=True, description='The rule id as stored in the blockchain', example='RULE_0df8eb8b-a469-46ae-8119-fbf98fa05b92'),
     'tags': fields.String(required=True, description='Rule to be executed', example=['diagnostic']),
     'hospital_ids': fields.String(required=True, description='The id of the hospital for the source data', example=['FCRB', 'USTAN', 'ZMC']),
@@ -409,7 +409,8 @@ class DV(Resource):
             data_vault = create_data_vault(satellites)
             add_id_values(data_vault['links'])
             hub_equalizer(data_vault['hubs'])
-            return data_vault
+            print(f"DATA VAULT: {data_vault}")
+            return {"hello": "there"}
 
 
 
