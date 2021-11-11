@@ -231,10 +231,13 @@ class StaffDepartment(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            staff_details = get_department_of_staff_member(response['body'])
-            return staff_details, 200
+            try:
+                staff_details = get_department_of_staff_member(response['body'])
+                return staff_details, 200
+            except:
+                return {"message": "Unable to retrieve details about staff member"}, 500
         else:
-            return {"message": "Unable to retrieve details about staff member"}, 500
+            return {"message": "Invalid Access Token"}, 401
 
 
 @staff_space.route('/departments')
@@ -245,11 +248,14 @@ class Departments(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            body = request.get_json()
-            department_ids = get_departments(body)
-            return department_ids, 200
+            try:
+                body = request.get_json()
+                department_ids = get_departments(body)
+                return department_ids, 200
+            except:
+                return {"message": "Unable to retrieve department ids"}, 500
         else:
-            return {"message": "Unable to retrieve department ids"}, 500
+            return {"message": "Invalid Access Token"}, 401
 
 
 # Tags: Return the lists of available tags during the rule construction in the front end 
@@ -263,11 +269,14 @@ class Tags(Resource):
         response = validate_jwt(jwt)
         print(response['body'])
         if response['status_code'] == 200:
-            body = request.get_json()
-            tags = get_tags(body)
-            return tags, 200
+            try:
+                body = request.get_json()
+                tags = get_tags(body)
+                return tags, 200
+            except:
+                return {"message": "Unable to retrieve tags"}, 500
         else:
-            return {"message": "Unable to retrieve tags"}, 500
+            return {"message": "nvalid Access Token"}, 401
 
 @tags_space.route('/all_tags')
 class MultipleTags(Resource):
@@ -278,14 +287,17 @@ class MultipleTags(Resource):
         response = validate_jwt(jwt)
         print(response['body'])
         if response['status_code'] == 200:
-            body = request.get_json()
-            multiple_tags = {}
-            for hospital_id in body['hospital_ids']:
-                tags = get_tags({'hospital_id': hospital_id})
-                multiple_tags[hospital_id] = tags
-            return multiple_tags, 200
+            try:
+                body = request.get_json()
+                multiple_tags = {}
+                for hospital_id in body['hospital_ids']:
+                    tags = get_tags({'hospital_id': hospital_id})
+                    multiple_tags[hospital_id] = tags
+                return multiple_tags, 200
+            except:
+                return {"message": "Unable to retrieve tags"}, 500
         else:
-            return {"message": "Unable to retrieve tags"}, 500
+            return {"message": "Invalid Access Token"}, 401
 
 
 # Add and remove users
@@ -299,11 +311,14 @@ class AddUser(Resource):
         response = validate_jwt(jwt)
         print(response['body'])
         if response['status_code'] == 200:
-            body = request.get_json()
-            response = add_user(body['serums_id'], body['patient_id'], body['hospital_id'])
-            return response
+            try:
+                body = request.get_json()
+                response = add_user(body['serums_id'], body['patient_id'], body['hospital_id'])
+                return response
+            except:
+                return {"message": "Unable to add user"}, 500
         else:
-            return {"message": "Unable to add user"}, 500
+            return {"message": "Invalid Access Token"}, 401
 
 
 @users_space.route('/remove_user')
@@ -315,11 +330,14 @@ class RemoveUser(Resource):
         response = validate_jwt(jwt)
         print(response['body'])
         if response['status_code'] == 200:
-            body = request.get_json()
-            response = remove_user(body['serums_id'], body['hospital_ids'])
-            return response
+            try:
+                body = request.get_json()
+                response = remove_user(body['serums_id'], body['hospital_ids'])
+                return response
+            except:
+                return {"message": "Unable to remove user"}, 500
         else:
-            return {"message": "Unable to remove user"}, 500
+            return {"message": "Invalid Access Token"}, 401
 
 
 # Machine Learning: Used by SCCH's machine learning algorithm
@@ -333,10 +351,13 @@ class MachineLearning(Resource):
         response = validate_jwt(jwt)
         print(response['body'])
         if response['status_code'] == 200:
-            patient_data = get_patient_data_for_ml(response['body'])
-            return patient_data, 200
+            try:
+                patient_data = get_patient_data_for_ml(response['body'])
+                return patient_data, 200
+            except:
+                return {"message": "Unable to retrieve the data for analytics"}, 500
         else:
-            return {"message": "Unable to retrieve the data for analytics"}, 500
+            return {"message": "Invalid Access Token"}, 401
 
 
 # Search function: Returns a Serums ID for an individual patient based on known details such as name, dob, etc.
@@ -349,9 +370,12 @@ class Search(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            return search_for_serums_id(request.get_json())
+            try:
+                return search_for_serums_id(request.get_json())
+            except:
+                return {"message": "Unable to retrieve Serums ID"}, 500
         else:
-            return {"message": "Unable to find that patient"}, 500
+            return {"message": "Invalid Access Token"}, 401
 
 
 
@@ -379,12 +403,15 @@ class SPHR(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            body = request.get_json()
-            patient_data = get_patient_data(body)
-            result = parse_sphr(patient_data)
-            return result, 200
+            try:
+                body = request.get_json()
+                patient_data = get_patient_data(body)
+                result = parse_sphr(patient_data)
+                return result, 200
+            except:
+                {"message": "Unable to create SPHR"}, 500
         else:
-            return {"message": "Unable to create SPHR"}, 500
+            return {"message": "Invalid Access Token"}, 401
 
 
 @sphr_space.route('/encrypted')
@@ -396,16 +423,19 @@ class SPHR_Encrypted(Resource):
         response = validate_jwt(jwt)
         print(response)
         if response['status_code'] == 200:
-            body = request.get_json()
-            patient_data, proof_id = get_patient_data(body)
-            print(patient_data)
-            encrypted_data, encryption_key, public_key = encrypt_data_with_new_key(patient_data, body['public_key'])
-            encrypted_key = encrypt_key(encryption_key, public_key)
-            record_updated = update_record(proof_id, 'encryption', 'success', {'public_key': body['public_key']})
-            print(f"Record updated: {record_updated}")
-            return {"data": encrypted_data, "key": encrypted_key}, 200
+            try:
+                body = request.get_json()
+                patient_data, proof_id = get_patient_data(body)
+                print(patient_data)
+                encrypted_data, encryption_key, public_key = encrypt_data_with_new_key(patient_data, body['public_key'])
+                encrypted_key = encrypt_key(encryption_key, public_key)
+                record_updated = update_record(proof_id, 'encryption', 'success', {'public_key': body['public_key']})
+                print(f"Record updated: {record_updated}")
+                return {"data": encrypted_data, "key": encrypted_key}, 200
+            except:
+                return {"message": "Unable to create SPHR"}, 500
         else:
-            return {"message": "Unable to create SPHR"}, 500
+            return {"message": "Invalid Access Token"}, 401
 
 
 # Data Vault space
@@ -427,7 +457,7 @@ class DV(Resource):
             add_id_values(data_vault['links'])
             hub_equalizer(data_vault['hubs'])
             print(f"DATA VAULT: {data_vault}")
-            return {"hello": "there"}
+            return data_vault, 200
 
 
 

@@ -2,6 +2,7 @@ from sources.keys_and_sats.zmc_keys_and_sats import zmc_sats, zmc_keys
 from sources.keys_and_sats.fcrb_keys_and_sats import fcrb_sats, fcrb_keys
 from sources.keys_and_sats.ustan_keys_and_sats import ustan_sats, ustan_keys
 import datetime
+import decimal
 
 def hospital_picker(hospital):
     if hospital == 'ZMC':
@@ -16,6 +17,10 @@ def process_value(value):
         return value.strftime("%d/%m/%Y %H:%M:%S")
     if isinstance(value, str):
         return value.strip()
+    if isinstance(value, datetime.time):
+        return value.strftime("%H:%M:%S")
+    if isinstance(value, decimal.Decimal):
+        return float(value)
     return value
 
 def process_satellites(data):
