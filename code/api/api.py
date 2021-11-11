@@ -237,7 +237,7 @@ class StaffDepartment(Resource):
             except:
                 return {"message": "Unable to retrieve details about staff member"}, 500
         else:
-            return {"message": "Invalid Access Token"}, 401
+            return {"message": response['message']}, response['status_code']
 
 
 @staff_space.route('/departments')
@@ -255,7 +255,7 @@ class Departments(Resource):
             except:
                 return {"message": "Unable to retrieve department ids"}, 500
         else:
-            return {"message": "Invalid Access Token"}, 401
+            return {"message": response['message']}, response['status_code']
 
 
 # Tags: Return the lists of available tags during the rule construction in the front end 
@@ -276,7 +276,7 @@ class Tags(Resource):
             except:
                 return {"message": "Unable to retrieve tags"}, 500
         else:
-            return {"message": "nvalid Access Token"}, 401
+            return {"message": response['message']}, response['status_code']
 
 @tags_space.route('/all_tags')
 class MultipleTags(Resource):
@@ -297,7 +297,7 @@ class MultipleTags(Resource):
             except:
                 return {"message": "Unable to retrieve tags"}, 500
         else:
-            return {"message": "Invalid Access Token"}, 401
+            return {"message": response['message']}, response['status_code']
 
 
 # Add and remove users
@@ -318,7 +318,7 @@ class AddUser(Resource):
             except:
                 return {"message": "Unable to add user"}, 500
         else:
-            return {"message": "Invalid Access Token"}, 401
+            return {"message": response['message']}, response['status_code']
 
 
 @users_space.route('/remove_user')
@@ -337,7 +337,7 @@ class RemoveUser(Resource):
             except:
                 return {"message": "Unable to remove user"}, 500
         else:
-            return {"message": "Invalid Access Token"}, 401
+            return {"message": response['message']}, response['status_code']
 
 
 # Machine Learning: Used by SCCH's machine learning algorithm
@@ -357,7 +357,7 @@ class MachineLearning(Resource):
             except:
                 return {"message": "Unable to retrieve the data for analytics"}, 500
         else:
-            return {"message": "Invalid Access Token"}, 401
+            return {"message": response['message']}, response['status_code']
 
 
 # Search function: Returns a Serums ID for an individual patient based on known details such as name, dob, etc.
@@ -375,7 +375,7 @@ class Search(Resource):
             except:
                 return {"message": "Unable to retrieve Serums ID"}, 500
         else:
-            return {"message": "Invalid Access Token"}, 401
+            return {"message": response['message']}, response['status_code']
 
 
 
@@ -411,7 +411,7 @@ class SPHR(Resource):
             except:
                 {"message": "Unable to create SPHR"}, 500
         else:
-            return {"message": "Invalid Access Token"}, 401
+            return {"message": response['message']}, response['status_code']
 
 
 @sphr_space.route('/encrypted')
@@ -435,7 +435,7 @@ class SPHR_Encrypted(Resource):
             except:
                 return {"message": "Unable to create SPHR"}, 500
         else:
-            return {"message": "Invalid Access Token"}, 401
+            return {"message": response['message']}, response['status_code']
 
 
 # Data Vault space
@@ -449,17 +449,20 @@ class DV(Resource):
         response = validate_jwt(jwt)
         print(response)
         if response['status_code'] == 200:
-            body = request.get_json()
-            data = get_patient_data(body)
-            # return patient_data
-            satellites = process_satellites(data)
-            data_vault = create_data_vault(satellites)
-            add_id_values(data_vault['links'])
-            hub_equalizer(data_vault['hubs'])
-            print(f"DATA VAULT: {data_vault}")
-            return data_vault, 200
-
-
-
+            try:
+                body = request.get_json()
+                data = get_patient_data(body)
+                # return patient_data
+                satellites = process_satellites(data)
+                data_vault = create_data_vault(satellites)
+                add_id_values(data_vault['links'])
+                hub_equalizer(data_vault['hubs'])
+                print(f"DATA VAULT: {data_vault}")
+                return data_vault, 200
+            except:
+                return {"message": "Unable to create data vault"}, 500
+        else:
+            return {"message": response['message']}, response['status_code']
+        
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5001)
