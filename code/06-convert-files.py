@@ -37,8 +37,8 @@ with open("{image_path}/hip.png".format(image_path=image_path), "rb") as image_f
 with open("{image_path}/pelvis.png".format(image_path=image_path), "rb") as image_file:
     image_2 = str(base64.b64encode(image_file.read())).replace("b'", "").replace("'", "")
 
-print(image_1)
-print(image_2)
+# print(image_1)
+# print(image_2)
 
 # Converting PDF into image then transforming into string
 
@@ -74,6 +74,7 @@ with open('{document_path}/converted/concat.png'.format(document_path=document_p
 
 # Saving to database
 
+#THIS WOULD NEED TO BE A LIST OF ALL THE AVAILABLE PATNRS. DOABLE BUT WILL TAKE A LONG TIME
 images = {'patnr': [1075835, 1075835], 'image_title': ['Right hip x-ray', 'Right pelvis x-ray'], 'type': ['x-ray', 'x-ray'], 'date': ['2020-09-01', '2020-09-01'], 'image': [image_1, image_2]}
 document = {'patnr': [1075835, 1075835], 'document_title': ['Resultaten verwijzing orthopedisch onderzoek', 'Operatieraport vervanging rechter heupgewricht'], 'type': ['orthopedics', 'orthopedics'], 'date': ['2020.02.14', '2020.03.16'],'document': [document1, document1]}
 image_df = pd.DataFrame.from_dict(images)
