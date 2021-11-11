@@ -1,14 +1,10 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from flask_cors import CORS
 from flask_restplus import Api, Resource, fields
 from dotenv import load_dotenv
-from pathlib import Path
 
 import os
 import subprocess
-import json
-
-from pandas import DataFrame
 
 
 # Functions
@@ -16,7 +12,7 @@ from pandas import DataFrame
 from functions.jwt import validate_jwt
 from functions.departments import get_department_of_staff_member, get_departments
 from functions.ml import get_patient_data_for_ml
-from functions.get_source_data import get_patient_data, parse_sphr, convert_dates_to_string, convert_decimal_to_float
+from functions.get_source_data import get_patient_data, parse_sphr
 from functions.encryption import encrypt_data_with_new_key, encrypt_key
 from functions.search import search_for_serums_id
 from functions.tags import get_tags
@@ -27,7 +23,6 @@ from data_vaults.satellites import process_satellites
 from data_vaults.data_vault import create_data_vault
 from data_vaults.hub_post_processing import hub_equalizer
 from data_vaults.link_post_processing import add_id_values
-
 
 
 # Setting up environment
@@ -53,7 +48,6 @@ api = Api(
     description='Return the encrypted Smart Patient Health Record from the Serums data lake',
 )
 
-# default_jwt="""Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMyMzg4MjgzLCJqdGkiOiIzZmMxOTFkZWYyNmY0MzU4YmZkZDkwMjZlYTRhMTYxNiIsInVzZXJJRCI6MzY0LCJpc3MiOiJTZXJ1bXNBdXRoZW50aWNhdGlvbiIsImlhdCI6MTYzMTc4MzQ4Mywic3ViIjoiZXVhbkB0ZXN0LmNvbSIsImdyb3VwSURzIjpbIlBBVElFTlQiXSwib3JnSUQiOiJVU1RBTiIsImF1ZCI6Imh0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw_dT1odHRwLTNBX193d3cuc2VydW1zLmNvbSZkPUR3SURhUSZjPWVJR2pzSVRmWFBfeS1ETExYMHVFSFhKdlU4bk9IclVLOElyd05LT3RrVlUmcj11VGZONXVRMWtod2JSeV9UZ0tINmFVZDAtQmJtMEc4Sy1WYWprelpteTk4Jm09MmlVTm4yOUZTYWY3LTAzeHU5eE1CcmNuNHQ2VV8zdzN1cUxpTHl0VGZUNCZzPTVqQjJqbXFoc05BX2cxU1Z5WmdVRlJGOW9FUDhfQVFhLWxpY1lXM0l1ZncmZT0ifQ.d0DBb1ZLLtaOuPofpPpaFABFLSkIpI2LS3Ne92fXASk"""
 response = get_jwt(staff_emails['zmc'])
 jwt_value = response['body']['resource_obj']['access']
 
@@ -378,22 +372,7 @@ class Search(Resource):
             return {"message": response['message']}, response['status_code']
 
 
-
 # Smart Patient Health Record: Returns data based on the rules created by the patients
-
-# @sphr_space.route('/get_sphr')
-# class SPHR(Resource):
-#     @api.expect(sphr_parser, request_fields)
-#     def post(self):
-#         '''Return the Smart Patient Health Record from the Serums data lake'''
-#         jwt = request.headers['Authorization']
-#         response = validate_jwt(jwt)
-#         if response['status_code'] == 200:
-#             body = request.get_json()
-#             patient_data, proof_id = get_patient_data(body)
-#             return patient_data, 200
-#         else:
-#             return {"message": "Unable to create SPHR"}, 500
 
 @sphr_space.route('/get_sphr')
 class SPHR(Resource):
@@ -452,13 +431,37 @@ class DV(Resource):
             try:
                 body = request.get_json()
                 data = get_patient_data(body)
-                # return patient_data
                 satellites = process_satellites(data)
                 data_vault = create_data_vault(satellites)
                 add_id_values(data_vault['links'])
                 hub_equalizer(data_vault['hubs'])
                 print(f"DATA VAULT: {data_vault}")
                 return data_vault, 200
+            except:
+                return {"message": "Unable to create data vault"}, 500
+        else:
+            return {"message": response['message']}, response['status_code']
+        
+
+@dv_space.route('/encrypted')
+class DVEncrypted(Resource):
+    @api.expect(dv_parser, dv_request_fields)
+    def post(self):
+        '''Return the encrypted patient data in data vault format'''
+        jwt = request.headers['Authorization']
+        response = validate_jwt(jwt)
+        print(response)
+        if response['status_code'] == 200:
+            try:
+                body = request.get_json()
+                data = get_patient_data(body)
+                satellites = process_satellites(data)
+                data_vault = create_data_vault(satellites)
+                add_id_values(data_vault['links'])
+                hub_equalizer(data_vault['hubs'])
+                encrypted_data, encryption_key, public_key = encrypt_data_with_new_key(data_vault, body['public_key'])
+                encrypted_key = encrypt_key(encryption_key, public_key)
+                return {"data": encrypted_data, "key": encrypted_key}, 200
             except:
                 return {"message": "Unable to create data vault"}, 500
         else:

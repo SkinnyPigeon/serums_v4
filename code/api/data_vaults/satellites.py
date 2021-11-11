@@ -40,5 +40,3 @@ def process_satellites(data):
                     results[hospital][table_name][satellite_name]['data'] = [{k: process_value(row[k]) for k in row if k in columns} for row in source_data]
                     results[hospital][table_name][satellite_name]['keys'] = [{k: row[k] for k in row if k in keys} for row in source_data]
     return results
-
-            
