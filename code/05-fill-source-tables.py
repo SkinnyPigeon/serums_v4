@@ -20,6 +20,7 @@ if PORT == None:
     PORT = os.environ.get('PGPORT')
 
 engine = create_engine("postgresql://postgres:{}@localhost:{}/source".format(PASSWORD, PORT))
+engine.execute("SET DateStyle='iso, dmy'")
 
 # Creating source tables
 
