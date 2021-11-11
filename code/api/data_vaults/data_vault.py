@@ -35,11 +35,10 @@ def current_hub_values(hubs):
 def create_data_vault(sats):
     boilerplate = generate_boilerplate()
     results = {}
+    results['satellites'] = {}
+    results['hubs'] = {}
+    results['links'] = {}
     for hospital in sats:
-        results = {}
-        results['satellites'] = {}
-        results['hubs'] = {}
-        results['links'] = {}
         for table in sats[hospital]:
             satellite_definitions = sats[hospital][table]
             links = sats[hospital][table]['links']
