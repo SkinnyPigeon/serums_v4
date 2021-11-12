@@ -2,12 +2,22 @@ import requests
 import subprocess
 from dotenv import load_dotenv
 import os
+import jwt
 
 project_folder = subprocess.check_output("pwd", shell=True).decode("utf-8").rstrip()
 load_dotenv(os.path.join(project_folder, '.env'))
 JWT_KEY = os.getenv('JWT_KEY')
 if JWT_KEY == None:
     JWT_KEY = os.environ.get('JWT_KEY')
+
+def validate_jwt(encoded_jwt):
+    try:
+        decoded_jwt = jwt.decode(encoded_jwt, JWT_KEY, audience="https://shcs.serums.cs.st-andrews.ac.uk/", algorithms='HS256')
+        if decoded_jwt:
+            response = {'serums_id': decoded_jwt['userID'], 'hospital_id': decoded_jwt['orgID'], 'groupIDs': decoded_jwt['groupIDs']}
+            return response
+    except jwt.exceptions.InvalidSignatureError as e:
+        return False
 
 def refresh_jwt(hospital):
     """Used in testing to generate a fresh JWT quickly. New JWTs can be selected by logging into the Serums portal, however, they have a finite life on them. Using the refresh tokens limits the need to do the logging in. Calls the authentication module to refresh the token
@@ -44,7 +54,7 @@ def refresh_jwt(hospital):
         print("Failed to make request. Reason: {}​".format(str(e)))
 
 
-def validate_jwt(jwt):
+def validate_jwt_legacy(jwt):
     """Calls the authentication module to validate a JWT included in the header of the request
     
             Parameters:

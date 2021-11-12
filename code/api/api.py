@@ -52,8 +52,15 @@ response = get_jwt(staff_emails['zmc'])
 jwt_value = response['body']['resource_obj']['access']
 
 default_jwt = "Bearer {jwt_value}".format(jwt_value=jwt_value)
-jwt_response = validate_jwt(default_jwt)
+jwt_response = validate_jwt(jwt_value)
 print(jwt_response)
+
+# check = decode_jwt(jwt_value)
+# if check:
+#     print("JWT IS VALID")
+#     print(check)
+# else:
+#     print("JWT IS NOT VALID")
 
 
 # Models
@@ -75,7 +82,7 @@ staff_parser_body = api.parser()
 staff_parser_body.add_argument('Authorization', help="The authorization token", location="headers",
                           default=default_jwt)
 staff_parser_body_fields = api.model('Return the staff tables', {
-    'hospital_id': fields.String(required=True, description='The id of the organisation to return the staff tables for', example=jwt_response['body']['orgID'])
+    'hospital_id': fields.String(required=True, description='The id of the organisation to return the staff tables for', example=jwt_response['hospital_id'])
 })
 
 # Tags
@@ -84,7 +91,7 @@ tags_parser = api.parser()
 tags_parser.add_argument('Authorization', help="The authorization token", location="headers",
                           default=default_jwt)
 tags_fields = api.model('Return the available tags for an institute', {
-    'hospital_id': fields.String(required=True, description='The id of the organisation to return the tags tables for', example=jwt_response['body']['orgID'])
+    'hospital_id': fields.String(required=True, description='The id of the organisation to return the tags tables for', example=jwt_response['hospital_id'])
 })
 
 multiple_tags_fields = api.model('Return the available tags for multiple institutes', {
