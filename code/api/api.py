@@ -50,6 +50,8 @@ api = Api(
 
 response = get_jwt(staff_emails['zmc'])
 jwt_value = response['body']['resource_obj']['access']
+jwt_response = validate_jwt(f"Bearer {jwt_value}")
+print(jwt_response)
 
 default_jwt = "Bearer {jwt_value}".format(jwt_value=jwt_value)
 
