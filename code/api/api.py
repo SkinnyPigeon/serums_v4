@@ -387,7 +387,8 @@ class SPHR(Resource):
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
-                patient_data = get_patient_data(body)
+                patient_data = get_patient_data(body, response)
+                # patient_data = get_patient_data(body)
                 result = parse_sphr(patient_data)
                 return result, 200
             except:
