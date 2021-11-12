@@ -11,13 +11,15 @@ if JWT_KEY == None:
     JWT_KEY = os.environ.get('JWT_KEY')
 
 def validate_jwt(encoded_jwt):
+    token = encoded_jwt.replace('Bearer ', '')
     try:
-        decoded_jwt = jwt.decode(encoded_jwt, JWT_KEY, audience="https://shcs.serums.cs.st-andrews.ac.uk/", algorithms='HS256')
+        decoded_jwt = jwt.decode(token, JWT_KEY, audience="https://shcs.serums.cs.st-andrews.ac.uk/", algorithms='HS256')
         if decoded_jwt:
-            response = {'serums_id': decoded_jwt['userID'], 'hospital_id': decoded_jwt['orgID'], 'groupIDs': decoded_jwt['groupIDs']}
-            return response
+            return {'serums_id': decoded_jwt['userID'], 'hospital_id': decoded_jwt['orgID'], 'groupIDs': decoded_jwt['groupIDs'], 'status_code': 200}
     except jwt.exceptions.InvalidSignatureError as e:
-        return False
+        return {'status_code': 404, 'message': str(e)}
+    except jwt.exceptions.DecodeError as d:
+        return {'status_code': 422, 'message': str(d)}
 
 def refresh_jwt(hospital):
     """Used in testing to generate a fresh JWT quickly. New JWTs can be selected by logging into the Serums portal, however, they have a finite life on them. Using the refresh tokens limits the need to do the logging in. Calls the authentication module to refresh the token

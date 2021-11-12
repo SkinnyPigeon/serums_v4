@@ -53,15 +53,6 @@ jwt_value = response['body']['resource_obj']['access']
 
 default_jwt = "Bearer {jwt_value}".format(jwt_value=jwt_value)
 jwt_response = validate_jwt(jwt_value)
-print(jwt_response)
-
-# check = decode_jwt(jwt_value)
-# if check:
-#     print("JWT IS VALID")
-#     print(check)
-# else:
-#     print("JWT IS NOT VALID")
-
 
 # Models
 
@@ -250,6 +241,7 @@ class Departments(Resource):
     def post(self):
         """Returns the details about all of the staff members for a healthcare provider"""
         jwt = request.headers['Authorization']
+        print(jwt)
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
             try:
@@ -271,7 +263,6 @@ class Tags(Resource):
         """Returns a list of tags and translated tags available for an individual hospital"""
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
-        print(response['body'])
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
@@ -289,7 +280,6 @@ class MultipleTags(Resource):
         """Returns a list of tags and translated tags available for multiple hospitals"""
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
-        print(response['body'])
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
@@ -313,7 +303,6 @@ class AddUser(Resource):
         """Adds a user to a hospital's serums_ids table. This allows their serums id to be linked to any of their available data in the data lake"""
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
-        print(response['body'])
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
