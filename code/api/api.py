@@ -53,6 +53,7 @@ jwt_value = response['body']['resource_obj']['access']
 
 default_jwt = "Bearer {jwt_value}".format(jwt_value=jwt_value)
 jwt_response = validate_jwt(jwt_value)
+print(f"JWT RESPONSE: {jwt_response}")
 
 # Models
 
@@ -227,7 +228,8 @@ class StaffDepartment(Resource):
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
             try:
-                staff_details = get_department_of_staff_member(response['body'])
+                staff_details = get_department_of_staff_member(response)
+                
                 return staff_details, 200
             except:
                 return {"message": "Unable to retrieve details about staff member"}, 500

@@ -26,7 +26,7 @@ def get_department_of_staff_member(body):
                 department_ids (list):  A list of dictionaries containing the details of a single staff member for a particular healthcare provider
     """
     try:
-        metadata = MetaData(schema=body['orgID'].lower())
+        metadata = MetaData(schema=body['hospital_id'].lower())
         Base = automap_base(metadata=metadata)
         engine = create_engine('postgresql://postgres:{}@localhost:{}/source'.format(PASSWORD, PORT))
         Base.prepare(engine, reflect=True)
@@ -40,7 +40,7 @@ def get_department_of_staff_member(body):
             department_table.name,
             department_table.department_id,
             department_table.department_name
-        ], department_table.serums_id == body['userID'] )
+        ], department_table.serums_id == body['serums_id'] )
 
         department_ids = []
         for serums_id, staff_id, name, department_id, department_name in session.execute(query):
