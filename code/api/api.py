@@ -50,10 +50,11 @@ api = Api(
 
 response = get_jwt(staff_emails['zmc'])
 jwt_value = response['body']['resource_obj']['access']
-jwt_response = validate_jwt(f"Bearer {jwt_value}")
-print(jwt_response)
 
 default_jwt = "Bearer {jwt_value}".format(jwt_value=jwt_value)
+jwt_response = validate_jwt(default_jwt)
+print(jwt_response)
+
 
 # Models
 
@@ -74,7 +75,7 @@ staff_parser_body = api.parser()
 staff_parser_body.add_argument('Authorization', help="The authorization token", location="headers",
                           default=default_jwt)
 staff_parser_body_fields = api.model('Return the staff tables', {
-    'hospital_id': fields.String(required=True, description='The id of the organisation to return the staff tables for', example='ZMC')
+    'hospital_id': fields.String(required=True, description='The id of the organisation to return the staff tables for', example=jwt_response['body']['orgID'])
 })
 
 # Tags
@@ -83,7 +84,7 @@ tags_parser = api.parser()
 tags_parser.add_argument('Authorization', help="The authorization token", location="headers",
                           default=default_jwt)
 tags_fields = api.model('Return the available tags for an institute', {
-    'hospital_id': fields.String(required=True, description='The id of the organisation to return the tags tables for', example='ZMC')
+    'hospital_id': fields.String(required=True, description='The id of the organisation to return the tags tables for', example=jwt_response['body']['orgID'])
 })
 
 multiple_tags_fields = api.model('Return the available tags for multiple institutes', {
@@ -147,7 +148,7 @@ sphr_parser.add_argument('Authorization', help="The authorization token", locati
 
 request_fields = api.model('Request Smart Patient Health Record', {
     'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=118),
-    'rule_id': fields.String(required=True, description='The rule id as stored in the blockchain', example='RULE_0df8eb8b-a469-46ae-8119-fbf98fa05b92'),
+    # 'rule_id': fields.String(required=True, description='The rule id as stored in the blockchain', example='RULE_0df8eb8b-a469-46ae-8119-fbf98fa05b92'),
     'tags': fields.String(required=True, description='Rule to be executed', example=['patient_address', 'treatments', 'wearable']),
     'hospital_ids': fields.String(required=True, description='The id of the hospital for the source data', example=['FCRB', 'USTAN', 'ZMC']),
     'public_key': fields.String(required=True, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
@@ -171,8 +172,8 @@ dv_parser.add_argument('Authorization', help="The authorization token", location
                          default=default_jwt)
 
 dv_request_fields = api.model('Request Smart Patient Health Record As Data Vault', {
-    'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=364),
-    'rule_id': fields.String(required=True, description='The rule id as stored in the blockchain', example='RULE_0df8eb8b-a469-46ae-8119-fbf98fa05b92'),
+    'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=118),
+    # 'rule_id': fields.String(required=True, description='The rule id as stored in the blockchain', example='RULE_0df8eb8b-a469-46ae-8119-fbf98fa05b92'),
     'tags': fields.String(required=True, description='Rule to be executed', example=['diagnostic']),
     'hospital_ids': fields.String(required=True, description='The id of the hospital for the source data', example=['FCRB', 'USTAN', 'ZMC']),
     'public_key': fields.String(required=True, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
