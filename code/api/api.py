@@ -48,7 +48,7 @@ api = Api(
     description='Return the encrypted Smart Patient Health Record from the Serums data lake',
 )
 
-default_jwt_response = get_jwt(patient_emails['zmc'])
+default_jwt_response = get_jwt(admin_emails['zmc'])
 jwt_value = default_jwt_response['body']['resource_obj']['access']
 
 
@@ -224,7 +224,7 @@ class StaffDepartment(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            if 'MEDICAL_STAFF' not in response['groupIDs'] and 'MEDICAL_ADMIN' not in response['groupIDs']:
+            if 'MEDICAL_STAFF' not in response['groupIDs'] and 'HOSPITAL_ADMIN' not in response['groupIDs']:
                 return {"message": "Must be either a medical staff or admin to view staff members"}, 404
             try:
                 staff_details = get_department_of_staff_member(response)
@@ -243,10 +243,8 @@ class Departments(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            print(response)
-            if 'MEDICAL_STAFF' not in response['groupIDs'] and 'MEDICAL_ADMIN' not in response['groupIDs']:
-                print("AKJSDKJASKSAJKJKDJAKSJDASDKJ")
-                return {"message": "Must be either a medical staff or admin to view staff members"}, 404
+            # if 'MEDICAL_STAFF' not in response['groupIDs'] and 'HOSPITAL_ADMIN' not in response['groupIDs']:
+            #     return {"message": "Must be either a medical staff or admin to view staff members"}, 404
             try:
                 body = request.get_json()
                 department_ids = get_departments(body)
@@ -307,8 +305,8 @@ class AddUser(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            if 'MEDICAL_ADMIN' not in response['groupIDs']:
-                return {"message": "Must be an admin to add user", "status_code": 404}
+            if 'HOSPITAL_ADMIN' not in response['groupIDs']:
+                return {"message": "Must be an admin to add user"}, 404
             try:
                 body = request.get_json()
                 response = add_user(body['serums_id'], body['patient_id'], body['hospital_id'])
@@ -327,8 +325,8 @@ class RemoveUser(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            if 'MEDICAL_ADMIN' not in response['groupIDs']:
-                return {"message": "Must be an admin to remove user", "status_code": 404}
+            if 'HOSPITAL_ADMIN' not in response['groupIDs']:
+                return {"message": "Must be an admin to remove user"}, 404
             try:
                 body = request.get_json()
                 response = remove_user(body['serums_id'], body['hospital_ids'])
@@ -368,8 +366,8 @@ class Search(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            if 'MEDICAL_STAFF' not in response['groupIDs'] and 'MEDICAL_ADMIN' not in response['groupIDs']:
-                return {"message": "Must be either a medical staff or admin to search for users", "status_code": 404}
+            if 'MEDICAL_STAFF' not in response['groupIDs'] and 'HOSPITAL_ADMIN' not in response['groupIDs']:
+                return {"message": "Must be either a medical staff or admin to search for users"}, 404
             try:
                 return search_for_serums_id(request.get_json())
             except:
