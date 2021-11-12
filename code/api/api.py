@@ -18,7 +18,7 @@ from functions.search import search_for_serums_id
 from functions.tags import get_tags
 from functions.add_and_remove_users import add_user, remove_user
 from functions.lineage import update_record
-from utils.jwt_functions import get_jwt, staff_emails, patient_emails
+from utils.jwt_functions import get_jwt, staff_emails, patient_emails, admin_emails
 from data_vaults.satellites import process_satellites
 from data_vaults.data_vault import create_data_vault
 from data_vaults.hub_post_processing import hub_equalizer
@@ -48,8 +48,9 @@ api = Api(
     description='Return the encrypted Smart Patient Health Record from the Serums data lake',
 )
 
-response = get_jwt(staff_emails['zmc'])
-jwt_value = response['body']['resource_obj']['access']
+default_jwt_response = get_jwt(patient_emails['zmc'])
+jwt_value = default_jwt_response['body']['resource_obj']['access']
+
 
 default_jwt = "Bearer {jwt_value}".format(jwt_value=jwt_value)
 jwt_response = validate_jwt(jwt_value)
@@ -192,16 +193,12 @@ dv_reply_fields = api.model('Successful Response', {
 # Name spaces
 
 hello_space = api.namespace('hello', description='Check the server is on')
-staff_space = api.namespace(
-    'staff_tables', description='Return the staff tables')
-tags_space = api.namespace(
-    'tags_tables', description='Return the tags tables')
+staff_space = api.namespace('staff_tables', description='Return the staff tables')
+tags_space = api.namespace('tags_tables', description='Return the tags tables')
 users_space = api.namespace('users', description='Add or remove a user from the Serums network')
+ml_space = api.namespace('machine_learning', description='Return the patient data for the machine learning algorithm')
 search_space = api.namespace('search', description="Search for a patient\'s SERUMS ID")
-ml_space = api.namespace(
-    'machine_learning', description='Return the patient data for the machine learning algorithm')
-sphr_space = api.namespace('smart_patient_health_record',
-                           description='Retrieve the Smart Patient Health Record')
+sphr_space = api.namespace('smart_patient_health_record', description='Retrieve the Smart Patient Health Record')
 dv_space = api.namespace('data_vault', description='Returns the patient data in data vault format')
 
 # Routes
@@ -227,9 +224,10 @@ class StaffDepartment(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
+            if 'MEDICAL_STAFF' not in response['groupIDs'] and 'MEDICAL_ADMIN' not in response['groupIDs']:
+                return {"message": "Must be either a medical staff or admin to view staff members"}, 404
             try:
                 staff_details = get_department_of_staff_member(response)
-                
                 return staff_details, 200
             except:
                 return {"message": "Unable to retrieve details about staff member"}, 500
@@ -243,9 +241,12 @@ class Departments(Resource):
     def post(self):
         """Returns the details about all of the staff members for a healthcare provider"""
         jwt = request.headers['Authorization']
-        print(jwt)
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
+            print(response)
+            if 'MEDICAL_STAFF' not in response['groupIDs'] and 'MEDICAL_ADMIN' not in response['groupIDs']:
+                print("AKJSDKJASKSAJKJKDJAKSJDASDKJ")
+                return {"message": "Must be either a medical staff or admin to view staff members"}, 404
             try:
                 body = request.get_json()
                 department_ids = get_departments(body)
@@ -306,6 +307,8 @@ class AddUser(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
+            if 'MEDICAL_ADMIN' not in response['groupIDs']:
+                return {"message": "Must be an admin to add user", "status_code": 404}
             try:
                 body = request.get_json()
                 response = add_user(body['serums_id'], body['patient_id'], body['hospital_id'])
@@ -323,8 +326,9 @@ class RemoveUser(Resource):
         """Deletes a user from one or more hospital's serums_ids table. This instantly severs the system's ability to access the patient's records even before their medical data is removed during the next nightly ETL process"""
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
-        print(response['body'])
         if response['status_code'] == 200:
+            if 'MEDICAL_ADMIN' not in response['groupIDs']:
+                return {"message": "Must be an admin to remove user", "status_code": 404}
             try:
                 body = request.get_json()
                 response = remove_user(body['serums_id'], body['hospital_ids'])
@@ -344,7 +348,6 @@ class MachineLearning(Resource):
         """Returns the data within from a hospital's source system for use by the machine learning algorithm"""
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
-        print(response['body'])
         if response['status_code'] == 200:
             try:
                 patient_data = get_patient_data_for_ml(response['body'])
@@ -365,6 +368,8 @@ class Search(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
+            if 'MEDICAL_STAFF' not in response['groupIDs'] and 'MEDICAL_ADMIN' not in response['groupIDs']:
+                return {"message": "Must be either a medical staff or admin to search for users", "status_code": 404}
             try:
                 return search_for_serums_id(request.get_json())
             except:

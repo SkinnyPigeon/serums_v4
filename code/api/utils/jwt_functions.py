@@ -39,18 +39,18 @@ def get_jwt(user, password=password):
     except Exception as e:
         print("Failed to make request. Reason: {}​".format(str(e)))
 
-def validate_jwt(jwt):
-    url = "https://authentication.serums.cs.st-andrews.ac.uk/ua/verify_jwt/"
-    payload = ""
-    headers = {
-        "Authorization": f"Bearer {jwt}",
-        "Content-Type": "application/json"
-    }
-    try:
-        response = requests.request("POST", url, headers=headers, data=payload)
-        if response.status_code == 200:
-            return {"status_code": response.status_code, "body": response.json()}
-        else:
-            return {"status_code": response.status_code, "body": response.text}
-    except Exception as e:
-        print("Failed to make request. Reason: {}​".format(str(e)))
+# def validate_jwt(jwt):
+#     url = "https://authentication.serums.cs.st-andrews.ac.uk/ua/verify_jwt/"
+#     payload = ""
+#     headers = {
+#         "Authorization": f"Bearer {jwt}",
+#         "Content-Type": "application/json"
+#     }
+#     try:
+#         response = requests.request("POST", url, headers=headers, data=payload)
+#         if response.status_code == 200:
+#             return {"status_code": response.status_code, "body": response.json()}
+#         else:
+#             return {"status_code": response.status_code, "body": response.text}
+#     except Exception as e:
+#         print("Failed to make request. Reason: {}​".format(str(e)))
