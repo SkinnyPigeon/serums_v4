@@ -48,13 +48,13 @@ api = Api(
     description='Return the encrypted Smart Patient Health Record from the Serums data lake',
 )
 
-default_jwt_response = get_jwt(admin_emails['zmc'])
+default_jwt_response = get_jwt(staff_emails['zmc'])
 jwt_value = default_jwt_response['body']['resource_obj']['access']
 
 
 default_jwt = "Bearer {jwt_value}".format(jwt_value=jwt_value)
 jwt_response = validate_jwt(jwt_value)
-print(f"JWT RESPONSE: {jwt_response}")
+# print(f"JWT RESPONSE: {jwt_response}")
 
 # Models
 
@@ -388,9 +388,11 @@ class SPHR(Resource):
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
-                patient_data = get_patient_data(body, response)
+                patient_data = get_patient_data(body, jwt)
+                print(f"PATIENT DATA: {patient_data}")
                 # patient_data = get_patient_data(body)
                 result = parse_sphr(patient_data)
+                print(f"RESULT TO RETURN: {result}")
                 return result, 200
             except:
                 {"message": "Unable to create SPHR"}, 500
@@ -405,7 +407,7 @@ class SPHR_Encrypted(Resource):
         '''Return the encrypted Smart Patient Health Record from the Serums data lake'''
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
-        print(response)
+        # print(response)
         if response['status_code'] == 200:
             try:
                 body = request.get_json()

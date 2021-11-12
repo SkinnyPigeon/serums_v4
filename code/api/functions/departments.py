@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 import os
 from dotenv import load_dotenv
 import subprocess
+from functions.jwt import validate_jwt
 
 project_folder = subprocess.check_output("pwd", shell=True).decode("utf-8").rstrip()
 load_dotenv(os.path.join(project_folder, '.env'))
@@ -99,3 +100,21 @@ def get_departments(body):
         return department_ids
     except Exception as e:
         return {"error": str(e)}
+
+
+def check_staff_member(jwt):
+    id_and_department = {}
+    jwt_response = validate_jwt(jwt)
+    print(jwt_response)
+    if jwt_response['status_code'] == 200 and 'PATIENT' not in jwt_response['groupIDs']:
+        staff_response = get_departments(jwt_response)
+        print(f"STAFF RESPONSE: {staff_response}")
+        if staff_response:
+            print("HELLO FROM CHECK STAFF MEMBER")
+            for staff_member in staff_response:
+                if jwt_response['serums_id'] == staff_member['serums_id']:
+                    id_and_department['id'] = jwt_response['serums_id']
+                    id_and_department['department'] = staff_member['department_id']
+    else:
+        print(jwt_response['groupIDs'])
+    return id_and_department

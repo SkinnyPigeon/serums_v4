@@ -22,6 +22,7 @@ from sources.tags.fcrb import fcrb_tags
 from sources.tags.ustan import ustan_tags
 from sources.tags.zmc import zmc_tags
 from functions.lineage import create_record, update_record, schema_string
+from functions.rules import validate_rules
 
 
 # Helper functions
@@ -375,12 +376,16 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name, proo
 def parse_sphr(patient_data):
     result = {}
     for hospital in patient_data:
+        print(f"HOSPITAL: {hospital}")
         result[hospital] = {}
         for table in patient_data[hospital]['data']:
+            print(f"TABLE: {table}")
             df = DataFrame([x for x in patient_data[hospital]['data'][table]])
             df = convert_dates_to_string(df)
             df = convert_decimal_to_float(df)
+            print(f"DATA FRAME: {df}")
             result[hospital][table] = df.to_dict('index')
+    print(f"RESULT: {result}")
     return result
 
 # def get_patient_data(body):
@@ -404,13 +409,36 @@ def parse_sphr(patient_data):
 #     print(f"GET DATA RESULT: {results}")
 #     return results
 
-def get_patient_data(body, jwt_response):
+# def get_patient_data(body, jwt_response):
+#     results = {}
+#     proof_id = 'abc123'
+#     for hospital_id in body['hospital_ids']:
+#         results[hospital_id.upper()] = {}
+#         hospital, tags_list = hospital_picker(hospital_id)
+#         tags = select_tags(tags_list, body['tags'])
+#         connection = setup_connection(hospital)
+#         id_class = connection['base'].classes.serums_ids
+#         key_name = select_source_patient_id_name(hospital)
+#         patient_id = select_source_patient_id_value(connection['session'], 
+#                                                         id_class, 
+#                                                         body['serums_id'], key_name)
+#         data = select_patient_data(connection, tags, patient_id, key_name, proof_id)
+#         connection['engine'].dispose()
+#         if len(data) > 0:
+#             results[hospital_id.upper()]['data'] = data
+#         results[hospital_id.upper()]['tags'] = tags
+#     print(f"GET DATA RESULT: {results}")
+#     return results
+
+def get_patient_data(body, jwt):
     results = {}
     proof_id = 'abc123'
     for hospital_id in body['hospital_ids']:
         results[hospital_id.upper()] = {}
         hospital, tags_list = hospital_picker(hospital_id)
-        tags = select_tags(tags_list, body['tags'])
+        valid_tags = validate_rules(body, jwt)
+        print(f"VALID TAGS: {valid_tags}")
+        tags = select_tags(tags_list, valid_tags)
         connection = setup_connection(hospital)
         id_class = connection['base'].classes.serums_ids
         key_name = select_source_patient_id_name(hospital)

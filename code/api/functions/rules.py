@@ -1,5 +1,5 @@
 import requests
-from functions.departments import get_department_of_staff_member
+from functions.departments import get_department_of_staff_member, check_staff_member
 from functions.jwt import validate_jwt
 
 def get_rules(jwt, grantor_id, grantee_id):
@@ -67,10 +67,11 @@ def get_rules_for_doctor(jwt, grantor_id, serums_and_department_ids):
     response = []
     url = 'http://localhost:30001/v1/api/getRules'
     headers = {
-        "Authorization": f"Bearer {jwt}",
+        "Authorization": f"{jwt}",
         "Content-Type": "application/json"
     }
     for id in serums_and_department_ids:
+        print(f"ID: {id}")
         data = {
             "filters": [
                 {
@@ -90,24 +91,28 @@ def get_rules_for_doctor(jwt, grantor_id, serums_and_department_ids):
             ]
         }
         rule_response = requests.request('POST', url, headers=headers, json=data)
+        print(f"RULE RESPONSE: {rule_response}")
         response.extend(rule_response.json())
     return response
 
 
-def validate_rules(jwt, body):
+def validate_rules(body, jwt):
     tags = []
     jwt_response = validate_jwt(jwt)
-    requestor_type = jwt_response['body']['groupIDs']
+    requestor_type = jwt_response['groupIDs']
     if validate_patient(requestor_type):
         print('PATIENT')
         if jwt_response['status_code'] == 200:
-            if body['serums_id'] == jwt_response['body']['userID']:
+            if body['serums_id'] == jwt_response['serums_id']:
                 tags = ['all']
     elif validate_doctor(requestor_type):
         print('DOCTOR')
-        serums_and_department_ids = get_department_of_staff_member(jwt)
+        serums_and_department_ids = check_staff_member(jwt)
+        print(f"ID AND DEPT: {serums_and_department_ids}")
         rules = get_rules_for_doctor(jwt, body['serums_id'], serums_and_department_ids)
+        print(f"RULES: {rules}")
         tags = sum_up_rules(rules)
+        print(f"TAGS: {tags}")
     return tags
 
 # tags = validate_rules(jwt, body)
