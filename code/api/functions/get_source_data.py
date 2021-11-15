@@ -3,6 +3,7 @@
 from sqlalchemy import create_engine, MetaData, inspect
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import InvalidRequestError
 
 import os
 from dotenv import load_dotenv
@@ -256,12 +257,21 @@ def select_tabular_patient_data(connection, tables, tag_definition, patient_id, 
     entities = []
     for field in fields:
         entities.append(getattr(table_class, field))
-    result = connection['session'].query(table_class).with_entities(*entities).filter_by(**{key_name: patient_id}).all()
-    
-    for row in result:
-        data.append(convert_tuples_to_dict(row, fields))
+    try:
+        result = connection['session'].query(table_class).with_entities(*entities).filter_by(**{key_name: patient_id}).all()
+        for row in result:
+            data.append(convert_tuples_to_dict(row, fields))
+    except InvalidRequestError as i:
+        foreign_key_table_class = tables[tag_definition['key_lookup']['table']]
+        foreign_key = tag_definition['key_lookup']['key']
+        key_entities = []
+        key_entities.append(getattr(foreign_key_table_class, foreign_key))
+        key_result = connection['session'].query(foreign_key_table_class).with_entities(*key_entities).filter_by(**{key_name: patient_id}).all()
+        for row in key_result:
+            result = connection['session'].query(table_class).with_entities(*entities).filter_by(**{foreign_key: row[0]}).all()
+            for row in result:
+                data.append(convert_tuples_to_dict(row, fields))
     return data
-
 
 def hash_columns(columns):
     """Used to hash the columns of the Smart Patient Health Records. This allows for verification that the data selection has taken place correctly based on the rule definition
@@ -344,7 +354,8 @@ def get_patient_data(body, jwt):
     results = {}
     # PROOF ID NEEDS TO BE REINSTATED FROM TUESDAY ONWARDS
     proof_id = 'abc123'
-    valid_tags = validate_rules(body, jwt)
+    # valid_tags = validate_rules(body, jwt)
+    valid_tags = ['healthcare_providers']
     for hospital_id in body['hospital_ids']:
         results[hospital_id.upper()] = {}
         hospital, tags_list = hospital_picker(hospital_id)

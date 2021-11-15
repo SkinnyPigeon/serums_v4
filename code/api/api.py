@@ -386,13 +386,13 @@ class SPHR(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            try:
-                body = request.get_json()
-                patient_data = get_patient_data(body, jwt)
-                parse_data = parse_sphr(patient_data)
-                return parse_data, 200
-            except:
-                {"message": "Unable to create SPHR"}, 500
+            # try:
+            body = request.get_json()
+            patient_data = get_patient_data(body, jwt)
+            parse_data = parse_sphr(patient_data)
+            return parse_data, 200
+            # except:
+            #     {"message": "Unable to create SPHR"}, 500
         else:
             return {"message": response['message']}, response['status_code']
 

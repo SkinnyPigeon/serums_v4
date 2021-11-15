@@ -16,7 +16,7 @@ fcrb_healthcare_providers_2 = {'tag': 'healthcare_providers', 'source': 'fcrb.ep
 fcrb_healthcare_providers_4 = {'tag': 'healthcare_providers', 'source': 'fcrb.medication', 'fields': ['patnr', 'falnr', 'einri'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 fcrb_healthcare_providers_5 = {'tag': 'healthcare_providers', 'source': 'fcrb.monitoring_params', 'fields': ['patnr', 'pernr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 fcrb_healthcare_providers_6 = {'tag': 'healthcare_providers', 'source': 'fcrb.order_entry', 'fields': ['patnr', 'einri', 'pernr', 'orgid'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
-# fcrb_healthcare_providers_7 = {'tag': 'healthcare_providers', 'source': 'fcrb.professional', 'fields': ['pernr', 'orgid', 'erdat'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
+fcrb_healthcare_providers_7 = {'tag': 'healthcare_providers', 'source': 'fcrb.professional', 'fields': ['pernr', 'orgid', 'erdat'], 'key_lookup': {'table': 'fcrb.episode', 'key': 'pernr'}, 'table': True, 'graph': False, 'image': False}
 
 fcrb_patient_appointments_1 = {'tag': 'patient_appointments', 'source': 'fcrb.episode', 'fields': ['patnr', 'pernr', 'falar', 'statu', 'enddt', 'storn', 'begdt', 'casetx', 'fatxt'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 fcrb_patient_appointments_2 = {'tag': 'patient_appointments', 'source': 'fcrb.monitoring_params', 'fields': ['patnr', 'falnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
@@ -70,7 +70,7 @@ fcrb_tags = [
     fcrb_healthcare_providers_4, 
     fcrb_healthcare_providers_5, 
     fcrb_healthcare_providers_6, 
-    # fcrb_healthcare_providers_7, 
+    fcrb_healthcare_providers_7, 
     fcrb_patient_appointments_1, 
     fcrb_patient_appointments_2, 
     fcrb_patient_appointments_3, 
