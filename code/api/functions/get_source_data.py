@@ -432,12 +432,12 @@ def parse_sphr(patient_data):
 
 def get_patient_data(body, jwt):
     results = {}
+    # PROOF ID NEEDS TO BE REINSTATED FROM TUESDAY ONWARDS
     proof_id = 'abc123'
+    valid_tags = validate_rules(body, jwt)
     for hospital_id in body['hospital_ids']:
         results[hospital_id.upper()] = {}
         hospital, tags_list = hospital_picker(hospital_id)
-        valid_tags = validate_rules(body, jwt)
-        print(f"VALID TAGS: {valid_tags}")
         tags = select_tags(tags_list, valid_tags)
         connection = setup_connection(hospital)
         id_class = connection['base'].classes.serums_ids
@@ -449,6 +449,7 @@ def get_patient_data(body, jwt):
         connection['engine'].dispose()
         if len(data) > 0:
             results[hospital_id.upper()]['data'] = data
+        elif len(data) <= 0:
+            results[hospital_id.upper()]['data'] = {}
         results[hospital_id.upper()]['tags'] = tags
-    print(f"GET DATA RESULT: {results}")
     return results
