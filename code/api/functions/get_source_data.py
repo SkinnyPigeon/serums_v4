@@ -354,8 +354,7 @@ def get_patient_data(body, jwt):
     results = {}
     # PROOF ID NEEDS TO BE REINSTATED FROM TUESDAY ONWARDS
     proof_id = 'abc123'
-    # valid_tags = validate_rules(body, jwt)
-    valid_tags = ['healthcare_providers']
+    valid_tags = validate_rules(body, jwt)
     for hospital_id in body['hospital_ids']:
         results[hospital_id.upper()] = {}
         hospital, tags_list = hospital_picker(hospital_id)
