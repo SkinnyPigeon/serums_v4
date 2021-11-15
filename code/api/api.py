@@ -48,7 +48,7 @@ api = Api(
     description='Return the encrypted Smart Patient Health Record from the Serums data lake',
 )
 
-default_jwt_response = get_jwt(staff_emails['zmc'])
+default_jwt_response = get_jwt(patient_emails['zmc'])
 jwt_value = default_jwt_response['body']['resource_obj']['access']
 
 
