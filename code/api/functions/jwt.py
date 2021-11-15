@@ -14,7 +14,6 @@ def validate_jwt(encoded_jwt):
     token = encoded_jwt.replace('Bearer ', '')
     try:
         decoded_jwt = jwt.decode(token, JWT_KEY, audience="https://shcs.serums.cs.st-andrews.ac.uk/", algorithms='HS256')
-        # print(f"DECODED JWT: {decoded_jwt}")
         if decoded_jwt:
             return {'serums_id': decoded_jwt['userID'], 'hospital_id': decoded_jwt['orgID'], 'groupIDs': decoded_jwt['groupIDs'], 'status_code': 200}
     except jwt.exceptions.InvalidSignatureError as e:

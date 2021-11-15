@@ -108,9 +108,7 @@ def check_staff_member(jwt):
     print(jwt_response)
     if jwt_response['status_code'] == 200 and 'PATIENT' not in jwt_response['groupIDs']:
         staff_response = get_departments(jwt_response)
-        print(f"STAFF RESPONSE: {staff_response}")
         if staff_response:
-            print("HELLO FROM CHECK STAFF MEMBER")
             for staff_member in staff_response:
                 if jwt_response['serums_id'] == staff_member['serums_id']:
                     id_and_department['id'] = jwt_response['serums_id']

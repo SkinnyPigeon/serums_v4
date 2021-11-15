@@ -3,6 +3,7 @@
 from sqlalchemy import create_engine, MetaData, inspect
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.exc import NoResultFound
 
 import os
 from dotenv import load_dotenv
@@ -33,7 +34,9 @@ def setup_connection(body):
                 connection (dict): This contains most of the important elements of the connection allowing for many different types of operations within the database
     """
     engine = create_engine('postgresql://postgres:{}@localhost:{}/source'.format(PASSWORD, PORT))
-    schema = body['orgID'].lower() + "_ml"
+    # Removing the dedicated schema so the patient only needs to be added to a single place for it to work
+    # schema = body['hospital_id'].lower() + "_ml"
+    schema = body['hospital_id'].lower()
     metadata = MetaData(schema=schema, bind=engine)
     metadata.reflect(engine)
     Base = automap_base(metadata=metadata)
@@ -192,14 +195,16 @@ def get_patient_data_for_ml(body):
         key_name = select_source_patient_id_name(body)
         patient_id = select_source_patient_id_value(connection['session'], 
                                                     id_class, 
-                                                    body['userID'], key_name)
+                                                    body['serums_id'], key_name)
         for table in tables:
-            print(table)
             table_class = connection['base'].classes[table]
             data = select_patient_data(connection['session'], table_class, patient_id, key_name)
             results[table] = data
         connection['engine'].dispose()
         return results
+    except NoResultFound as n:
+        connection['engine'].dispose()
+        return {"message": "Patient not found with that Serums ID"}
     except Exception as e:
         connection['engine'].dispose()
         return {"error": str(e)}

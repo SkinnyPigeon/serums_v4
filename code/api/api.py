@@ -48,13 +48,13 @@ api = Api(
     description='Return the encrypted Smart Patient Health Record from the Serums data lake',
 )
 
-default_jwt_response = get_jwt(staff_emails['zmc'])
+default_jwt_response = get_jwt(patient_emails['ustan'])
 jwt_value = default_jwt_response['body']['resource_obj']['access']
 
 
 default_jwt = "Bearer {jwt_value}".format(jwt_value=jwt_value)
 jwt_response = validate_jwt(jwt_value)
-# print(f"JWT RESPONSE: {jwt_response}")
+print(f"JWT RESPONSE: {jwt_response}")
 
 # Models
 
@@ -348,7 +348,7 @@ class MachineLearning(Resource):
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
             try:
-                patient_data = get_patient_data_for_ml(response['body'])
+                patient_data = get_patient_data_for_ml(response)
                 return patient_data, 200
             except:
                 return {"message": "Unable to retrieve the data for analytics"}, 500
