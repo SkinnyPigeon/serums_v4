@@ -260,49 +260,23 @@ def select_tabular_patient_data(connection, tables, tag_definition, patient_id, 
     
     for row in result:
         data.append(convert_tuples_to_dict(row, fields))
-
-    # columns = []
-    # for column in df.columns:
-    #     columns.append(column)
-    # column_hash = schema_string(columns)
-    # return df.to_dict('index'), column_hash
     return data
 
 
-def select_image_patient_data(session, tables, tag_definition, patient_id, key_name):
-    """WORK IN PROGRESS. WILL BE USED TO SELECT IMAGE DATA.
-    
+def hash_columns(columns):
+    """Used to hash the columns of the Smart Patient Health Records. This allows for verification that the data selection has taken place correctly based on the rule definition
+
             Parameters:
 
-                session (Session): The SQLAlchemy session to run the query with\n
-                tables (dict): A dictionary that uses the table names as the keys and SQLAlchemy table classes as the values\n
-                tag_definition (dict): A tag definition that is based on the tags field in the request body\n
-                patient_id (int): The native patient id within the hospital's system\n
-                key_name (str): The name of the patient id column within a hospital's system
+                columns (list): A list of the columns that are to be hashed
 
-    
+            Returns:
+
+                column_hash (str): A string hash that allows verification the correct columns have been selected without revealing the details of what those columns are
+
     """
-    data = []
-    table_class = tables[tag_definition['source']]
-    fields = tag_definition['fields']
-    entities = []
-    for field in fields:
-        entities.append(getattr(table_class, field))
-    result = session.query(table_class).with_entities(*entities).filter_by(**{key_name: patient_id}).all()
-    
-    for row in result:
-        data.append(convert_tuples_to_dict(row, fields))
-
-    df = DataFrame([x for x in data])
-    df = convert_dates_to_string(df)
-    df = convert_decimal_to_float(df)
-    # print(df)
-
-    return df.to_dict('index')
-
-
-# Selecting the data based on the tags
-
+    column_hash = schema_string(columns)
+    return column_hash
 
 def select_patient_data(connection, tags_definitions, patient_id, key_name, proof_id):
     """Used to determine the type of data selection to be used i.e. image, tabular, or graph. Calls the relevant function.
@@ -325,112 +299,48 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name, proo
     tables = get_classes(connection['schema'], connection['base'])
     for tag_definition in tags_definitions:
         if tag_definition['table']:
-            # results[tag_definition['source']], column_hash = select_tabular_patient_data(connection, tables, tag_definition, patient_id, key_name)
-            # column_hashes.append(column_hash)
             results[tag_definition['source']] = select_tabular_patient_data(connection, tables, tag_definition, patient_id, key_name)
-    #     if tag_definition['image']:
-    #         results[tag_definition['source']] = select_image_patient_data(session, tables, tag_definition, patient_id, key_name)
-    # sorted_hashes = sorted(column_hashes)
+            columns_to_hash = hash_columns(list(results[tag_definition['source']][0].keys()))
+            column_hashes.append(columns_to_hash)
+    sorted_hashes = sorted(column_hashes)
     # update_record(proof_id, 'data_selected', 'success', {'columns_hash': "".join(sorted_hashes)}, hospital_id=connection['schema'].upper())
     return results
 
 
-# def get_patient_data(body):
-#     """The main function for generating the Smart Patient Health Record
-    
-#             Parameters:
-
-#                 body (dict): The request body from the api call
-
-#             Returns:
-
-#                 smart_patient_health_record (DataFrame): A DataFrame containing the selected patient data
-#     """
-#     results = {}
-#     # proof_id = create_record(body['serums_id'], body['rule_id'], body['hospital_ids'])
-#     proof_id = 'abc123'
-#     for hospital_id in body['hospital_ids']:
-#         # CHANGED THIS TO ADD THE HOSPITAL LAYER
-#         results[hospital_id.upper()] = {}
-#         # try:
-#         hospital, tags_list = hospital_picker(hospital_id)
-#         tags = select_tags(tags_list, body['tags'])
-#         connection = setup_connection(hospital)
-#         id_class = connection['base'].classes.serums_ids
-#         key_name = select_source_patient_id_name(hospital)
-#         patient_id = select_source_patient_id_value(connection['session'], 
-#                                                         id_class, 
-#                                                         body['serums_id'], key_name)
-#         data = select_patient_data(connection, tags, patient_id, key_name, proof_id)
-#         connection['engine'].dispose()
-#         if len(data) > 0:
-#             # CHANGED THIS TO ADD THE DATA LAYER
-#             results[hospital_id.upper()]['data'] = data
-#         # except Exception as e:
-#         #     connection['engine'].dispose()
-#         #     if str(e) == "No row was found for one()":
-#         #         results[hospital_id] = {"Error": "Serums ID not found with healthcare provider: {}".format(hospital_id)}
-#     print(f"GET DATA RESULT: {results}")
-#     return results, proof_id
-
 def parse_sphr(patient_data):
+    """Parses the data of the standard Smart Patient Health Record. This converts dates to strings and decimals to floats allowing them to be sent as JSON.
+
+            Parameters:
+
+                patient_data (dict): The patient data that has been selected by the API call
+
+            Returns:
+
+                result (dict): The parsed data that is ready for transmission as JSON
+    
+    """
     result = {}
     for hospital in patient_data:
-        print(f"HOSPITAL: {hospital}")
         result[hospital] = {}
         for table in patient_data[hospital]['data']:
-            print(f"TABLE: {table}")
             df = DataFrame([x for x in patient_data[hospital]['data'][table]])
             df = convert_dates_to_string(df)
             df = convert_decimal_to_float(df)
-            print(f"DATA FRAME: {df}")
             result[hospital][table] = df.to_dict('index')
-    print(f"RESULT: {result}")
     return result
 
-# def get_patient_data(body):
-#     results = {}
-#     proof_id = 'abc123'
-#     for hospital_id in body['hospital_ids']:
-#         results[hospital_id.upper()] = {}
-#         hospital, tags_list = hospital_picker(hospital_id)
-#         tags = select_tags(tags_list, body['tags'])
-#         connection = setup_connection(hospital)
-#         id_class = connection['base'].classes.serums_ids
-#         key_name = select_source_patient_id_name(hospital)
-#         patient_id = select_source_patient_id_value(connection['session'], 
-#                                                         id_class, 
-#                                                         body['serums_id'], key_name)
-#         data = select_patient_data(connection, tags, patient_id, key_name, proof_id)
-#         connection['engine'].dispose()
-#         if len(data) > 0:
-#             results[hospital_id.upper()]['data'] = data
-#         results[hospital_id.upper()]['tags'] = tags
-#     print(f"GET DATA RESULT: {results}")
-#     return results
-
-# def get_patient_data(body, jwt_response):
-#     results = {}
-#     proof_id = 'abc123'
-#     for hospital_id in body['hospital_ids']:
-#         results[hospital_id.upper()] = {}
-#         hospital, tags_list = hospital_picker(hospital_id)
-#         tags = select_tags(tags_list, body['tags'])
-#         connection = setup_connection(hospital)
-#         id_class = connection['base'].classes.serums_ids
-#         key_name = select_source_patient_id_name(hospital)
-#         patient_id = select_source_patient_id_value(connection['session'], 
-#                                                         id_class, 
-#                                                         body['serums_id'], key_name)
-#         data = select_patient_data(connection, tags, patient_id, key_name, proof_id)
-#         connection['engine'].dispose()
-#         if len(data) > 0:
-#             results[hospital_id.upper()]['data'] = data
-#         results[hospital_id.upper()]['tags'] = tags
-#     print(f"GET DATA RESULT: {results}")
-#     return results
 
 def get_patient_data(body, jwt):
+    """The main function for generating the Smart Patient Health Record
+    
+            Parameters:
+
+                body (dict): The request body from the API call
+
+            Returns:
+
+                smart_patient_health_record (DataFrame): A DataFrame containing the selected patient data
+    """
     results = {}
     # PROOF ID NEEDS TO BE REINSTATED FROM TUESDAY ONWARDS
     proof_id = 'abc123'
