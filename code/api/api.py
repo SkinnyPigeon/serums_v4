@@ -436,17 +436,17 @@ class DV(Resource):
         response = validate_jwt(jwt)
         print(response)
         if response['status_code'] == 200:
-            # try:
-            body = request.get_json()
-            patient_data = get_patient_data(body, jwt)
-            satellites = process_satellites(patient_data)
-            data_vault = create_data_vault(satellites)
-            add_id_values(data_vault['links'])
-            hub_equalizer(data_vault['hubs'])
-            print(f"DATA VAULT: {data_vault}")
-            return data_vault, 200
-            # except:
-            #     return {"message": "Unable to create data vault"}, 500
+            try:
+                body = request.get_json()
+                patient_data = get_patient_data(body, jwt)
+                satellites = process_satellites(patient_data)
+                data_vault = create_data_vault(satellites)
+                add_id_values(data_vault['links'])
+                hub_equalizer(data_vault['hubs'])
+                print(f"DATA VAULT: {data_vault}")
+                return data_vault, 200
+            except:
+                return {"message": "Unable to create data vault"}, 500
         else:
             return {"message": response['message']}, response['status_code']
         
@@ -462,8 +462,8 @@ class DVEncrypted(Resource):
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
-                data = get_patient_data(body)
-                satellites = process_satellites(data)
+                patient_data = get_patient_data(body, jwt)
+                satellites = process_satellites(patient_data)
                 data_vault = create_data_vault(satellites)
                 add_id_values(data_vault['links'])
                 hub_equalizer(data_vault['hubs'])
