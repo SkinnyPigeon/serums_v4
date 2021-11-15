@@ -48,7 +48,7 @@ api = Api(
     description='Return the encrypted Smart Patient Health Record from the Serums data lake',
 )
 
-default_jwt_response = get_jwt(patient_emails['ustan'])
+default_jwt_response = get_jwt(staff_emails['zmc'])
 jwt_value = default_jwt_response['body']['resource_obj']['access']
 
 
@@ -149,7 +149,7 @@ sphr_parser.add_argument('Authorization', help="The authorization token", locati
 request_fields = api.model('Request Smart Patient Health Record', {
     'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=118),
     # 'rule_id': fields.String(required=True, description='The rule id as stored in the blockchain', example='RULE_0df8eb8b-a469-46ae-8119-fbf98fa05b92'),
-    'tags': fields.String(required=True, description='Rule to be executed', example=['patient_address', 'treatments', 'wearable']),
+    # 'tags': fields.String(required=True, description='Rule to be executed', example=['patient_address', 'treatments', 'wearable']),
     'hospital_ids': fields.String(required=True, description='The id of the hospital for the source data', example=['FCRB', 'USTAN', 'ZMC']),
     'public_key': fields.String(required=True, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDM+DNCybR7LdizOcK1gH2P7dD
@@ -174,7 +174,7 @@ dv_parser.add_argument('Authorization', help="The authorization token", location
 dv_request_fields = api.model('Request Smart Patient Health Record As Data Vault', {
     'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=118),
     # 'rule_id': fields.String(required=True, description='The rule id as stored in the blockchain', example='RULE_0df8eb8b-a469-46ae-8119-fbf98fa05b92'),
-    'tags': fields.String(required=True, description='Rule to be executed', example=['diagnostic']),
+    # 'tags': fields.String(required=True, description='Rule to be executed', example=['diagnostic']),
     'hospital_ids': fields.String(required=True, description='The id of the hospital for the source data', example=['FCRB', 'USTAN', 'ZMC']),
     'public_key': fields.String(required=True, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDM+DNCybR7LdizOcK1gH2P7dD
