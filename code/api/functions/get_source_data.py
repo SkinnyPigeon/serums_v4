@@ -313,7 +313,7 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name, proo
             columns_to_hash = hash_columns(list(results[tag_definition['source']][0].keys()))
             column_hashes.append(columns_to_hash)
     sorted_hashes = sorted(column_hashes)
-    # update_record(proof_id, 'data_selected', 'success', {'columns_hash': "".join(sorted_hashes)}, hospital_id=connection['schema'].upper())
+    update_record(proof_id, 'data_selected', 'success', {'columns_hash': "".join(sorted_hashes)}, hospital_id=connection['schema'].upper())
     return results
 
 
@@ -353,23 +353,29 @@ def get_patient_data(body, jwt):
     """
     results = {}
     # PROOF ID NEEDS TO BE REINSTATED FROM TUESDAY ONWARDS
-    proof_id = 'abc123'
-    valid_tags = validate_rules(body, jwt)
-    for hospital_id in body['hospital_ids']:
-        results[hospital_id.upper()] = {}
-        hospital, tags_list = hospital_picker(hospital_id)
-        tags = select_tags(tags_list, valid_tags)
-        connection = setup_connection(hospital)
-        id_class = connection['base'].classes.serums_ids
-        key_name = select_source_patient_id_name(hospital)
-        patient_id = select_source_patient_id_value(connection['session'], 
-                                                        id_class, 
-                                                        body['serums_id'], key_name)
-        data = select_patient_data(connection, tags, patient_id, key_name, proof_id)
-        connection['engine'].dispose()
-        if len(data) > 0:
-            results[hospital_id.upper()]['data'] = data
-        elif len(data) <= 0:
-            results[hospital_id.upper()]['data'] = {}
-        results[hospital_id.upper()]['tags'] = tags
-    return results
+    # proof_id = create_record()
+    
+    valid_tags, rule_ids = validate_rules(body, jwt)
+    if valid_tags != None:
+        proof_id = create_record(body['serums_id'], "".join(rule_ids), body['hospital_ids'])
+        print(f"PROOF ID: {proof_id}")
+        for hospital_id in body['hospital_ids']:
+            results[hospital_id.upper()] = {}
+            hospital, tags_list = hospital_picker(hospital_id)
+            tags = select_tags(tags_list, valid_tags)
+            connection = setup_connection(hospital)
+            id_class = connection['base'].classes.serums_ids
+            key_name = select_source_patient_id_name(hospital)
+            patient_id = select_source_patient_id_value(connection['session'], 
+                                                            id_class, 
+                                                            body['serums_id'], key_name)
+            data = select_patient_data(connection, tags, patient_id, key_name, proof_id)
+            connection['engine'].dispose()
+            if len(data) > 0:
+                results[hospital_id.upper()]['data'] = data
+            elif len(data) <= 0:
+                results[hospital_id.upper()]['data'] = {}
+            results[hospital_id.upper()]['tags'] = tags
+        return results
+    else:
+        return False

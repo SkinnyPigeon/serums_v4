@@ -13,6 +13,8 @@ BCPASSWORD = os.getenv('BCPASSWORD')
 if BCPASSWORD == None:
     BCPASSWORD = os.environ.get('BCPASSWORD')
 
+print(f"BCPASSWORD: {BCPASSWORD}")
+
 url = 'http://localhost:30001/v1/api/proof/'
 
 def create_record(serums_id, rule_id, hospital_ids):
@@ -28,7 +30,8 @@ def create_record(serums_id, rule_id, hospital_ids):
                 proof_id (str): The proof ID of the newly created record on the lineage blockchain that will be used to continue to update the record
     """
     token = jwt.encode({}, BCPASSWORD, algorithm='HS256')
-    header = {"Authorization": f"Bearer {token}"}
+    print(f"BCTOKEN: {token.decode('utf-8')}")
+    header = {"Authorization": f"Bearer {token.decode('utf-8')}"}
     body = {
         'serumsId': serums_id,
         'ruleId': rule_id,
@@ -36,6 +39,7 @@ def create_record(serums_id, rule_id, hospital_ids):
         'date': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
     }
     response = requests.post(url, data=body, headers=header)
+    print(f"PROOF RESPONSE: {response.json()}")
     if response.status_code == 200:
         proof_id = response.json()['proofId']
         print(f"PROOF ID: {proof_id}")
@@ -56,7 +60,7 @@ def update_record(proof_id, stage, status, content, hospital_id=None):
                 content (dict): A dictionary containing details about the operation 
     """
     token = jwt.encode({}, BCPASSWORD, algorithm='HS256')
-    header = {"Authorization": f"Bearer {token}"}
+    header = {"Authorization": f"Bearer {token.decode('utf-8')}"}
     update_url = url + proof_id
     if hospital_id != None:
         body = {
@@ -77,7 +81,7 @@ def update_record(proof_id, stage, status, content, hospital_id=None):
     }
     try:
         response = requests.patch(update_url, json=body, headers=header)
-        print(response.json())
+        print(f"UPDATED CALL: {response.json()}")
         if response.status_code == 200:
             return {'stage': stage, 'updated': 'success'}, 200
         else:

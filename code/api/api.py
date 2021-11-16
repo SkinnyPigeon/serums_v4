@@ -18,7 +18,7 @@ from functions.encryption import encrypt_data_with_new_key, encrypt_key
 from functions.search import search_for_serums_id
 from functions.tags import get_tags
 from functions.add_and_remove_users import add_user, remove_user
-from functions.lineage import update_record
+from functions.lineage import create_record, update_record
 from utils.jwt_functions import get_jwt, staff_emails, patient_emails, admin_emails
 from data_vaults.satellites import process_satellites
 from data_vaults.data_vault import create_data_vault
@@ -53,7 +53,7 @@ api = Api(
     description='Return the encrypted Smart Patient Health Record from the Serums data lake',
 )
 
-default_jwt_response = get_jwt(patient_emails['zmc'])
+default_jwt_response = get_jwt(staff_emails['zmc'])
 jwt_value = default_jwt_response['body']['resource_obj']['access']
 print(f"JWT: {jwt_value}")
 
@@ -399,10 +399,13 @@ class SPHR(Resource):
             # try:
             body = request.get_json()
             patient_data = get_patient_data(body, jwt)
-            parse_data = parse_sphr(patient_data)
-            return parse_data, 200
+            if patient_data:
+                parse_data = parse_sphr(patient_data)
+                return parse_data, 200
+            else:
+                return {"message": "Incorrect Serums ID provided for logged in patient"}, 404
             # except:
-            #     {"message": "Unable to create SPHR"}, 500
+                # {"message": "Unable to create SPHR"}, 500
         else:
             return {"message": response['message']}, response['status_code']
 

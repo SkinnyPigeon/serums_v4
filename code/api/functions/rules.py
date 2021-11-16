@@ -103,8 +103,13 @@ def validate_rules(body, jwt):
         if jwt_response['status_code'] == 200:
             if body['serums_id'] == jwt_response['serums_id']:
                 tags = ['all']
+                rule_ids = None
+            else:
+                tags = None
+                rule_ids = None
     elif validate_doctor(requestor_type):
         serums_and_department_ids = check_staff_member(jwt)
         rules = get_rules_for_doctor(jwt, body['serums_id'], serums_and_department_ids)
         tags = sum_up_rules(rules)
-    return tags
+        rule_ids = [rule['id'] for rule in rules]
+    return tags, rule_ids
