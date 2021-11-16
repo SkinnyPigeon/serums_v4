@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_cors import CORS
 from flask_restplus import Api, Resource, fields
 from dotenv import load_dotenv
+import jwt
 
 import os
 import subprocess
@@ -34,9 +35,13 @@ project_folder = subprocess.check_output(
 load_dotenv(os.path.join(project_folder, '.env'))
 PORT = os.getenv('PGPORT')
 PASSWORD = os.getenv('PGPASSWORD')
+BCPASSWORD=os.getenv('BCPASSWORD')
+
 if PORT == None:
     PASSWORD = os.environ.get('PGPASSWORD')
     PORT = os.environ.get('PGPORT')
+    BCPASSWORD=os.environ.get('BCPASSWORD')
+
 
 app = Flask(__name__)
 app.config['ERROR_404_HELP'] = False
@@ -50,11 +55,16 @@ api = Api(
 
 default_jwt_response = get_jwt(patient_emails['zmc'])
 jwt_value = default_jwt_response['body']['resource_obj']['access']
+print(f"JWT: {jwt_value}")
 
 
 default_jwt = "Bearer {jwt_value}".format(jwt_value=jwt_value)
 jwt_response = validate_jwt(jwt_value)
 print(f"JWT RESPONSE: {jwt_response}")
+
+token = jwt.encode({}, BCPASSWORD, algorithm="HS256")
+proof_header = {"Authorization": f"Bearer {token}"}
+print(token)
 
 # Models
 

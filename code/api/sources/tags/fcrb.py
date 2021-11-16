@@ -1,6 +1,8 @@
 fcrb_diagnostic_1 = {'tag': 'diagnostic', 'source': 'fcrb.diagnostic', 'fields': ['einri', 'patnr', 'falnr', 'pernr', 'lfdnr', 'dkey1'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 fcrb_diagnostic_2 = {'tag': 'diagnostic', 'source': 'fcrb.episode', 'fields': ['patnr', 'falnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 
+# I have commented out some of these tag definitions since they only contain the patient's id. This would provide next to no information
+
 # fcrb_patient_details_1 = {'tag': 'patient_details', 'source': 'fcrb.diagnostic', 'fields': ['patnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 # fcrb_patient_details_2 = {'tag': 'patient_details', 'source': 'fcrb.episode', 'fields': ['patnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
 fcrb_patient_details_3 = {'tag': 'patient_details', 'source': 'fcrb.medication', 'fields': ['patnr', 'falnr'], 'key_lookup': {}, 'table': True, 'graph': False, 'image': False}
