@@ -352,12 +352,9 @@ def get_patient_data(body, jwt):
                 smart_patient_health_record (DataFrame): A DataFrame containing the selected patient data
     """
     results = {}
-    # PROOF ID NEEDS TO BE REINSTATED FROM TUESDAY ONWARDS
-    # proof_id = create_record()
-    
     valid_tags, rule_ids = validate_rules(body, jwt)
     if valid_tags != None:
-        proof_id = create_record(body['serums_id'], "".join(rule_ids), body['hospital_ids'])
+        proof_id = create_record(body['serums_id'], rule_ids, body['hospital_ids'])
         print(f"PROOF ID: {proof_id}")
         for hospital_id in body['hospital_ids']:
             results[hospital_id.upper()] = {}
