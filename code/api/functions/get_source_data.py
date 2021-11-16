@@ -373,6 +373,6 @@ def get_patient_data(body, jwt):
             elif len(data) <= 0:
                 results[hospital_id.upper()]['data'] = {}
             results[hospital_id.upper()]['tags'] = tags
-        return results
+        return results, proof_id
     else:
-        return False
+        return False, None

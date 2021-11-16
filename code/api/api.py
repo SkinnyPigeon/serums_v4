@@ -396,16 +396,17 @@ class SPHR(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            # try:
-            body = request.get_json()
-            patient_data = get_patient_data(body, jwt)
-            if patient_data:
-                parse_data = parse_sphr(patient_data)
-                return parse_data, 200
-            else:
-                return {"message": "Incorrect Serums ID provided for logged in patient"}, 404
-            # except:
-                # {"message": "Unable to create SPHR"}, 500
+            try:
+                body = request.get_json()
+                patient_data, proof_id = get_patient_data(body, jwt)
+                if patient_data:
+                    parse_data = parse_sphr(patient_data)
+                    update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
+                    return parse_data, 200
+                else:
+                    return {"message": "Incorrect Serums ID provided for logged in patient"}, 404
+            except:
+                {"message": "Unable to create SPHR"}, 500
         else:
             return {"message": response['message']}, response['status_code']
 
@@ -417,20 +418,15 @@ class SPHR_Encrypted(Resource):
         '''Return the encrypted Smart Patient Health Record from the Serums data lake'''
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
-        # print(response)
         if response['status_code'] == 200:
             try:
-                # body = request.get_json()
-                # patient_data, proof_id = get_patient_data(body)
-                # print(patient_data)
-                # proof_id = 'abc123'
                 body = request.get_json()
-                patient_data = get_patient_data(body, jwt)
+                patient_data, proof_id = get_patient_data(body, jwt)
                 parse_data = parse_sphr(patient_data)
+                update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
                 encrypted_data, encryption_key, public_key = encrypt_data_with_new_key(parse_data, body['public_key'])
                 encrypted_key = encrypt_key(encryption_key, public_key)
-                # record_updated = update_record(proof_id, 'encryption', 'success', {'public_key': body['public_key']})
-                # print(f"Record updated: {record_updated}")
+                update_record(proof_id, 'encryption', 'success', {'public_key': body['public_key']})
                 return {"data": encrypted_data, "key": encrypted_key}, 200
             except:
                 return {"message": "Unable to create SPHR"}, 500
@@ -451,11 +447,13 @@ class DV(Resource):
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
-                patient_data = get_patient_data(body, jwt)
+                patient_data, proof_id = get_patient_data(body, jwt)
                 satellites = process_satellites(patient_data)
+                update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
                 data_vault = create_data_vault(satellites)
                 add_id_values(data_vault['links'])
                 hub_equalizer(data_vault['hubs'])
+                update_record(proof_id, 'data_vault_created', 'success', {'satellites': len(data_vault['satellites']), 'hubs': len(data_vault['hubs']), 'links': len(data_vault['links'])})
                 print(f"DATA VAULT: {data_vault}")
                 return data_vault, 200
             except:
@@ -475,13 +473,16 @@ class DVEncrypted(Resource):
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
-                patient_data = get_patient_data(body, jwt)
+                patient_data, proof_id = get_patient_data(body, jwt)
                 satellites = process_satellites(patient_data)
+                update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
                 data_vault = create_data_vault(satellites)
                 add_id_values(data_vault['links'])
                 hub_equalizer(data_vault['hubs'])
+                update_record(proof_id, 'data_vault_created', 'success', {'satellites': len(data_vault['satellites']), 'hubs': len(data_vault['hubs']), 'links': len(data_vault['links'])})
                 encrypted_data, encryption_key, public_key = encrypt_data_with_new_key(data_vault, body['public_key'])
                 encrypted_key = encrypt_key(encryption_key, public_key)
+                update_record(proof_id, 'encryption', 'success', {'public_key': body['public_key']})
                 return {"data": encrypted_data, "key": encrypted_key}, 200
             except:
                 return {"message": "Unable to create data vault"}, 500
