@@ -385,10 +385,10 @@ class Search(Resource):
         if response['status_code'] == 200:
             if 'MEDICAL_STAFF' not in response['groupIDs'] and 'HOSPITAL_ADMIN' not in response['groupIDs']:
                 return {"message": "Must be either a medical staff or admin to search for users"}, 404
-            # try:
-            return search_for_serums_id(request.get_json())
-            # except:
-            #     return {"message": "Unable to retrieve Serums ID"}, 500
+            try:
+                return search_for_serums_id(request.get_json())
+            except:
+                return {"message": "Unable to retrieve Serums ID"}, 500
         else:
             return {"message": response['message']}, response['status_code']
 
@@ -403,17 +403,17 @@ class SPHR(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            # try:
-            body = request.get_json()
-            patient_data, proof_id = get_patient_data(body, jwt)
-            # if patient_data:
-            parse_data = parse_sphr(patient_data)
-            update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
-            return parse_data, 200
-                # else:
-                #     return {"message": "Incorrect Serums ID provided for logged in patient"}, 404
-            # except:
-            #     {"message": "Unable to create SPHR"}, 500
+            try:
+                body = request.get_json()
+                patient_data, proof_id = get_patient_data(body, jwt)
+                if patient_data:
+                    parse_data = parse_sphr(patient_data)
+                    update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
+                    return parse_data, 200
+                else:
+                    return {"message": "Incorrect Serums ID provided for logged in patient"}, 404
+            except:
+                {"message": "Unable to create SPHR"}, 500
         else:
             return {"message": response['message']}, response['status_code']
 
