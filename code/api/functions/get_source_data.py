@@ -353,6 +353,10 @@ def get_patient_data(body, jwt):
     """
     results = {}
     valid_tags, rule_ids = validate_rules(body, jwt)
+    print(f"VALID TAGS 1: {valid_tags}")
+    valid_tags = list(set(valid_tags).intersection(body['tags']))
+    print(f"BODY TAGS: {body['tags']}")
+    print(f"VALID TAGS 2: {valid_tags}")
     if valid_tags != None:
         proof_id = create_record(body['serums_id'], rule_ids, body['hospital_ids'])
         print(f"PROOF ID: {proof_id}")

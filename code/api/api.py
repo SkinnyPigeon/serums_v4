@@ -155,6 +155,7 @@ sphr_parser.add_argument('Authorization', help="The authorization token", locati
 
 request_fields = api.model('Request Encrypted Smart Patient Health Record', {
     'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=118),
+    'tags': fields.String(required=True, description='The tags to filter the data by', example=['operations', 'patient_address']),
     'hospital_ids': fields.String(required=True, description='The id of the hospital for the source data', example=['FCRB', 'USTAN', 'ZMC']),
     'public_key': fields.String(required=True, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDM+DNCybR7LdizOcK1gH2P7dD
@@ -166,6 +167,7 @@ bURHcIsIDc64L0e1ZQIDAQAB
 
 request_fields_no_pk = api.model('Request Unencrypted Smart Patient Health Record', {
     'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=118),
+    'tags': fields.String(required=True, description='The tags to filter the data by', example=['operations', 'patient_address']),
     'hospital_ids': fields.String(required=True, description='The id of the hospital for the source data', example=['FCRB', 'USTAN', 'ZMC'])
 })
 
@@ -183,6 +185,7 @@ dv_parser.add_argument('Authorization', help="The authorization token", location
 
 dv_request_fields = api.model('Request Encrypted Smart Patient Health Record As Data Vault', {
     'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=118),
+    'tags': fields.String(required=True, description='The tags to filter the data by', example=['operations', 'patient_address']),
     'hospital_ids': fields.String(required=True, description='The id of the hospital for the source data', example=['FCRB', 'USTAN', 'ZMC']),
     'public_key': fields.String(required=True, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDM+DNCybR7LdizOcK1gH2P7dD
@@ -194,6 +197,7 @@ bURHcIsIDc64L0e1ZQIDAQAB
 
 dv_request_fields_no_pk = api.model('Request Unencrypted Smart Patient Health Record As Data Vault', {
     'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=118),
+    'tags': fields.String(required=True, description='The tags to filter the data by', example=['operations', 'patient_address']),
     'hospital_ids': fields.String(required=True, description='The id of the hospital for the source data', example=['FCRB', 'USTAN', 'ZMC'])
 })
 
