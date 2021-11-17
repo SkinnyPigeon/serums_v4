@@ -1,5 +1,18 @@
 import requests
 
+import subprocess
+from dotenv import load_dotenv
+import os
+
+project_folder = subprocess.check_output("pwd", shell=True).decode("utf-8").rstrip()
+load_dotenv(os.path.join(project_folder, '.env'))
+JWT_KEY = os.getenv('JWT_KEY')
+JWT_PATH = os.getenv('JWT_PATH')
+if JWT_KEY == None:
+    JWT_KEY = os.environ.get('JWT_KEY')
+    JWT_KEY = os.environ.get('JWT_PATH')
+
+
 patient_emails = {
     'ustan': 'ppp1@ustan.com',
     'fcrb': 'ppp1@fcrb.com',
@@ -21,7 +34,7 @@ admin_emails = {
 password = 'thisisagoodpassword'
 
 def get_jwt(user, password=password):
-    url = "https://authentication.serums.cs.st-andrews.ac.uk/ua/create_jwt/"
+    url = JWT_PATH + "/create_jwt/"
     headers = {
         "Content-Type": "application/json"
     }
@@ -38,19 +51,3 @@ def get_jwt(user, password=password):
             return {"status_code": response.status_code, "body": response.text}
     except Exception as e:
         print("Failed to make request. Reason: {}​".format(str(e)))
-
-# def validate_jwt(jwt):
-#     url = "https://authentication.serums.cs.st-andrews.ac.uk/ua/verify_jwt/"
-#     payload = ""
-#     headers = {
-#         "Authorization": f"Bearer {jwt}",
-#         "Content-Type": "application/json"
-#     }
-#     try:
-#         response = requests.request("POST", url, headers=headers, data=payload)
-#         if response.status_code == 200:
-#             return {"status_code": response.status_code, "body": response.json()}
-#         else:
-#             return {"status_code": response.status_code, "body": response.text}
-#     except Exception as e:
-#         print("Failed to make request. Reason: {}​".format(str(e)))

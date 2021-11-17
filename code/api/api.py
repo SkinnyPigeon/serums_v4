@@ -53,9 +53,13 @@ api = Api(
     description='Return the encrypted Smart Patient Health Record from the Serums data lake',
 )
 
-default_jwt_response = get_jwt(staff_emails['zmc'])
-jwt_value = default_jwt_response['body']['resource_obj']['access']
-print(f"JWT: {jwt_value}")
+# default_jwt_response = get_jwt(staff_emails['zmc'])
+# jwt_value = default_jwt_response['body']['resource_obj']['access']
+# print(f"JWT: {jwt_value}")
+
+
+
+jwt_value='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM3NzQ5MDMyLCJqdGkiOiIwYmQwNjJiYTQ3MGI0ZTUxODJhMDg0MGVhNGEzOGMxNiIsInVzZXJJRCI6MTIyLCJpc3MiOiJTZXJ1bXNBdXRoZW50aWNhdGlvbiIsImlhdCI6MTYzNzE0NDIzMiwic3ViIjoibWVkc3RhZmYxQHptYy5jb20iLCJncm91cElEcyI6WyJNRURJQ0FMX1NUQUZGIl0sIm9yZ0lEIjoiWk1DIiwiZGVwdElEIjpudWxsLCJkZXB0TmFtZSI6bnVsbCwic3RhZmZJRCI6bnVsbCwibmFtZSI6bnVsbCwiYXVkIjoiaHR0cHM6Ly9zaGNzLnNlcnVtcy5jcy5zdC1hbmRyZXdzLmFjLnVrLyJ9.3vO-38Oio3iir5_Dz4xhuF12xnRdoLReDgbt_EY7MQg'
 
 
 default_jwt = "Bearer {jwt_value}".format(jwt_value=jwt_value)

@@ -12,7 +12,9 @@ services:
     networks:
       - serums
     environment:
-      - BC_PATH=http://host.docker.internal:30001
+      - BC_PATH=http://192.168.122.24:30001
+      #- BC_PATH=http://host.docker.internal:30001
+      - JWT_PATH=https://authentication.serums.cs.st-andrews.ac.uk/ua
 
 networks:
   serums:

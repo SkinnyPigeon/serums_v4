@@ -24,12 +24,12 @@ engine.execute("SET DateStyle='iso, dmy'")
 
 # Creating source tables
 
-directories = ['fcrb', 'ustan', 'zmc', 'ustan_ml']
+directories = ['fcrb', 'ustan', 'zmc']
 # directories = ['fcrb']
 
 fcrb_tables = ['hospital_doctors', 'serums_ids', 'diagnostic', 'episode', 'medical_specialty', 'medication', 'monitoring_params', 'order_entry', 'patient_address', 'patient', 'professional', 'vital_signs', 'tags', 'translated_tags']
 ustan_tables = ['hospital_doctors', 'serums_ids', 'cycles', 'general', 'intentions', 'patients', 'regimes', 'smr01', 'smr06', 'tags', 'translated_tags']
-ustan_ml_tables = ['serums_ids', 'cycles', 'general', 'intentions', 'patients', 'regimes', 'smr01', 'smr06']
+# ustan_ml_tables = ['serums_ids', 'cycles', 'general', 'intentions', 'patients', 'regimes', 'smr01', 'smr06']
 zmc_tables = ['hospital_doctors', 'serums_ids', 'wearable', 'alcohol_use', 'allergies', 'bloodpressure', 'complaints_and_diagnosis', 'drug_use', 'functional_or_mental_state', 'living_situation', 'medical_aids_and_tools', 'medication_agreements', 'medication_use', 'registered_events', 'tobacco_use', 'warning', 'weight', 'length', 'patient_details', 'tags', 'translated_tags']
 
 for directory in directories:
@@ -41,8 +41,8 @@ for directory in directories:
         tables = fcrb_tables
     elif directory == 'ustan':
         tables = ustan_tables
-    elif directory == 'ustan_ml':
-        tables = ustan_ml_tables
+    # elif directory == 'ustan_ml':
+    #     tables = ustan_ml_tables
     elif directory == 'zmc':
         tables = zmc_tables
 
