@@ -6,10 +6,13 @@ services:
     build: .
     ports:
       - "5000:5000"
+      - "5001:5001"
     stdin_open: true
     tty: true
     networks:
       - serums
+    environment:
+      - BC_PATH=http://host.docker.internal:30001
 
 networks:
   serums:

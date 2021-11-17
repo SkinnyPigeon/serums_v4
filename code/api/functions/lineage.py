@@ -10,12 +10,15 @@ from hashlib import md5, sha256
 project_folder = subprocess.check_output("pwd", shell=True).decode("utf-8").rstrip()
 load_dotenv(os.path.join(project_folder, '.env'))
 BCPASSWORD = os.getenv('BCPASSWORD')
+BC_PATH=os.getenv('BC_PATH')
 if BCPASSWORD == None:
     BCPASSWORD = os.environ.get('BCPASSWORD')
+    BC_PATH=os.getenv('BC_PATH')
+
 
 print(f"BCPASSWORD: {BCPASSWORD}")
 
-url = 'http://localhost:30001/v1/api/proof/'
+url = BC_PATH + '/v1/api/proof/'
 
 def create_record(serums_id, rule_id, hospital_ids):
     """Creates a record on the lineage blockchain that will track the creation of a Smart Patient Health Record
@@ -30,8 +33,11 @@ def create_record(serums_id, rule_id, hospital_ids):
                 proof_id (str): The proof ID of the newly created record on the lineage blockchain that will be used to continue to update the record
     """
     token = jwt.encode({}, BCPASSWORD, algorithm='HS256')
-    print(f"BCTOKEN: {token.decode('utf-8')}")
-    header = {"Authorization": f"Bearer {token.decode('utf-8')}"}
+    print(f"TOKEN TYPE: {type(token)}")
+    if isinstance(token, bytes):
+        token = token.decode('utf-8')
+    print(f"BCTOKEN: {token}")
+    header = {"Authorization": f"Bearer {token}"}
     body = {
         'serumsId': serums_id,
         'ruleId': rule_id,
@@ -60,7 +66,11 @@ def update_record(proof_id, stage, status, content, hospital_id=None):
                 content (dict): A dictionary containing details about the operation 
     """
     token = jwt.encode({}, BCPASSWORD, algorithm='HS256')
-    header = {"Authorization": f"Bearer {token.decode('utf-8')}"}
+    print(f"TOKEN TYPE: {type(token)}")
+    if isinstance(token, bytes):
+        token = token.decode('utf-8')
+    print(f"BCTOKEN: {token}")
+    header = {"Authorization": f"Bearer {token}"}
     update_url = url + proof_id
     if hospital_id != None:
         body = {

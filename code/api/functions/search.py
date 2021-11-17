@@ -200,7 +200,7 @@ def search_for_serums_id(body):
                     print(df_copy)
                     connection['engine'].dispose()
                     ids.append(df_copy.to_dict('index')[0])
-            if len(ids) > 1:
+            if len(ids) > 0:
                 return ids, 200
             else:
                 return {"message": "No patient found with those details"}, 500

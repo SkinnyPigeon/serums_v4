@@ -1,9 +1,14 @@
 import requests
 from functions.departments import get_department_of_staff_member, check_staff_member
 from functions.jwt import validate_jwt
+import os
+
+BC_PATH=os.getenv('BC_PATH')
+if BC_PATH == None:
+    BC_PATH=os.getenv('BC_PATH')
 
 def get_rules(jwt, grantor_id, grantee_id):
-    url = 'http://localhost:30001/v1/api/getRules'
+    url = BC_PATH + '/v1/api/getRules'
     headers = {
         "Authorization": f"Bearer {jwt}",
         "Content-Type": "application/json"
@@ -65,7 +70,7 @@ def validate_patient(group_ids):
 
 def get_rules_for_doctor(jwt, grantor_id, serums_and_department_ids):
     response = []
-    url = 'http://localhost:30001/v1/api/getRules'
+    url = BC_PATH + '/v1/api/getRules'
     headers = {
         "Authorization": f"{jwt}",
         "Content-Type": "application/json"

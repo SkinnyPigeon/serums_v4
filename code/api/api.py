@@ -130,15 +130,9 @@ search_fields = api.model("Search for a patient\'s SERUMS id", {
     'first_name': fields.String(required=False, description="The patient\'s first name", example='Joana'),
     'first_surname': fields.String(required=False, description="The patient\'s first surname", example='Soler'),
     'family_name': fields.String(required=False, description="The patient\'s family name", example='Rodríguez'),
-    'dob': fields.DateTime(required=False, description="The patient\'s date of birth", example='1935-05-12'),
+    'dob': fields.DateTime(required=False, description="The patient\'s date of birth", example='1935-12-05'),
     'gender': fields.String(required=False, description="The patient\'s gender", example='2'),
-    'hospital_id': fields.String(required=False, description="The id of the hospital for the source data", example='FCRB'),
-    'public_key': fields.String(required=False, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDM+DNCybR7LdizOcK1gH2P7dD
-sajGUEIoPFp7wjhgKykYkCGVQCvl55g/zdh6UI9Cd/i2IEf5wo+Ct9oihy9SnJSp
-3sOp1KESV+ElwdK3vkaIo1AUuj+E8LTe7llyJ61JJdZaozyT0PxM8jB2vIaNEdbO
-bURHcIsIDc64L0e1ZQIDAQAB
------END PUBLIC KEY-----""")
+    'hospital_id': fields.String(required=False, description="The id of the hospital for the source data", example='FCRB')
 })
 
 # Machine learning
@@ -168,13 +162,7 @@ bURHcIsIDc64L0e1ZQIDAQAB
 
 request_fields_no_pk = api.model('Request Unencrypted Smart Patient Health Record', {
     'serums_id': fields.Integer(required=True, description='The Serums ID for the patient', example=118),
-    'hospital_ids': fields.String(required=True, description='The id of the hospital for the source data', example=['FCRB', 'USTAN', 'ZMC']),
-    'public_key': fields.String(required=True, description="The public key used as part of the API's encryption", example="""-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDM+DNCybR7LdizOcK1gH2P7dD
-sajGUEIoPFp7wjhgKykYkCGVQCvl55g/zdh6UI9Cd/i2IEf5wo+Ct9oihy9SnJSp
-3sOp1KESV+ElwdK3vkaIo1AUuj+E8LTe7llyJ61JJdZaozyT0PxM8jB2vIaNEdbO
-bURHcIsIDc64L0e1ZQIDAQAB
------END PUBLIC KEY-----""")
+    'hospital_ids': fields.String(required=True, description='The id of the hospital for the source data', example=['FCRB', 'USTAN', 'ZMC'])
 })
 
 reply_fields = api.model('Successful Response', {
@@ -389,10 +377,10 @@ class Search(Resource):
         if response['status_code'] == 200:
             if 'MEDICAL_STAFF' not in response['groupIDs'] and 'HOSPITAL_ADMIN' not in response['groupIDs']:
                 return {"message": "Must be either a medical staff or admin to search for users"}, 404
-            try:
-                return search_for_serums_id(request.get_json())
-            except:
-                return {"message": "Unable to retrieve Serums ID"}, 500
+            # try:
+            return search_for_serums_id(request.get_json())
+            # except:
+            #     return {"message": "Unable to retrieve Serums ID"}, 500
         else:
             return {"message": response['message']}, response['status_code']
 
@@ -407,17 +395,17 @@ class SPHR(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            try:
-                body = request.get_json()
-                patient_data, proof_id = get_patient_data(body, jwt)
-                if patient_data:
-                    parse_data = parse_sphr(patient_data)
-                    update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
-                    return parse_data, 200
-                else:
-                    return {"message": "Incorrect Serums ID provided for logged in patient"}, 404
-            except:
-                {"message": "Unable to create SPHR"}, 500
+            # try:
+            body = request.get_json()
+            patient_data, proof_id = get_patient_data(body, jwt)
+            # if patient_data:
+            parse_data = parse_sphr(patient_data)
+            update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
+            return parse_data, 200
+                # else:
+                #     return {"message": "Incorrect Serums ID provided for logged in patient"}, 404
+            # except:
+            #     {"message": "Unable to create SPHR"}, 500
         else:
             return {"message": response['message']}, response['status_code']
 
