@@ -24,6 +24,7 @@ from sources.tags.ustan import ustan_tags
 from sources.tags.zmc import zmc_tags
 from functions.lineage import create_record, update_record, schema_string
 from functions.rules import validate_rules
+from functions.jwt import validate_jwt
 
 
 # Helper functions
@@ -353,10 +354,11 @@ def get_patient_data(body, jwt):
     """
     results = {}
     valid_tags, rule_ids = validate_rules(body, jwt)
-    print(f"VALID TAGS 1: {valid_tags}")
-    valid_tags = list(set(valid_tags).intersection(body['tags']))
-    print(f"BODY TAGS: {body['tags']}")
-    print(f"VALID TAGS 2: {valid_tags}")
+    jwt_response = validate_jwt(jwt)
+    if 'PATIENT' in jwt_response['groupIDs']:
+        valid_tags = body['tags']
+    else:
+        valid_tags = list(set(valid_tags).intersection(body['tags']))
     if valid_tags != None:
         proof_id = create_record(body['serums_id'], rule_ids, body['hospital_ids'])
         print(f"PROOF ID: {proof_id}")

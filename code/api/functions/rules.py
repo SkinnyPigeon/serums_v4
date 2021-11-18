@@ -107,7 +107,6 @@ def validate_rules(body, jwt):
     if validate_patient(requestor_type):
         if jwt_response['status_code'] == 200:
             if body['serums_id'] == jwt_response['serums_id']:
-                tags = ['all']
                 rule_ids = None
             else:
                 tags = None
