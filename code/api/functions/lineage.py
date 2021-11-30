@@ -55,6 +55,7 @@ def create_record(serums_id, rule_id, hospital_ids):
         return False
 
 def update_record(proof_id, stage, status, content, hospital_id=None):
+    print(f"UPDATING RECORD PROOF ID: {proof_id}")
     """Update the record on the lineage blockchain during each stage of the creation of a Smart Patient Health Record
 
             Parameters:

@@ -314,7 +314,10 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name, proo
             columns_to_hash = hash_columns(list(results[tag_definition['source']][0].keys()))
             column_hashes.append(columns_to_hash)
     sorted_hashes = sorted(column_hashes)
-    update_record(proof_id, 'data_selected', 'success', {'columns_hash': "".join(sorted_hashes)}, hospital_id=connection['schema'].upper())
+    try:
+        update_record(proof_id, 'data_selected', 'success', {'columns_hash': "".join(sorted_hashes)}, hospital_id=connection['schema'].upper())
+    except:
+        print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
     return results
 
 
@@ -353,11 +356,13 @@ def get_patient_data(body, jwt):
                 smart_patient_health_record (DataFrame): A DataFrame containing the selected patient data
     """
     results = {}
-    valid_tags, rule_ids = validate_rules(body, jwt)
     jwt_response = validate_jwt(jwt)
     if 'PATIENT' in jwt_response['groupIDs']:
+        print("YEAH IT's A PATIENT")
         valid_tags = body['tags']
+        rule_ids = 'PATIENT-ACCESSING-OWN-RECORD'
     else:
+        valid_tags, rule_ids = validate_rules(body, jwt)
         valid_tags = list(set(valid_tags).intersection(body['tags']))
     if valid_tags != None:
         proof_id = create_record(body['serums_id'], rule_ids, body['hospital_ids'])
