@@ -407,6 +407,8 @@ class SPHR(Resource):
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
+                if 'PATIENT' in jwt_response['groupIDs'] and response['serums_id'] != body['serums_id']:
+                    return {"message": "Patients can only access their own records, please check the serums id in request body"}, 401
                 patient_data, proof_id = get_patient_data(body, jwt)
                 if patient_data:
                     parse_data = parse_sphr(patient_data)
@@ -434,6 +436,8 @@ class SPHR_Encrypted(Resource):
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
+                if 'PATIENT' in jwt_response['groupIDs'] and response['serums_id'] != body['serums_id']:
+                    return {"message": "Patients can only access their own records, please check the serums id in request body"}, 401
                 patient_data, proof_id = get_patient_data(body, jwt)
                 parse_data = parse_sphr(patient_data)
                 try:
@@ -466,6 +470,8 @@ class DV(Resource):
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
+                if 'PATIENT' in jwt_response['groupIDs'] and response['serums_id'] != body['serums_id']:
+                    return {"message": "Patients can only access their own records, please check the serums id in request body"}, 401
                 patient_data, proof_id = get_patient_data(body, jwt)
                 satellites = process_satellites(patient_data)
                 try:
@@ -499,6 +505,8 @@ class DVEncrypted(Resource):
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
+                if 'PATIENT' in jwt_response['groupIDs'] and response['serums_id'] != body['serums_id']:
+                    return {"message": "Patients can only access their own records, please check the serums id in request body"}, 401
                 patient_data, proof_id = get_patient_data(body, jwt)
                 satellites = process_satellites(patient_data)
                 try:
