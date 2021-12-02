@@ -9,4 +9,5 @@ id,serums_id,staff_id,name,department_id,department_name
 8,7007,7007,Mila Meyer,3,Consultant
 9,7008,7008,Anna Smit,3,Consultant
 10,7009,7009,Daan De Jong,3,Consultant
-11,122,7010,Leon Jansen,3,Emergency
+11,122,122,Leon Jansen,4,MEDICAL_STAFF
+12,123,7002,Emma Bakker,5,HOSPITAL_ADMIN

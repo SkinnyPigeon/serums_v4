@@ -26,6 +26,7 @@ from data_vaults.satellites import process_satellites
 from data_vaults.data_vault import create_data_vault
 from data_vaults.hub_post_processing import hub_equalizer
 from data_vaults.link_post_processing import add_id_values
+from functions.body import validate_body
 
 
 # Setting up environment
@@ -243,11 +244,11 @@ class StaffDepartment(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            if 'MEDICAL_STAFF' not in response['groupIDs'] and 'HOSPITAL_ADMIN' not in response['groupIDs']:
-                return {"message": "Must be either a medical staff or admin to view staff members"}, 404
+            # if 'MEDICAL_STAFF' not in response['groupIDs'] and 'HOSPITAL_ADMIN' not in response['groupIDs']:
+            #     return {"message": "Must be either a medical staff or admin to view staff members"}, 404
             try:
                 staff_details = get_department_of_staff_member(response)
-                return staff_details, 200
+                return staff_details[0], 200
             except:
                 return {"message": "Unable to retrieve details about staff member"}, 500
         else:
@@ -262,8 +263,6 @@ class Departments(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            # if 'MEDICAL_STAFF' not in response['groupIDs'] and 'HOSPITAL_ADMIN' not in response['groupIDs']:
-            #     return {"message": "Must be either a medical staff or admin to view staff members"}, 404
             try:
                 body = request.get_json()
                 department_ids = get_departments(body)
@@ -324,7 +323,7 @@ class AddUser(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            if 'HOSPITAL_ADMIN' not in response['groupIDs']:
+            if 'HOSPITAL_ADMIN' not in response['groupIDs'] and 'SERUMS_ADMIN' not in response['groupIDs']:
                 return {"message": "Must be an admin to add user"}, 404
             try:
                 body = request.get_json()
@@ -344,7 +343,7 @@ class RemoveUser(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            if 'HOSPITAL_ADMIN' not in response['groupIDs']:
+            if 'HOSPITAL_ADMIN' not in response['groupIDs'] and 'SERUMS_ADMIN' not in response['groupIDs']:
                 return {"message": "Must be an admin to remove user"}, 404
             try:
                 body = request.get_json()
@@ -385,7 +384,7 @@ class Search(Resource):
         jwt = request.headers['Authorization']
         response = validate_jwt(jwt)
         if response['status_code'] == 200:
-            if 'MEDICAL_STAFF' not in response['groupIDs'] and 'HOSPITAL_ADMIN' not in response['groupIDs']:
+            if 'MEDICAL_STAFF' not in response['groupIDs'] and 'HOSPITAL_ADMIN' not in response['groupIDs'] and 'SERUMS_ADMIN' not in response['groupIDs']:
                 return {"message": "Must be either a medical staff or admin to search for users"}, 404
             try:
                 return search_for_serums_id(request.get_json())
@@ -407,6 +406,9 @@ class SPHR(Resource):
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
+                valid_body = validate_body(body)
+                if len(valid_body) > 0:
+                    return {"message": valid_body}, 422
                 if 'PATIENT' in jwt_response['groupIDs'] and response['serums_id'] != body['serums_id']:
                     return {"message": "Patients can only access their own records, please check the serums id in request body"}, 401
                 patient_data, proof_id = get_patient_data(body, jwt)
@@ -436,21 +438,25 @@ class SPHR_Encrypted(Resource):
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
+                valid_body = validate_body(body, encrypted=True)
+                if len(valid_body) > 0:
+                    return {"message": valid_body}, 422
                 if 'PATIENT' in jwt_response['groupIDs'] and response['serums_id'] != body['serums_id']:
                     return {"message": "Patients can only access their own records, please check the serums id in request body"}, 401
                 patient_data, proof_id = get_patient_data(body, jwt)
-                parse_data = parse_sphr(patient_data)
-                try:
-                    update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
-                except:
-                    print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
-                encrypted_data, encryption_key, public_key = encrypt_data_with_new_key(parse_data, body['public_key'])
-                encrypted_key = encrypt_key(encryption_key, public_key)
-                try:
-                    update_record(proof_id, 'encryption', 'success', {'public_key': body['public_key']})
-                except:
-                    print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
-                return {"data": encrypted_data, "key": encrypted_key}, 200
+                if patient_data:
+                    parse_data = parse_sphr(patient_data)
+                    try:
+                        update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
+                    except:
+                        print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
+                    encrypted_data, encryption_key, public_key = encrypt_data_with_new_key(parse_data, body['public_key'])
+                    encrypted_key = encrypt_key(encryption_key, public_key)
+                    try:
+                        update_record(proof_id, 'encryption', 'success', {'public_key': body['public_key']})
+                    except:
+                        print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
+                    return {"data": encrypted_data, "key": encrypted_key}, 200
             except:
                 return {"message": "Unable to create SPHR"}, 500
         else:
@@ -470,6 +476,9 @@ class DV(Resource):
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
+                valid_body = validate_body(body)
+                if len(valid_body) > 0:
+                    return {"message": valid_body}, 422
                 if 'PATIENT' in jwt_response['groupIDs'] and response['serums_id'] != body['serums_id']:
                     return {"message": "Patients can only access their own records, please check the serums id in request body"}, 401
                 patient_data, proof_id = get_patient_data(body, jwt)
@@ -505,6 +514,9 @@ class DVEncrypted(Resource):
         if response['status_code'] == 200:
             try:
                 body = request.get_json()
+                valid_body = validate_body(body, encrypted=True)
+                if len(valid_body) > 0:
+                    return {"message": valid_body}, 422
                 if 'PATIENT' in jwt_response['groupIDs'] and response['serums_id'] != body['serums_id']:
                     return {"message": "Patients can only access their own records, please check the serums id in request body"}, 401
                 patient_data, proof_id = get_patient_data(body, jwt)

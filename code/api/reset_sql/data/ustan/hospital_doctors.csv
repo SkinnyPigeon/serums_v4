@@ -9,4 +9,5 @@ id,serums_id,staff_id,name,department_id,department_name
 8,395,6007,Amelia Clark,4,Admin
 9,6008,6008,Noah Thomson,3,Consultant
 10,6009,6009,Jack Smith,2,Surgery
-11,120,6010,Steve Smith,2,Emergency
+11,120,120,Charlotte Watson,4,MEDICAL_STAFF
+12,121,121,Oliver Wilson,5,HOSPITAL_ADMIN
