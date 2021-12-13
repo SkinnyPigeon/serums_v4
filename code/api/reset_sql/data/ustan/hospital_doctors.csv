@@ -11,3 +11,4 @@ id,serums_id,staff_id,name,department_id,department_name
 10,6009,6009,Jack Smith,2,Surgery
 11,120,120,Charlotte Watson,4,MEDICAL_STAFF
 12,121,121,Oliver Wilson,5,HOSPITAL_ADMIN
+13,22,22,Charles Wilson,6,SERUMS_ADMIN
