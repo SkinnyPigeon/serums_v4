@@ -12,3 +12,4 @@ id,serums_id,staff_id,name,department_id,department_name
 11,120,120,Charlotte Watson,4,MEDICAL_STAFF
 12,121,121,Oliver Wilson,5,HOSPITAL_ADMIN
 13,22,22,Charles Wilson,6,SERUMS_ADMIN
+14,83,83,adminSelkie1@ustan.com,6,SERUMS_ADMIN

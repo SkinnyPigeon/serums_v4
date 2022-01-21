@@ -52,6 +52,7 @@ def create_record(serums_id, rule_id, hospital_ids):
         print(f"TOKEN: {token}")
         return proof_id
     else:
+        print("ASKDJSKSJKAJSDK")
         return False
 
 def update_record(proof_id, stage, status, content, hospital_id=None):

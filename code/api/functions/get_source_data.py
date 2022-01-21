@@ -314,10 +314,10 @@ def select_patient_data(connection, tags_definitions, patient_id, key_name, proo
             columns_to_hash = hash_columns(list(results[tag_definition['source']][0].keys()))
             column_hashes.append(columns_to_hash)
     sorted_hashes = sorted(column_hashes)
-    try:
-        update_record(proof_id, 'data_selected', 'success', {'columns_hash': "".join(sorted_hashes)}, hospital_id=connection['schema'].upper())
-    except:
-        print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
+    # try:
+    #     update_record(proof_id, 'data_selected', 'success', {'columns_hash': "".join(sorted_hashes)}, hospital_id=connection['schema'].upper())
+    # except:
+    #     print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
     return results
 
 
@@ -360,12 +360,19 @@ def get_patient_data(body, jwt):
     if 'PATIENT' in jwt_response['groupIDs']:
         print("YEAH IT's A PATIENT")
         valid_tags = body['tags']
+        print(f"VALID TAGS: {valid_tags}")
+        print(f"HOSPITAL IDS: {body['hospital_ids']}")
         rule_ids = 'PATIENT-ACCESSING-OWN-RECORD'
     else:
         valid_tags, rule_ids = validate_rules(body, jwt)
         valid_tags = list(set(valid_tags).intersection(body['tags']))
     if valid_tags != None:
-        proof_id = create_record(body['serums_id'], rule_ids, body['hospital_ids'])
+        print("CALLING LINEAGE BLOCKCHAIN")
+        # try:
+        #     proof_id = create_record(body['serums_id'], rule_ids, body['hospital_ids'])
+        # except:
+        #     print("UNABLE TO CREATE LINEAGE BLOCKCHAIN")
+        proof_id = "TEMP FIX"
         print(f"PROOF ID: {proof_id}")
         for hospital_id in body['hospital_ids']:
             results[hospital_id.upper()] = {}

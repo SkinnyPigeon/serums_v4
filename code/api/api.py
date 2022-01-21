@@ -62,7 +62,7 @@ api = Api(
 
 
 
-jwt_value='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM5OTkwMjcwLCJqdGkiOiI5NGVlZGExOTEyMjI0OTk3ODY5M2E3YjJhZjNhMjE3ZSIsInVzZXJJRCI6MTIyLCJpc3MiOiJTZXJ1bXNBdXRoZW50aWNhdGlvbiIsImlhdCI6MTYzOTM4NTQ3MCwic3ViIjoibWVkc3RhZmYxQHptYy5jb20iLCJncm91cElEcyI6WyJNRURJQ0FMX1NUQUZGIl0sIm9yZ0lEIjoiWk1DIiwiZGVwdElEIjo0LCJkZXB0TmFtZSI6Ik1FRElDQUxfU1RBRkYiLCJzdGFmZklEIjoxMjIsIm5hbWUiOiJMZW9uIEphbnNlbiIsImF1ZCI6Imh0dHBzOi8vc2hjcy5zZXJ1bXMuY3Muc3QtYW5kcmV3cy5hYy51ay8ifQ.zIHdEG0nbjo_dDrJR6xz4fwKReIIkdtei3FV0X_l2Ls'
+jwt_value='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ1MzQ1MDczLCJqdGkiOiJjZTRlYjQ5NjQ2NWY0ZmNhYTU4NzY1ZGI4NGRhMDIxNSIsInVzZXJJRCI6MTE3LCJpc3MiOiJTZXJ1bXNBdXRoZW50aWNhdGlvbiIsImlhdCI6MTY0Mjc1MzA3Mywic3ViIjoicHBwMUB1c3Rhbi5jb20iLCJncm91cElEcyI6WyJQQVRJRU5UIl0sIm9yZ0lEIjoiVVNUQU4iLCJkZXB0SUQiOm51bGwsImRlcHROYW1lIjpudWxsLCJzdGFmZklEIjpudWxsLCJuYW1lIjpudWxsLCJhdWQiOiJodHRwczovL3NoY3Muc2VydW1zLmNzLnN0LWFuZHJld3MuYWMudWsvIn0.F6VexwH5rUqrBs31Zm_QQwqCbGRWMK3dlk2gC31xhMU'
 
 
 default_jwt = f"Bearer {jwt_value}"
@@ -414,10 +414,10 @@ class SPHR(Resource):
                 patient_data, proof_id = get_patient_data(body, jwt)
                 if patient_data:
                     parse_data = parse_sphr(patient_data)
-                    try:
-                        update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
-                    except:
-                        print(f"FAILED TO UPDATE LINEAGE BLOCKCHAIN")
+                    # try:
+                    #     update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
+                    # except:
+                    #     print(f"FAILED TO UPDATE LINEAGE BLOCKCHAIN")
                     return parse_data, 200
                 else:
                     return {"message": "Incorrect Serums ID provided for logged in patient"}, 404
@@ -446,16 +446,16 @@ class SPHR_Encrypted(Resource):
                 patient_data, proof_id = get_patient_data(body, jwt)
                 if patient_data:
                     parse_data = parse_sphr(patient_data)
-                    try:
-                        update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
-                    except:
-                        print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
+                    # try:
+                    #     update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
+                    # except:
+                    #     print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
                     encrypted_data, encryption_key, public_key = encrypt_data_with_new_key(parse_data, body['public_key'])
                     encrypted_key = encrypt_key(encryption_key, public_key)
-                    try:
-                        update_record(proof_id, 'encryption', 'success', {'public_key': body['public_key']})
-                    except:
-                        print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
+                    # try:
+                    #     update_record(proof_id, 'encryption', 'success', {'public_key': body['public_key']})
+                    # except:
+                    #     print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
                     return {"data": encrypted_data, "key": encrypted_key}, 200
             except:
                 return {"message": "Unable to create SPHR"}, 500
@@ -483,17 +483,17 @@ class DV(Resource):
                     return {"message": "Patients can only access their own records, please check the serums id in request body"}, 401
                 patient_data, proof_id = get_patient_data(body, jwt)
                 satellites = process_satellites(patient_data)
-                try:
-                    update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
-                except:
-                    print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
+                # try:
+                #     update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
+                # except:
+                    # print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
                 data_vault = create_data_vault(satellites)
                 add_id_values(data_vault['links'])
                 hub_equalizer(data_vault['hubs'])
-                try:
-                    update_record(proof_id, 'data_vault_created', 'success', {'satellites': len(data_vault['satellites']), 'hubs': len(data_vault['hubs']), 'links': len(data_vault['links'])})
-                except:
-                    print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
+                # try:
+                #     update_record(proof_id, 'data_vault_created', 'success', {'satellites': len(data_vault['satellites']), 'hubs': len(data_vault['hubs']), 'links': len(data_vault['links'])})
+                # except:
+                #     print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
                 print(f"DATA VAULT: {data_vault}")
                 return data_vault, 200
             except:
@@ -521,23 +521,23 @@ class DVEncrypted(Resource):
                     return {"message": "Patients can only access their own records, please check the serums id in request body"}, 401
                 patient_data, proof_id = get_patient_data(body, jwt)
                 satellites = process_satellites(patient_data)
-                try:
-                    update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
-                except:
-                    print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
+                # try:
+                #     update_record(proof_id, 'data_filled', 'success', {'data_parsed': ['dates converted to strings', 'decimals converted to floats']})
+                # except:
+                #     print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
                 data_vault = create_data_vault(satellites)
                 add_id_values(data_vault['links'])
                 hub_equalizer(data_vault['hubs'])
-                try:
-                    update_record(proof_id, 'data_vault_created', 'success', {'satellites': len(data_vault['satellites']), 'hubs': len(data_vault['hubs']), 'links': len(data_vault['links'])})
-                except:
-                    print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
+                # try:
+                #     update_record(proof_id, 'data_vault_created', 'success', {'satellites': len(data_vault['satellites']), 'hubs': len(data_vault['hubs']), 'links': len(data_vault['links'])})
+                # except:
+                #     print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
                 encrypted_data, encryption_key, public_key = encrypt_data_with_new_key(data_vault, body['public_key'])
                 encrypted_key = encrypt_key(encryption_key, public_key)
-                try:
-                    update_record(proof_id, 'encryption', 'success', {'public_key': body['public_key']})
-                except:
-                    print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
+                # try:
+                #     update_record(proof_id, 'encryption', 'success', {'public_key': body['public_key']})
+                # except:
+                #     print("FAILED TO UPDATE LINEAGE BLOCKCHAIN")
                 return {"data": encrypted_data, "key": encrypted_key}, 200
             except:
                 return {"message": "Unable to create data vault"}, 500
