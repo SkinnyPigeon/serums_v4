@@ -4,6 +4,7 @@ from sqlalchemy import create_engine, MetaData, inspect
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 
 import os
 from dotenv import load_dotenv
@@ -376,14 +377,21 @@ def get_patient_data(body, jwt):
         print(f"PROOF ID: {proof_id}")
         for hospital_id in body['hospital_ids']:
             results[hospital_id.upper()] = {}
-            hospital, tags_list = hospital_picker(hospital_id)
+            results[hospital_id.upper()]['data'] = {}
+            try:
+                hospital, tags_list = hospital_picker(hospital_id)
+            except TypeError:
+                continue
             tags = select_tags(tags_list, valid_tags)
             connection = setup_connection(hospital)
             id_class = connection['base'].classes.serums_ids
             key_name = select_source_patient_id_name(hospital)
-            patient_id = select_source_patient_id_value(connection['session'], 
-                                                            id_class, 
-                                                            body['serums_id'], key_name)
+            try:
+                patient_id = select_source_patient_id_value(connection['session'], 
+                                                                id_class, 
+                                                                body['serums_id'], key_name)
+            except NoResultFound:
+                continue
             data = select_patient_data(connection, tags, patient_id, key_name, proof_id)
             connection['engine'].dispose()
             if len(data) > 0:

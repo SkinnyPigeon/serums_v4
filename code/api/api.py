@@ -409,9 +409,10 @@ class SPHR(Resource):
                 valid_body = validate_body(body)
                 if len(valid_body) > 0:
                     return {"message": valid_body}, 422
-                if 'PATIENT' in jwt_response['groupIDs'] and response['serums_id'] != body['serums_id']:
+                if 'PATIENT' in response['groupIDs'] and response['serums_id'] != body['serums_id']:
                     return {"message": "Patients can only access their own records, please check the serums id in request body"}, 401
                 patient_data, proof_id = get_patient_data(body, jwt)
+                print(f"PATIENT DATA: {patient_data}")
                 if patient_data:
                     parse_data = parse_sphr(patient_data)
                     # try:
@@ -441,7 +442,7 @@ class SPHR_Encrypted(Resource):
                 valid_body = validate_body(body, encrypted=True)
                 if len(valid_body) > 0:
                     return {"message": valid_body}, 422
-                if 'PATIENT' in jwt_response['groupIDs'] and response['serums_id'] != body['serums_id']:
+                if 'PATIENT' in response['groupIDs'] and response['serums_id'] != body['serums_id']:
                     return {"message": "Patients can only access their own records, please check the serums id in request body"}, 401
                 patient_data, proof_id = get_patient_data(body, jwt)
                 if patient_data:
@@ -479,7 +480,7 @@ class DV(Resource):
                 valid_body = validate_body(body)
                 if len(valid_body) > 0:
                     return {"message": valid_body}, 422
-                if 'PATIENT' in jwt_response['groupIDs'] and response['serums_id'] != body['serums_id']:
+                if 'PATIENT' in response['groupIDs'] and response['serums_id'] != body['serums_id']:
                     return {"message": "Patients can only access their own records, please check the serums id in request body"}, 401
                 patient_data, proof_id = get_patient_data(body, jwt)
                 satellites = process_satellites(patient_data)
@@ -517,7 +518,7 @@ class DVEncrypted(Resource):
                 valid_body = validate_body(body, encrypted=True)
                 if len(valid_body) > 0:
                     return {"message": valid_body}, 422
-                if 'PATIENT' in jwt_response['groupIDs'] and response['serums_id'] != body['serums_id']:
+                if 'PATIENT' in response['groupIDs'] and response['serums_id'] != body['serums_id']:
                     return {"message": "Patients can only access their own records, please check the serums id in request body"}, 401
                 patient_data, proof_id = get_patient_data(body, jwt)
                 satellites = process_satellites(patient_data)
